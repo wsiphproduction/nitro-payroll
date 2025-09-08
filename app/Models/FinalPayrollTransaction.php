@@ -19,7 +19,7 @@ use DB;
 
 use App\Models\Misc;
 
-class PayrollTransaction extends Model
+class FinalPayrollTransaction extends Model
 {
 
   public function GetSettingsNextTransNo(){

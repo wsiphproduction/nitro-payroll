@@ -1,0 +1,2 @@
+﻿EmployeeNo,LoanTypeCode,Frequency [1ST HALF/2ND HALF/EVERY CUTOFF ],VoucherNo,Date Issue  [mm/dd/yyyyy  (date format)],Loan Amnt,Interest Amnt,Amortizaion Amnt,Date Start Payment [mm/dd/yyyyy  (date format)],Remarks
+END,,,,,,,,,

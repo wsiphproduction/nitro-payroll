@@ -1,0 +1,923 @@
+@extends('layout.adminweb')
+@section('content')
+
+<!--excel--->
+<script src="{{ URL::to('public/admin/excel/xlsx.full.min.js') }}"></script>
+<script src="{{ URL::to('public/admin/excel/FileSaver.js') }}"></script>
+
+<style>
+ #style-2::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
+
+#style-2::-webkit-scrollbar
+{
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+#style-2::-webkit-scrollbar-thumb
+{
+    background-color: #f68c1f;
+}
+   
+.select2-container{
+    z-index: 99999999999;
+}
+.Error-Level {
+    background: #ffcccc;
+}
+.Dupli-Level {
+    background: #ccffcc;
+}
+
+.Normal-Level {
+   background: #fff;
+}
+
+nav > .nav.nav-tabs{
+
+  border: none;
+    color:#fff;
+    background:#475F7B;
+    border-radius:0;
+    margin-bottom: initial ;
+
+}
+nav > div a.nav-item.nav-link,
+nav > div a.nav-item.nav-link.active
+{
+  border: none;
+    color:#fff;
+    background:#475F7B;
+    border-radius:0;
+}
+.nav.nav-tabs .nav-item, .nav.nav-pills .nav-item{
+  margin-right: initial;
+  padding-bottom:0px;
+  margin-bottom: 0px;
+}
+nav > div a.nav-item.nav-link.active:after
+ {
+  content: "";
+  position: relative;
+  bottom: -38px;
+  left: -10%;
+  border-top-color: #f68c1f ;
+}
+.tab-content{
+line-height: 25px;
+border: 0px solid #ddd;
+border-top:5px solid #f68c1f;
+border-bottom:1px solid #eee;
+border-left:1px solid #eee;
+border-right:1px solid #eee;
+}
+
+nav > div a.nav-item.nav-link:hover,
+nav > div a.nav-item.nav-link:focus
+{
+  border: none;
+    background: #f68c1f;
+    color:#fff;
+    border-radius:0;
+    transition:background 0.20s linear;
+}
+
+.highlighted {
+    background: #ffffcc !important;
+}
+
+</style>
+
+    <!-- BEGIN: Content-->
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb p-0 mb-0">
+                                    <li class="breadcrumb-item">
+                                        <a href="javascript:void(0);">
+                                            <i class="bx bx-home-alt"></i>
+                                        </a>
+                                    </li>
+                                    <li class="breadcrumb-item active">Over Time Rate List
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <section id="basic-input">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+
+                                <div class="card-header">
+                                    <h4 class="card-title">Over Time Rate List</h4>
+                                </div>
+
+                                <div class="card-content">
+                                    
+                                    <div class="card-body card-dashboard">
+
+                                        <div class="row">
+                                            <div class="col-md-12 mb-1">
+                                                <fieldset>
+                                                    <div class="input-group">
+
+                                                         <select id="selSearchStatus" class="form-control" style="width:15%">
+                                                          <option value="">All Record</option>                                                          
+                                                          <option disabled="disabled">[ Status Option ]</option>
+                                                          <option value="1">Status: Active</option>
+                                                          <option value="0">Status: Inactive</option>
+                                                        </select>
+                                                  
+                                                        <input type="text" class="form-control searchtext" placeholder="Search Here.." style="width: 50%;margin-left: 6px;">
+
+                                                        <button id="btnSearch" type="button" class="btn btn-icon btn-outline-primary mr-1 mb-1 disabled_border" tooltip="Search Here.." tooltip-position="top"> 
+                                                            <i class="bx bx-search"></i>
+                                                        </button>
+
+                                                     @if(Session::get('IS_SUPER_ADMIN') || $Allow_View_Print_Export==1)
+                                                        <button type="button" class="btn btn-icon btn-outline-primary mr-1 mb-1" onclick="GenerateExcel()" tooltip="Export To Excel" tooltip-position="top" style="padding: 0.4rem 0.6rem;height: 40px;margin-left: -11px;">
+                                                           <i class="bx bx-file"></i> 
+                                                        </button>  
+                                                       @endif  
+
+                                                      @if(Session::get('IS_SUPER_ADMIN') || $Allow_Add_Create_Import_Upload==1)
+                                                        <button type="button" class="btn btn-icon btn-outline-primary mr-1 mb-1" onclick="NewRecord()" tooltip="Create New" tooltip-position="top">
+                                                            <i class="bx bx-plus"></i> New
+                                                        </button>
+                                                       @endif    
+                                                                                     
+
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+
+                                         <div id="style-2" class="table-responsive col-md-12 table_default_height">
+                                            <table id="tblList" class="table zero-configuration complex-headers border alt-background">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th style="width:1%;"></th>  
+                                                        <th>CODE</th>                                                        
+                                                        <th>O.T RATE NAME</th>                                                        
+                                                        <th>IS O.T N.D</th>
+                                                        <th>MONTHLY RATES</th>
+                                                        <th>DAILY RATES</th>
+                                                        <th>STATUS</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div id="divPaging" class="col-md-11" style="display: none;">   
+                                           <hr style="margin-top:0px;margin-bottom:0px;">   
+                                            <div style="width:110%;font-size: 11px;">
+                                                <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+                                                    <ul class="pagination ul-paging scrollbar" style="overflow-x: auto;">
+                                                        
+                                                    </ul>
+                                                 </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <!-- MODAL -->
+    <div id="record-modal" class="modal fade text-left w-100" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title white-color">Over Time Rates Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="OTRateID" value="0" readonly>
+                    <div class="row">
+                 
+                         <div class="col-md-12">
+                            <fieldset class="form-group">
+                                <label for="OTRateCode">Code: <span class="required_field">*</span></label>
+                                <input id="OTRateCode" type="text" class="form-control" placeholder="Over Time Code" autocomplete="off"  maxlength="10">
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <fieldset class="form-group">
+                                <label for="OTRateName">Name: <span class="required_field">*</span></label>
+                                <input id="OTRateName" type="text" class="form-control" placeholder="Over Time Name" autocomplete="off">
+                            </fieldset>
+                        </div>
+                    </div>
+
+                       <div class="row">
+                        <div class="col-md-12">
+                            <fieldset class="form-group">
+                                <label for="OTRateDescription">Description: </label>
+                                <input id="OTRateDescription" type="text" class="form-control" placeholder="Over Time Description" autocomplete="off">
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <fieldset class="form-group">
+                                <label for="OTRate">Rate: </label>
+                                <input id="OTRate" type="text" class="form-control DecimalOnly text-align-right" placeholder="OT Rate" autocomplete="off">
+                            </fieldset>
+                        </div>
+
+                        <div class="col-md-6">
+                            <fieldset class="form-group">
+                                <label for="OTRateDaily">Daily Rate: </label>
+                                <input id="OTRateDaily" type="text" class="form-control DecimalOnly text-align-right" placeholder="OT Daily Rate" autocomplete="off">
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <fieldset class="form-group">
+                                <label for="Status">OT Night Differential: <span class="required_field">*</span></label>
+                                <div class="form-group">
+                                    <select id="IsOTND" class="form-control">
+                                        <option value="">Please select</option>
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-md-6">
+                            <fieldset class="form-group">
+                                <label for="Status">Status: <span class="required_field">*</span></label>
+                                <div class="form-group">
+                                    <select id="Status" class="form-control">
+                                        <option value="">Please select</option>
+                                        <option value="1">{{ config('app.STATUS_ACTIVE') }}</option>
+                                        <option value="0">{{ config('app.STATUS_INACTIVE') }}</option>
+                                    </select>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="btnSaveRecord" type="button" class="btn btn-primary ml-1" onclick="SaveRecord()">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block"> <i class='bx bx-save mr-1' style="font-size: 21px;"></i> Save</span>
+                    </button>
+                    <button id="btnCancelRecord" type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Cancel</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END MODAL -->
+
+</section>
+
+<script type="text/javascript">
+
+    var IsAdmin="{{Session::get('IS_SUPER_ADMIN')}}";
+
+    var IsAllowPrint="{{$Allow_View_Print_Export}}";
+    var IsAllowView="{{$Allow_View_Print_Export}}";
+
+    var IsAllowEdit="{{$Allow_Edit_Update}}";
+    var IsAllowCancel="{{$Allow_Delete_Cancel}}";
+    var IsAllowApprove="{{$Allow_Post_UnPost_Approve_UnApprove}}";
+
+    var intCurrentPage = 1;
+    var isPageFirstLoad = true;
+
+    $(document).ready(function() {
+
+        $('#tblList').DataTable( {
+            "columnDefs": [
+                {
+                    "targets": [ 0 ],
+                    "visible": false,
+                    "searchable": false
+                }
+            ],
+            'paging'      : false,
+            'lengthChange': false,
+            'searching'   : false,
+            'ordering'    : true,
+            'info'        : false,
+            'autoWidth'   : false,
+            "order": [[ 3, "asc" ]]
+        });
+
+        //Load Initial Data
+        $("#tblList").DataTable().clear().draw();
+        getRecordList(intCurrentPage, '');
+
+        isPageFirstLoad = false;
+
+        //===============================================================    
+        var table = $('#tblList').DataTable();
+        // Handle row click event
+        $('#tblList tbody').on('click', 'tr', function() {            
+            table.$('tr.highlighted').removeClass('highlighted');        
+            $(this).addClass('highlighted');
+        });
+
+    });
+
+    $("#selSearchStatus").change(function(){
+        $("#tblList").DataTable().clear().draw();
+        intCurrentPage = 1;
+        getRecordList(1, $('.searchtext').val());
+    });
+
+    $("#btnSearch").click(function(){
+        $("#tblList").DataTable().clear().draw();
+        intCurrentPage = 1;
+        getRecordList(1, $('.searchtext').val());
+    });
+
+    $('.searchtext').on('keypress', function (e) {
+        if(e.which === 13){
+            $("#tblList").DataTable().clear().draw();
+            intCurrentPage = 1;
+            getRecordList(1, $('.searchtext').val());
+        }
+    });
+
+    function getRecordList(vPageNo){
+
+      $("#tblList").DataTable().clear().draw();
+      $(".paginate_button").remove(); 
+      vLimit=100;
+
+        $.ajax({
+            type: "post",
+            data: {
+                _token: '{{ csrf_token() }}',
+                Platform: "{{ config('app.PLATFORM_ADMIN') }}",
+                SearchText: $('.searchtext').val(),
+                Status: $("#selSearchStatus").val(),
+                Limit: vLimit,
+                PageNo: vPageNo
+            },
+            url: "{{ route('get-ot-rate-list') }}",
+            dataType: "json",
+            success: function(data){
+                 total_rec=data.TotalRecord;
+                 LoadRecordList(data.OTRateList);
+                 if(total_rec>0){
+                     CreateLoanTypePaging(total_rec,vLimit);  
+                     if(total_rec>vLimit){
+                        $("#divPaging").show(); 
+                        $("#total-record").text(total_rec);
+                        $("#paging_button_id"+vPageNo).css("background", "#0069d9");
+                        $("#paging_button_id"+vPageNo).css("color", "#fff");
+                     }
+                  }
+                $("#divLoader").hide();
+            },
+            error: function(data){
+                $("#divLoader").hide();
+                console.log(data.responseText);
+            },
+            beforeSend:function(vData){
+                $("#divLoader").show();
+            }
+        });
+    };
+
+    function CreateLoanTypePaging(vTotalRecord,vLimit){
+
+       var i;
+       paging_button="";
+    
+        limit=vLimit; //get limit
+        totalcount=vTotalRecord; //get total count
+        pages=Math.ceil(totalcount/limit); //get pages
+      
+       if (pages!=1) {     
+
+          paging_button="<li class='paginate_button page-item previous' id='example2_previous'><a href='javascript:void(0)' aria-controls='example2' data-dt-idx="+i+" tabindex='0' class='page-link' onClick='getRecordList(1)'>First</a></li>"
+          $(".ul-paging").append(paging_button);
+       }
+       
+        if (pages>1) {        
+          for (i = 1; i <= pages; i++) {            
+            paging_button="<li class='paginate_button page-item'><a href='javascript:void(0)' id='paging_button_id"+i+"' aria-controls='example2' data-dt-idx="+i+" tabindex='0' class='page-link' onClick='getRecordList("+i+")'>"+i+"</a></li>"
+             $(".ul-paging").append(paging_button);
+          }
+        }
+          
+       if (pages!=1) {            
+        paging_button="<li class='paginate_button page-item next' id='example2_next'><a href='javascript:void(0)' aria-controls='example2' data-dt-idx="+i+" tabindex='0' class='page-link' onClick='getRecordList("+pages+",)'>Last</a></li>"
+        $(".ul-paging").append(paging_button);
+        }
+      
+   }
+
+    function LoadRecordList(vList){
+
+        if(vList.length > 0){
+            for(var x=0; x < vList.length; x++){
+                LoadRecordRow(vList[x]);
+            }
+        }
+
+    }
+
+    function LoadRecordRow(vData){
+
+        var tblList = $("#tblList").DataTable();
+
+        tdID = vData.ID;
+
+        tdAction="";
+
+        if(IsAdmin==1 || IsAllowView==1){
+
+        tdAction = "<div class='dropdown'>";
+
+                         if(vData.Status==1){
+                             tdAction = tdAction + "<span class='bx bx-right-arrow-circle font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' role='menu' style='color:green;'></span> ";  
+                             tdAction = tdAction +  "<div class='dropdown-menu dropdown-menu-right'>"; 
+                         }else {
+                            tdAction = tdAction + "<span class='bx bx-right-arrow-circle font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' role='menu' style='color:red;'></span> ";
+                            tdAction = tdAction +  "<div class='dropdown-menu dropdown-menu-right'>";                          
+                         }
+
+                       if(IsAdmin==1 || IsAllowEdit==1){
+
+                          tdAction = tdAction + 
+
+                            "<a class='dropdown-item' href='javascript:void(0);' onclick='EditRecord(" + vData.ID + ",true)' style='border-bottom: 1px solid lightgray;'>"+
+                                "<i class='bx bx-edit-alt mr-1'></i> " +
+                                "Edit Information" +
+                            "</a>";
+                        
+                        }
+
+                        tdAction = tdAction +
+
+                            "<a class='dropdown-item' href='javascript:void(0);' onclick='EditRecord(" + vData.ID + ",false)'>"+
+                                "<i class='bx bx-search-alt mr-1'></i> " +
+                                "View Information" +
+                            "</a>";
+                         
+                         tdAction = tdAction +  "</div>"+
+                      
+                    "</div>";
+        }
+        
+        tdOTRateCode = "<span>" + vData.Code + "</span>";
+        tdOTRateName = "<span>" + vData.Name + "</span>";
+ 
+       tdIsOTND = "";       
+        if(vData.IsOTND == 1){
+            tdIsOTND += "<span style='color:green;display:flex;'> Yes </span>";
+        }else{
+            tdIsOTND += "<span style='color:red;display:flex;'> No </span>";
+        }
+
+        tdOTRate = "<span>" + vData.Rate + "</span>";
+        tdOTDailyRate = "<span>" + vData.DailyRate + "</span>";
+        
+        tdStatus = "";
+
+        if(vData.Status == 1){
+            tdStatus += "<span style='color:green;display:flex;'> <i class='bx bx-check-circle'></i> Active </span>";
+        }else{
+            tdStatus += "<span style='color:red;display:flex;'> <i class='bx bx-x-circle'></i> Inactive </span>";
+        }
+
+       
+        //Check if record already listed
+        var IsRecordExist = false;
+        tblList.rows().every(function ( rowIdx, tableLoop, rowLoop ) {
+            var rowData = this.data();
+            if(rowData[0] == vData.ID){
+
+                IsRecordExist = true;
+                //Edit Row
+                curData = tblList.row(rowIdx).data();
+                curData[0] = tdID;
+                curData[1] = tdAction;
+                curData[2] = tdOTRateCode;
+                curData[3] = tdOTRateName;
+                curData[4] = tdIsOTND;
+                curData[5] = tdOTRate;
+                curData[6] = tdOTDailyRate;
+                curData[7] = tdStatus;
+                tblList.row(rowIdx).data(curData).invalidate().draw();
+            }
+        });
+
+        if(!IsRecordExist){
+
+            //New Row
+            tblList.row.add([
+                    tdID,
+                    tdAction,
+                    tdOTRateCode,
+                    tdOTRateName,
+                    tdIsOTND,
+                    tdOTRate,
+                    tdOTDailyRate,                    
+                    tdStatus
+                ]).draw();          
+        }
+    }
+
+    function Clearfields(){
+
+        EnabledDisbledText(false);
+
+        $("#OTRateID").val('0');
+
+        $("#OTRateCode").val('');
+        $("#Status").val('').change();
+
+        $("#OTRateName").val('');
+        $("#IsOTND").val('').change();
+        $("#OTRateDescription").val('');
+
+        $("#OTRate").val('');
+        $("#OTRateDaily").val('');
+
+        $("#btnSaveRecord").show();
+        $("#btnCancelRecord").show();
+
+    }
+
+    function EnabledDisbledText(vEnabled){
+
+        $("#OTRateCode").attr('disabled', vEnabled); 
+        $("#Status").attr('disabled', vEnabled); 
+
+        $("#OTRateName").attr('disabled', vEnabled); 
+        $("#IsOTND").val('').change();
+        $("#OTRateDescription").attr('disabled', vEnabled); 
+
+        $("#OTRate").attr('disabled', vEnabled); 
+        $("#OTRateDaily").attr('disabled', vEnabled); 
+       
+       $("#IsOTND").attr('disabled', vEnabled);      
+       $("#Status").attr('disabled', vEnabled); 
+   }
+
+    function resetTextBorderToNormal(){
+
+        $("#OTRateCode").css({"border":"#ccc 1px solid"});
+        $("#OTRateName").css({"border":"#ccc 1px solid"}); 
+         $("#IsOTND").css({"border":"#ccc 1px solid"}); 
+        $("#OTRateDescription").css({"border":"#ccc 1px solid"}); 
+
+        $("#OTRate").css({"border":"#ccc 1px solid"}); 
+        $("#OTRateDaily").css({"border":"#ccc 1px solid"}); 
+            
+        $("#Status").css({"border":"#ccc 1px solid"}); 
+    }
+
+    function NewRecord(){
+
+        Clearfields();
+        $("#record-modal").modal();
+
+    }
+
+    function EditRecord(vRecordID,vAllowEdit){
+
+        if(vRecordID > 0){
+            $.ajax({
+                type: "post",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    Platform: "{{ config('app.PLATFORM_ADMIN') }}",
+                    OTRateID: vRecordID
+                },
+                url: "{{ route('get-ot-rate-info') }}",
+                dataType: "json",
+                success: function(data){
+
+                    if(data.Response =='Success' && data.OTRateInfo != undefined){
+
+                        Clearfields();
+
+                        $("#OTRateID").val(data.OTRateInfo.ID);
+                        $("#OTRateCode").val(data.OTRateInfo.Code);
+                        $("#OTRateName").val(data.OTRateInfo.Name);
+                    
+                        if(data.OTRateInfo.IsOTND==1){                            
+                            $("#IsOTND").val("1").change();
+                        }else{                            
+                            $("#IsOTND").val("0").change();
+                        }  
+
+                        $("#OTRateDescription").val(data.OTRateInfo.Description);                          
+
+                        $("#OTRate").val(data.OTRateInfo.Rate);
+                        $("#OTRateDaily").val(data.OTRateInfo.DailyRate);
+
+                        if(data.OTRateInfo.Status==1){                            
+                            $("#Status").val("1").change();
+                        }else{                            
+                            $("#Status").val("0").change();
+                        }                      
+
+                        $("#OTRateCode").attr("style", "border: 1px solid rgb(204, 204, 204) !important");
+                        $("#OTRateName").attr("style", "border: 1px solid rgb(204, 204, 204) !important");
+                        $("#OTRateDescription").attr("style", "border: 1px solid rgb(204, 204, 204) !important");
+                        $("#IsOTND").attr("style", "border: 1px solid rgb(204, 204, 204) !important");
+                        $("#OTRate").attr("style", "border: 1px solid rgb(204, 204, 204) !important");
+                        $("#OTRateDaily").attr("style", "border: 1px solid rgb(204, 204, 204) !important");
+                        $("#Status").attr("style", "border: 1px solid rgb(204, 204, 204) !important");
+                        
+                        buttonOneClick("btnSaveRecord", "<i class='bx bx-save mr-1' style='font-size: 21px;'></i> Save", false);                                    
+
+                        if(vAllowEdit){
+                            $("#btnSaveRecord").show();
+                            $("#btnCancelRecord").text('Cancel');
+                            EnabledDisbledText(false);
+                        }else{
+                            $("#btnSaveRecord").hide();
+                            $("#btnCancelRecord").text('Close');
+                            EnabledDisbledText(true);
+                        }
+
+                        $("#divLoader").hide();
+                        $("#record-modal").modal();
+
+                    }else{
+                        $("#divLoader").hide();
+                         showHasErrorMessage('',data.ResponseMessage);
+                         return;
+                    }
+                },
+                error: function(data){
+                    $("#divLoader").hide();
+                    buttonOneClick("btnSaveRecord", "<i class='bx bx-save mr-1' style='font-size: 21px;'></i> Save", false);                                                        
+                    console.log(data.responseText);                    
+                   
+                },
+                beforeSend:function(vData){
+                    $("#divLoader").show();
+                    buttonOneClick("btnSaveRecord", "", false);
+                }
+            });
+        }
+    }
+
+    function SaveRecord(){
+
+        var vOTRateID = $("#vOTRateID").val();
+        var vOTRateCode = $("#OTRateCode").val();
+        var vOTRateName = $("#OTRateName").val();
+        var vIsOTND = $("#IsOTND").val();
+        var vOTRateDescription = $("#OTRateDescription").val();
+
+        var vOTRate = $("#OTRate").val();
+        var vOTDailyRate = $("#OTRateDaily").val();
+               
+        var vStatus = $("#Status").val();
+        
+        resetTextBorderToNormal();
+
+        
+        if(vOTRateCode.trim()=="") {
+           showHasErrorMessage('OTRateCode','Enter ot rate code.');
+           return;
+       }
+
+        if(vOTRateName.trim()=="") {
+           showHasErrorMessage('OTRateName','Enter Overtime rate name.');
+           return;
+       }
+
+        if(vOTRate.trim()=="") {
+           showHasErrorMessage('OTRate','Enter Overtime rate.');
+           return;
+       }
+
+        if(vOTDailyRate.trim()=="") {
+           showHasErrorMessage('OTRateDaily','Enter daily Overtime rate.');
+           return;
+       }
+
+       if(vIsOTND.trim()=="") {
+           showHasErrorMessage('IsOTND','Select this records is Overtime Nigh Diffenrential or not');
+           return;
+       }
+
+        if(vStatus.trim()=="") {
+           showHasErrorMessage('Status','Select status from the list.');
+           return;
+       }
+   
+       // SAVE DATA
+        $.ajax({
+            type: "post",
+            data: {
+                _token: '{{ csrf_token() }}',
+                Platform: "{{ config('app.PLATFORM_ADMIN') }}",
+                OTRateID: $("#OTRateID").val(),                
+                OTRateCode: $("#OTRateCode").val(),
+                OTRateName: $("#OTRateName").val(),
+                IsOTND: $("#IsOTND").val(),
+                OTRateDescription: $("#OTRateDescription").val(),
+                OTRate: $("#OTRate").val(),
+                OTDailyRate: $("#OTRateDaily").val(),
+                Status: $("#Status").val()
+            },
+            url: "{{ route('do-save-ot-rate') }}",
+            dataType: "json",
+            success: function(data){
+
+                $("#divLoader").hide();
+                buttonOneClick("btnSaveRecord", "Save", false);
+
+                if(data.Response =='Success'){
+                    $("#record-modal").modal('hide');
+                    showHasSuccessMessage(data.ResponseMessage);
+                    LoadRecordRow(data.OTRateInfo);
+                }else{
+                    showHasErrorMessage('',data.ResponseMessage);
+                    return;
+                     
+                }
+            },
+            error: function(data){
+                $("#divLoader").hide();
+                buttonOneClick("btnSaveRecord", "Save", false);
+
+             
+                console.log(data.responseText);
+               
+            },
+            beforeSend:function(vData){
+                $("#divLoader").show();
+                buttonOneClick("btnSaveRecord", "", true);
+            }
+        });
+
+    }
+
+  function GenerateExcel(){
+    $.ajax({
+          type: "post",
+          data: {
+              _token: '{{ csrf_token() }}',
+              Platform : "{{ config('app.PLATFORM_ADMIN') }}"          
+          },
+          url: "{{ route('get-excel-ot-rate-list') }}",
+          dataType: "json",
+          success: function(data){
+
+              if(data.Response=="Success"){
+                   resultquery=data.AllOTRateList;
+                   ShowGeneratedExcel();
+              }
+             
+          },
+          error: function(data){
+              console.log(data.responseText);
+          },
+          beforeSend:function(vData){
+    
+          }
+    });
+       
+   }
+     
+  function ShowGeneratedExcel(){
+        
+          var xlsRows = [];
+          var createXLSLFormatObj = [];
+                 
+         // Excel Headers
+          var xlsHeader = [
+                            " CODE NO ",
+                            " O.T RATE NAME ", 
+                            " O.T RATE DESCRIPTION ",
+                            " O.T RATE ",
+                            " O.T DAILY RATE ",
+                            " STATUS "
+                          ];
+
+          
+            xlsRows=resultquery;
+          
+            createXLSLFormatObj.push(xlsHeader);
+
+             var intRowCnt = 1;
+              $.each(xlsRows, function(index, value) {
+                  var innerRowData = [];   
+                  $.each(value, function(ind, val) {
+                    
+                    if(ind == "Code" ||
+                        ind == "Name" ||
+ 
+                        ind == "Description" ||
+                        ind == "Rate" ||
+
+                        ind == "DailyRate" ||
+                        ind == "Status"){
+
+                            innerRowData.push(val);
+                        }
+
+                  });
+
+                  createXLSLFormatObj.push(innerRowData);
+                   intRowCnt = intRowCnt + 1;
+        
+              });
+
+            var ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+            for (var i = 1; i <= intRowCnt; i++) {
+                ws["D" + i].z = '#,##0.00_);\\(#,##0.00\\)';
+                ws["E" + i].z = '#,##0.00_);\\(#,##0.00\\)';   
+
+                ws["D" + i].t = 'n';
+                ws["E" + i].t = 'n';
+                     
+            }
+
+            const countheader = Object.keys(createXLSLFormatObj); // columns name header to
+
+             var wscols = [];
+              for (var i = 0; i < countheader.length; i++) {  // columns length added
+                 wscols.push({ wch: Math.max(countheader[i].toString().length + 25) })
+              }
+              
+            ws['!cols'] = wscols;
+                       
+            /* File Name */
+            var wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws,"OT Rate List Sheet");
+
+            /* generate file and download */
+            const wbout = XLSX.write(wb, { type: "array", bookType: "xlsx" });
+            saveAs(new Blob([wbout], { type: "application/octet-stream" }), "All-OT-Rate-Report.xlsx");
+
+            showHasSuccessMessage('Excel file has successfully created & downloaded at Download Folder');     
+                          
+     }
+
+</script>
+
+
+<!-- Scrolling left & right by dragging table  -->
+<script>
+    $(document).ready(function() {
+      // Initialize the DataTable
+      $('#tblList').DataTable();
+
+      // Enable horizontal scroll
+      $('#style-2').on('mousedown', function(e) {
+        var startX = e.pageX;
+        var scrollLeft = $(this).scrollLeft();
+        $(this).on('mousemove', function(e) {
+          var distance = e.pageX - startX;
+          $(this).scrollLeft(scrollLeft - distance);
+        });
+        $(this).on('mouseup', function() {
+          $(this).off('mousemove');
+        });
+      });
+    });
+  </script>
+
+@endsection
+
+
+

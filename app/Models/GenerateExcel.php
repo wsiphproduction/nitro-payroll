@@ -1282,7 +1282,7 @@ public function generatePayrollRegisterPendingListExcel($param){
       ->join('payroll_branch_site as brnchsite', 'brnchsite.ID', '=', 'emp.company_branch_site_id')
       ->join('payroll_department as dept', 'dept.ID', '=', 'emp.department_id')
       ->join('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
-      ->leftjoin('payroll_section as sec', 'sec.DepartmentID', '=', 'dept.ID')
+      ->leftjoin('payroll_section as sec', 'sec.id', '=', 'emp.section_id')  
       ->leftjoin('payroll_job_type as job', 'job.ID', '=', 'emp.job_title_id')           
 
             ->selectraw("              

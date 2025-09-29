@@ -640,8 +640,8 @@ public function doSaveIncomeDeductionTempTransactionPerBatch($data){
         $IncomeDeductionAmnt = $IncomeDeductionTempDataItems[$x]["TotalIncomeDeductionAmnt"];
         $TotalIncomeDeductionAmnt = $IncomeDeductionTempDataItems[$x]["TotalIncomeDeductionAmnt"];
         
-        $MonthsToPay=0;
-        $MonthsToPay=ceil($TotalIncomeDeductionAmnt / $AmortizationAmnt);
+        $MonthsToPay=1;
+        //$MonthsToPay=ceil($TotalIncomeDeductionAmnt / $AmortizationAmnt);
         $Remarks =$IncomeDeductionTempDataItems[$x]["Remarks"];
         $Status =$IncomeDeductionTempDataItems[$x]["Status"];
         

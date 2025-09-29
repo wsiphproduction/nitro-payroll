@@ -35,7 +35,7 @@ body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation l
                         <ul class="nav navbar-nav">
                             <li class="nav-item d-none d-lg-block">
                                 <a class="nav-link bookmark-star mx3-color">
-                                  <h5> NITRO MANPOWER.: <span style="font-size:15px;">  </span></h5> 
+                                  <h5> Nitro Pacific Rockworks, Inc. <span style="font-size:15px;">  </span></h5> 
                                 </a>
                             </li>
                         </ul>
@@ -77,7 +77,7 @@ body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation l
                         <div class="brand-logo">
                             <img class="logo" src="{{ URL::asset('public/img/nitro-logo.png') }}" style="height:50px;position:relative;top:-10px;" />
                         </div>
-                        <h2 class="brand-text mb-0 white-color" style="font-size: 15px;margin-left:10px;">Nitro Payroll</h2>
+                        <h2 class="brand-text mb-0 white-color" style="font-size: 15px;margin-left:10px;">Nitro Pacific <br> Rockworks, Inc.</h2>
                     </a>
                 </li>
                 <li class="nav-item nav-toggle">

@@ -286,13 +286,13 @@
             <tr style="vertical-align: top;">
                 <td style="width: 70%; text-align: left;">
                     <div class="col-md-12" style="padding: 0px; margin:0px;">
-                        <span style="font-size:15px; font-weight:bold;">NITRO PACIFIC </span>
+                        <span style="font-size:15px; font-weight:bold;">Nitro Pacific Rockworks, Inc. </span>
                     </div>
                 </td>
                 <td style='width:0%;'></td>
                 <td style="width: 30%; text-align: left; padding-left:10px; ">
                     <div class="col-md-12" style="padding: 0px; margin:0px;">
-                        <span style="font-size:15px; font-weight:bold;">NITRO PACIFIC </span>
+                        <span style="font-size:15px; font-weight:bold;">Nitro Pacific Rockworks, Inc. </span>
                     </div>
                 </td>
             </tr>

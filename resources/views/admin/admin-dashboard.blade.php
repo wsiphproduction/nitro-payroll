@@ -289,7 +289,7 @@
           <!--/ Statistics Cards -->
     </div>
 
-    <div class="row">
+    <div class="row" style="display:none;">
       <!-- Statistics Cards -->
       <div class="col-6 col-md-4 col-lg-6 mb-4">
         <div class="card h-100">

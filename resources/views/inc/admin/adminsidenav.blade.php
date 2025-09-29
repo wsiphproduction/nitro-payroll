@@ -75,9 +75,9 @@ body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation l
                 <li class="nav-item mr-auto">
                     <a class="navbar-brand" href="{{ route('admin-dashboard') }}">
                         <div class="brand-logo">
-                            <img class="logo" src="{{ URL::asset('public/img/nitromobilelogo.jpg') }}" />
+                            <img class="logo" src="{{ URL::asset('public/img/nitro-logo.png') }}" style="height:50px;position:relative;top:-10px;" />
                         </div>
-                        <h2 class="brand-text mb-0 white-color" style="font-size: 20px;">Nitro Payroll</h2>
+                        <h2 class="brand-text mb-0 white-color" style="font-size: 15px;margin-left:10px;">Nitro Payroll</h2>
                     </a>
                 </li>
                 <li class="nav-item nav-toggle">

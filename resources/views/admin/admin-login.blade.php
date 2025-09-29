@@ -215,7 +215,7 @@
                   @endif
                     
                     <div class="logo">
-                        <img style="width:200px;" src="{{URL::asset('public/img/PMC-Company-Logo.png')}}">
+                        <img style="width:100px;" src="{{URL::asset('public/img/nitro-logo.png')}}">
                     </div>
                     <div class="card-header">
                         <p class="fs-5 mb-0">Login to your account</p>

@@ -70,7 +70,7 @@ body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation l
 
     <!-- BEGIN: Main Menu-->
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
-        <div class="navbar-header" style="background: #f68c1f;border-right:6px solid #475F7B;">
+        <div class="navbar-header" style="background: #11d624;border-right:6px solid #475F7B;">
             <ul class="nav navbar-nav flex-row">
                 <li class="nav-item mr-auto">
                     <a class="navbar-brand" href="{{ route('admin-dashboard') }}">

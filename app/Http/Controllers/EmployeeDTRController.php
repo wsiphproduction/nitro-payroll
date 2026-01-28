@@ -111,7 +111,8 @@ public function showAdminDTRUploader(Request $request){
     $param["Status"] = request("Status");
     $param["PageNo"] = request("PageNo");
     $param["Limit"] = config('app.ListRowLimit');
-   
+    $param["cutoffid"] = Session('ADMIN_PAYROLL_PERIOD_SCHED_ID') ?? 0;
+    
     $RetVal['Response'] = "Success";
     $RetVal['ResponseMessage'] = "";
     $RetVal["EmployeeDTRList"] = $EmployeeDTR->getEmployeeDTRList($param);

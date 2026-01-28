@@ -31,6 +31,7 @@ public function getEmployeeDTRList($param){
     $Limit = $param['Limit'];
     $PageNo = $param['PageNo'];
     $Status = $param['Status'];
+    $cutoffid = $param['cutoffid'];
 
     $SearchText = trim($param['SearchText']);
 
@@ -143,6 +144,8 @@ public function getEmployeeDTRList($param){
             }
         }
     }
+
+    $query->where("peds.PayrollPeriodID","=",$cutoffid); 
 
     if($SearchText != ''){
         $arSearchText = explode(" ",$SearchText);

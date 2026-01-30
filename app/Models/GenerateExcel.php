@@ -1192,6 +1192,8 @@ public function generatePayrollRegisterApprovedListExcel($param){
               COALESCE(paytrnemp.Undertime,0) as UndertimeAmount,
               COALESCE(paytrnemp.Absent,0) as AbsentAmount,
 
+              COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
+
               COALESCE(paytrnemp.Leave1,0) as SL,
               COALESCE(paytrnemp.Leave2,0) as VL,
               COALESCE(paytrnemp.Leave,0) - COALESCE(paytrnemp.Leave1,0) - COALESCE(paytrnemp.Leave2,0) as OL,
@@ -1246,7 +1248,8 @@ public function generatePayrollRegisterApprovedListExcel($param){
          $query->where('paytrnemp.EmployeeID',$EmployeeID);
        }
         
-      $query->orderBy("EmployeeName","ASC");
+    $query->orderBy("TeamLeader", "ASC")
+          ->orderBy("EmployeeName", "ASC");
     
 
     $list = $query->get();
@@ -1297,6 +1300,8 @@ public function generatePayrollRegisterPendingListExcel($param){
               COALESCE(paytrnemp.Late,0) as LateAmount,
               COALESCE(paytrnemp.Undertime,0) as UndertimeAmount,
               COALESCE(paytrnemp.Absent,0) as AbsentAmount,
+
+              COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
 
               COALESCE(paytrnemp.Leave1,0) as SL,
               COALESCE(paytrnemp.Leave2,0) as VL,
@@ -1351,7 +1356,8 @@ public function generatePayrollRegisterPendingListExcel($param){
          $query->where('paytrnemp.EmployeeID',$EmployeeID);
        }
       
-      $query->orderBy("EmployeeName","ASC");
+    $query->orderBy("TeamLeader", "ASC")
+          ->orderBy("EmployeeName", "ASC");
     
 
     $list = $query->get();

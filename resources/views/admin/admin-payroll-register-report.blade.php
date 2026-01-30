@@ -308,6 +308,7 @@ nav > div a.nav-item.nav-link:focus
                                                      <th></th>                                 
                                                         <th style="min-width: 110px;">EMPLOYEE ID</th>                                              
                                                         <th style="min-width: 120px;">EMPLOYEE NAME</th>                                              
+                                                        <th style="min-width: 120px;">TEAM LEADER</th>                                             
                                                         <th style="min-width: 110px;">BASIC PAY</th>
                                                         <th style="min-width: 110px;">E-COLA</th>
                                                         <th style="min-width: 60px;">LATE</th>
@@ -534,6 +535,8 @@ nav > div a.nav-item.nav-link:focus
             tdEmployeeNo = "<span class='font-normal'>" + vData.EmployeeNo + "</span>";
             tdEmployeeName = "<span class='font-normal'>" + vData.EmployeeName + "</span>";
 
+            tdTeamLeader = "<span class='font-normal'>" + (vData.TeamLeader ?? 'NO TEAM LEADER') + "</span>";
+
             tdBasicPay = "<span class='font-normal'>" + FormatDecimal(vData.BasicPay,2) + "</span>";
             tdECOLA = "<span class='font-normal'>" + FormatDecimal(vData.ECOLA,2) + "</span>";
 
@@ -588,31 +591,32 @@ nav > div a.nav-item.nav-link:focus
                     curData[0] = tdID;
                     curData[1] = tdEmployeeNo;
                     curData[2] = tdEmployeeName;
-                    curData[3] = tdBasicPay;
-                    curData[4] = tdECOLA;
-                    curData[5] = tdLate;                      
-                    curData[6] = tdUnderTime;                      
-                    curData[7] = tdAbsent;                      
-                    curData[8] = tdSL;
-                    curData[9] = tdVL;
-                    curData[10] = tdOL;
-                    curData[11] = tdNightDiff;
-                    curData[12] = tdOvertimePay;    
-                    curData[13] = tdOvertimeND;    
-                    curData[14] = tdOtherTaxableEarnings;
-                    curData[15] = tdOtherNonTaxableEarnings;
-                    curData[16] = tdGrossPay;
-                    curData[17] = tdSSS;
-                    curData[18] = tdPHIC;
-                    curData[19] = tdHDMF;   
-                    curData[20] = tdHDMFMP2;
-                    curData[21] = tdTaxableIncome;                    
-                    curData[22] = tdWTax;
-                    curData[23] = tdLoanDeduction;
-                    curData[24] = tOtherDeduction;
-                    curData[25] = tdTotalDeduction;
-                    curData[26] = tdNetPay;
-                    curData[27] = tdStatus;
+                    curData[3] = tdTeamLeader;
+                    curData[4] = tdBasicPay;
+                    curData[5] = tdECOLA;
+                    curData[6] = tdLate;                      
+                    curData[7] = tdUnderTime;                      
+                    curData[8] = tdAbsent;                      
+                    curData[9] = tdSL;
+                    curData[10] = tdVL;
+                    curData[11] = tdOL;
+                    curData[12] = tdNightDiff;
+                    curData[13] = tdOvertimePay;    
+                    curData[14] = tdOvertimeND;    
+                    curData[15] = tdOtherTaxableEarnings;
+                    curData[16] = tdOtherNonTaxableEarnings;
+                    curData[17] = tdGrossPay;
+                    curData[18] = tdSSS;
+                    curData[19] = tdPHIC;
+                    curData[20] = tdHDMF;   
+                    curData[21] = tdHDMFMP2;
+                    curData[22] = tdTaxableIncome;                    
+                    curData[23] = tdWTax;
+                    curData[24] = tdLoanDeduction;
+                    curData[25] = tOtherDeduction;
+                    curData[26] = tdTotalDeduction;
+                    curData[27] = tdNetPay;
+                    curData[28] = tdStatus;
                     
                     this.data(curData).invalidate().draw();
                 }
@@ -624,6 +628,7 @@ nav > div a.nav-item.nav-link:focus
                 tdID,
                 tdEmployeeNo,
                 tdEmployeeName,
+                tdTeamLeader,
                 tdBasicPay,
                 tdECOLA,
                 tdLate,
@@ -734,42 +739,41 @@ nav > div a.nav-item.nav-link:focus
                             ""
                           ];
           createXLSLFormatObj.push(xlsReportHeader);
-                 
+                
          // Excel Headers
           var xlsHeader = [
-                            "{{ strtoupper('Emlpoyee No.') }}",
-                            "{{ strtoupper('Emlpoyee Name') }}",
-                            "{{ strtoupper('Basic Pay') }}", 
-                            "{{ strtoupper('ECOLA') }}",
-                            "{{ strtoupper('Late') }}", 
-                            "{{ strtoupper('UnderTime') }}", 
-                            "{{ strtoupper('Absent') }}",
-                            "{{ strtoupper('SL') }}", 
-                            "{{ strtoupper('VL') }}",
-                            "{{ strtoupper('OL') }}", 
-                            "{{ strtoupper('Night Differential') }}",
-                            "{{ strtoupper('Overtime Pay') }}",
-                            "{{ strtoupper('ND OT') }}",
-                            "{{ strtoupper('Other Taxable Earnings') }}",
-                            "{{ strtoupper('Other Non Taxable Earnings') }}",
-                            "{{ strtoupper('Gross Pay') }}", 
-                            "{{ strtoupper('SSS Contribution') }}",
-                            "{{ strtoupper('PHIC Contribution') }}", 
-                            "{{ strtoupper('HDMF Contribution') }}", 
-                            "{{ strtoupper('HDMF MP2') }}", 
-                            "{{ strtoupper('Taxable Income') }}", 
-                            "{{ strtoupper('Withholding Tax') }}",
-                            "{{ strtoupper('Loan Deductions') }}",
-                            "{{ strtoupper('Other Deductions') }}", 
-                            "{{ strtoupper('Total Deductions') }}", 
-                            "{{ strtoupper('Net Pay') }}", 
-                            "{{ strtoupper('Status') }}"                         
-                          ];
-
+                "{{ strtoupper('Employee No.') }}",
+                "{{ strtoupper('Employee Name') }}",
+                "{{ strtoupper('Basic Pay') }}", 
+                "{{ strtoupper('ECOLA') }}",
+                "{{ strtoupper('Late') }}", 
+                "{{ strtoupper('UnderTime') }}", 
+                "{{ strtoupper('Absent') }}",
+                "{{ strtoupper('SL') }}", 
+                "{{ strtoupper('VL') }}",
+                "{{ strtoupper('OL') }}", 
+                "{{ strtoupper('Night Differential') }}",
+                "{{ strtoupper('Overtime Pay') }}",
+                "{{ strtoupper('ND OT') }}",
+                "{{ strtoupper('Other Taxable Earnings') }}",
+                "{{ strtoupper('Other Non Taxable Earnings') }}",
+                "{{ strtoupper('Gross Pay') }}", 
+                "{{ strtoupper('SSS Contribution') }}",
+                "{{ strtoupper('PHIC Contribution') }}", 
+                "{{ strtoupper('HDMF Contribution') }}", 
+                "{{ strtoupper('HDMF MP2') }}", 
+                "{{ strtoupper('Taxable Income') }}", 
+                "{{ strtoupper('Withholding Tax') }}",
+                "{{ strtoupper('Loan Deductions') }}",
+                "{{ strtoupper('Other Deductions') }}", 
+                "{{ strtoupper('Total Deductions') }}", 
+                "{{ strtoupper('Net Pay') }}", 
+                "{{ strtoupper('Status') }}"                         
+            ];
           
             xlsRows=resultquery;
           
-            createXLSLFormatObj.push(xlsHeader);
+            // createXLSLFormatObj.push(xlsHeader);
 
             var intRowCnt = 5;
             var dblBasicPay = 0;
@@ -797,163 +801,215 @@ nav > div a.nav-item.nav-link:focus
             var dblTotalDeduction = 0;
             var dblNetPay = 0;
 
-              $.each(xlsRows, function(index, value) {
-                  var innerRowData = [];   
-                  $.each(value, function(ind, val) {
-                                        
-                    if(ind == "BasicPay" ||
-                        ind == "ECOLA" ||
-                        ind == "LateAmount" ||
-                        ind == "UndertimeAmount" ||
-                        ind == "AbsentAmount" ||
-                        ind == "SL" ||
-                        ind == "VL" ||
-                        ind == "OL" ||
-                        ind == "NightDiff" ||
-                        ind == "OTPay" ||
-                        ind == "OTND" ||
-                        ind == "OtherTaxableEarnings" ||
-                        ind == "OtherNonTaxableEarnings" ||
-                        ind == "GrossPay" ||
-                        ind == "SSS" ||
-                        ind == "PHIC" ||
-                        ind == "HDMF" ||
-                        ind == "HDMFMP2" ||
-                        ind == "TaxableIncome" ||
-                        ind == "WTax" ||
-                        ind == "LoanDeduction" ||
-                        ind == "OtherDeduction" ||
-                        ind == "TotalDeduction" ||
-                        ind == "NetPay"){
+        // grand totals
+        var gBasicPay = 0, gECOLA = 0, gLate = 0, gUndertime = 0, gAbsent = 0,
+            gSL = 0, gVL = 0, gOL = 0, gNightDiff = 0, gOTPay = 0, gOTND = 0,
+            gOtherTaxable = 0, gOtherNonTaxable = 0, gGrossPay = 0,
+            gSSS = 0, gPHIC = 0, gHDMF = 0, gHDMFMP2 = 0,
+            gTaxable = 0, gWTax = 0, gLoan = 0, gOtherDed = 0,
+            gTotalDed = 0, gNetPay = 0;
 
-                        innerRowData.push(val);
+        // team leader subtotals
+        var tBasicPay = 0, tECOLA = 0, tLate = 0, tUndertime = 0, tAbsent = 0,
+            tSL = 0, tVL = 0, tOL = 0, tNightDiff = 0, tOTPay = 0, tOTND = 0,
+            tOtherTaxable = 0, tOtherNonTaxable = 0, tGrossPay = 0,
+            tSSS = 0, tPHIC = 0, tHDMF = 0, tHDMFMP2 = 0,
+            tTaxable = 0, tWTax = 0, tLoan = 0, tOtherDed = 0,
+            tTotalDed = 0, tNetPay = 0;
 
-                        if(ind == "BasicPay"){
-                            dblBasicPay = parseFloat(dblBasicPay) + parseFloat(val);
-                        }else if(ind == "ECOLA"){
-                            dblECOLA = parseFloat(dblECOLA) + parseFloat(val);
-                        }else if(ind == "LateAmount"){
-                            dblLateAmount = parseFloat(dblLateAmount) + parseFloat(val);
-                        }else if(ind == "UndertimeAmount"){
-                            dblUndertimeAmount = parseFloat(dblUndertimeAmount) + parseFloat(val);
-                        }else if(ind == "AbsentAmount"){
-                            dblAbsentAmount = parseFloat(dblAbsentAmount) + parseFloat(val);
-                        }else if(ind == "SL"){
-                            dblSL = parseFloat(dblSL) + parseFloat(val);
-                        }else if(ind == "VL"){
-                            dblVL = parseFloat(dblVL) + parseFloat(val);
-                        }else if(ind == "OL"){
-                            dblOL = parseFloat(dblOL) + parseFloat(val);
-                        }else if(ind == "NightDiff"){
-                            dblNightDiff = parseFloat(dblNightDiff) + parseFloat(val);
-                        }else if(ind == "OTPay"){
-                            dblOTPay = parseFloat(dblOTPay) + parseFloat(val);
-                        }else if(ind == "OTND"){
-                            dblOTND = parseFloat(dblOTND) + parseFloat(val);
-                        }else if(ind == "OtherTaxableEarnings"){
-                            dblOtherTaxableEarnings = parseFloat(dblOtherTaxableEarnings) + parseFloat(val);
-                        }else if(ind == "OtherNonTaxableEarnings"){
-                            dblOtherNonTaxableEarnings = parseFloat(dblOtherNonTaxableEarnings) + parseFloat(val);
-                        }else if(ind == "GrossPay"){
-                            dblGrossPay = parseFloat(dblGrossPay) + parseFloat(val);
-                        }else if(ind == "SSS"){
-                            dblSSS = parseFloat(dblSSS) + parseFloat(val);
-                        }else if(ind == "PHIC"){
-                            dblPHIC = parseFloat(dblPHIC) + parseFloat(val);
-                        }else if(ind == "HDMF"){
-                            dblHDMF = parseFloat(dblHDMF) + parseFloat(val);
-                        }else if(ind == "HDMFMP2"){
-                            dblHDMFMP2 = parseFloat(dblHDMFMP2) + parseFloat(val);
-                        }else if(ind == "TaxableIncome"){
-                            dblTaxableIncome = parseFloat(dblTaxableIncome) + parseFloat(val);
-                        }else if(ind == "WTax"){
-                            dblWTax = parseFloat(dblWTax) + parseFloat(val);
-                        }else if(ind == "LoanDeduction"){
-                            dblLoanDeduction = parseFloat(dblLoanDeduction) + parseFloat(val);
-                        }else if(ind == "OtherDeduction"){
-                            dblOtherDeduction = parseFloat(dblOtherDeduction) + parseFloat(val);
-                        }else if(ind == "TotalDeduction"){
-                            dblTotalDeduction = parseFloat(dblTotalDeduction) + parseFloat(val);
-                        }else if(ind == "NetPay"){
-                            dblNetPay = parseFloat(dblNetPay) + parseFloat(val);
-                        }
-                    }else{
-                        innerRowData.push(val);
-                    }
+        var currentTeamLeader = null;
 
-                  });
 
-                  createXLSLFormatObj.push(innerRowData);
-                  intRowCnt = intRowCnt + 1;
+        var currentTeamLeader = null;
 
-              });
+        $.each(xlsRows, function(index, v) {
+
+            // TEAM LEADER
+            if (currentTeamLeader !== v.TeamLeader) {
+
+                // sho previous subtotal
+                if (currentTeamLeader !== null) {
+                    createXLSLFormatObj.push(
+                        pushSubtotalRow("SUBTOTAL", {
+                            BasicPay: tBasicPay, ECOLA: tECOLA, Late: tLate,
+                            Undertime: tUndertime, Absent: tAbsent,
+                            SL: tSL, VL: tVL, OL: tOL,
+                            NightDiff: tNightDiff, OTPay: tOTPay, OTND: tOTND,
+                            OtherTaxable: tOtherTaxable,
+                            OtherNonTaxable: tOtherNonTaxable,
+                            GrossPay: tGrossPay,
+                            SSS: tSSS, PHIC: tPHIC, HDMF: tHDMF, HDMFMP2: tHDMFMP2,
+                            Taxable: tTaxable, WTax: tWTax,
+                            Loan: tLoan, OtherDed: tOtherDed,
+                            TotalDed: tTotalDed, NetPay: tNetPay
+                        })
+                    );
+                    createXLSLFormatObj.push([]);
+                }
+
+                // reset TL totals
+                tBasicPay = tECOLA = tLate = tUndertime = tAbsent =
+                tSL = tVL = tOL = tNightDiff = tOTPay = tOTND =
+                tOtherTaxable = tOtherNonTaxable = tGrossPay =
+                tSSS = tPHIC = tHDMF = tHDMFMP2 =
+                tTaxable = tWTax = tLoan = tOtherDed =
+                tTotalDed = tNetPay = 0;
+
+                // header block
+                createXLSLFormatObj.push(["TEAM LEADER: " + v.TeamLeader]);
+                createXLSLFormatObj.push([]);
+                createXLSLFormatObj.push(xlsHeader);
+                // createXLSLFormatObj.push(new Array(xlsHeader.length).fill("—"));
+
+                currentTeamLeader = v.TeamLeader;
+            }
+
+            // EMPLOYEE ROW
+            createXLSLFormatObj.push([
+                v.EmployeeNo, v.EmployeeName, v.BasicPay, v.ECOLA, v.LateAmount,
+                v.UndertimeAmount, v.AbsentAmount, v.SL, v.VL, v.OL,
+                v.NightDiff, v.OTPay, v.OTND,
+                v.OtherTaxableEarnings, v.OtherNonTaxableEarnings,
+                v.GrossPay, v.SSS, v.PHIC, v.HDMF, v.HDMFMP2,
+                v.TaxableIncome, v.WTax, v.LoanDeduction,
+                v.OtherDeduction, v.TotalDeduction, v.NetPay, v.Status
+            ]);
+
+            // ACCUMULATE TOTALS
+            tBasicPay += parseFloat(v.BasicPay, 2);       gBasicPay += parseFloat(v.BasicPay, 2);
+            tECOLA += parseFloat(v.ECOLA, 2);             gECOLA += parseFloat(v.ECOLA, 2);
+            tLate += parseFloat(v.LateAmount, 2);         gLate += parseFloat(v.LateAmount, 2);
+            tUndertime += parseFloat(v.UndertimeAmount, 2); gUndertime += parseFloat(v.UndertimeAmount, 2);
+            tAbsent += parseFloat(v.AbsentAmount, 2);     gAbsent += parseFloat(v.AbsentAmount, 2);
+            tSL += parseFloat(v.SL, 2);                   gSL += parseFloat(v.SL, 2);
+            tVL += parseFloat(v.VL, 2);                   gVL += parseFloat(v.VL, 2);
+            tOL += parseFloat(v.OL, 2);                   gOL += parseFloat(v.OL, 2);
+            tNightDiff += parseFloat(v.NightDiff, 2);     gNightDiff += parseFloat(v.NightDiff, 2);
+            tOTPay += parseFloat(v.OTPay, 2);             gOTPay += parseFloat(v.OTPay, 2);
+            tOTND += parseFloat(v.OTND, 2);               gOTND += parseFloat(v.OTND, 2);
+            tOtherTaxable += parseFloat(v.OtherTaxableEarnings, 2); gOtherTaxable += parseFloat(v.OtherTaxableEarnings, 2);
+            tOtherNonTaxable += parseFloat(v.OtherNonTaxableEarnings, 2); gOtherNonTaxable += parseFloat(v.OtherNonTaxableEarnings, 2);
+            tGrossPay += parseFloat(v.GrossPay, 2);       gGrossPay += parseFloat(v.GrossPay, 2);
+            tSSS += parseFloat(v.SSS, 2);                 gSSS += parseFloat(v.SSS, 2);
+            tPHIC += parseFloat(v.PHIC, 2);               gPHIC += parseFloat(v.PHIC, 2);
+            tHDMF += parseFloat(v.HDMF, 2);               gHDMF += parseFloat(v.HDMF, 2);
+            tHDMFMP2 += parseFloat(v.HDMFMP2, 2);         gHDMFMP2 += parseFloat(v.HDMFMP2, 2);
+            tTaxable += parseFloat(v.TaxableIncome, 2);   gTaxable += parseFloat(v.TaxableIncome, 2);
+            tWTax += parseFloat(v.WTax, 2);               gWTax += parseFloat(v.WTax, 2);
+            tLoan += parseFloat(v.LoanDeduction, 2);      gLoan += parseFloat(v.LoanDeduction, 2);
+            tOtherDed += parseFloat(v.OtherDeduction, 2); gOtherDed += parseFloat(v.OtherDeduction, 2);
+            tTotalDed += parseFloat(v.TotalDeduction, 2); gTotalDed += parseFloat(v.TotalDeduction, 2);
+            tNetPay += parseFloat(v.NetPay, 2);           gNetPay += parseFloat(v.NetPay, 2);
+        });
+
+
+        // last team leader subtotal
+        createXLSLFormatObj.push(
+            pushSubtotalRow("SUBTOTAL", {
+                BasicPay: tBasicPay, ECOLA: tECOLA, Late: tLate,
+                Undertime: tUndertime, Absent: tAbsent,
+                SL: tSL, VL: tVL, OL: tOL,
+                NightDiff: tNightDiff, OTPay: tOTPay, OTND: tOTND,
+                OtherTaxable: tOtherTaxable,
+                OtherNonTaxable: tOtherNonTaxable,
+                GrossPay: tGrossPay,
+                SSS: tSSS, PHIC: tPHIC, HDMF: tHDMF, HDMFMP2: tHDMFMP2,
+                Taxable: tTaxable, WTax: tWTax,
+                Loan: tLoan, OtherDed: tOtherDed,
+                TotalDed: tTotalDed, NetPay: tNetPay
+            })
+        );
+
+        // space
+        createXLSLFormatObj.push([]);
+
+        // GRAND TOTAL
+        createXLSLFormatObj.push(
+            pushSubtotalRow("GRAND TOTAL", {
+                BasicPay: gBasicPay, ECOLA: gECOLA, Late: gLate,
+                Undertime: gUndertime, Absent: gAbsent,
+                SL: gSL, VL: gVL, OL: gOL,
+                NightDiff: gNightDiff, OTPay: gOTPay, OTND: gOTND,
+                OtherTaxable: gOtherTaxable,
+                OtherNonTaxable: gOtherNonTaxable,
+                GrossPay: gGrossPay,
+                SSS: gSSS, PHIC: gPHIC, HDMF: gHDMF, HDMFMP2: gHDMFMP2,
+                Taxable: gTaxable, WTax: gWTax,
+                Loan: gLoan, OtherDed: gOtherDed,
+                TotalDed: gTotalDed, NetPay: gNetPay
+            })
+        );
             
-            //Total
-            var innerRowData = [];   
-            innerRowData.push("Total");
-            innerRowData.push("");
-            innerRowData.push(dblBasicPay);
-            innerRowData.push(dblECOLA);
-            innerRowData.push(dblLateAmount);
-            innerRowData.push(dblUndertimeAmount);
-            innerRowData.push(dblAbsentAmount);
-            innerRowData.push(dblSL);
-            innerRowData.push(dblVL);
-            innerRowData.push(dblOL);
-            innerRowData.push(dblNightDiff);
-            innerRowData.push(dblOTPay);
-            innerRowData.push(dblOTND);
-            innerRowData.push(dblOtherTaxableEarnings);
-            innerRowData.push(dblOtherNonTaxableEarnings);
-            innerRowData.push(dblGrossPay);
-            innerRowData.push(dblSSS);
-            innerRowData.push(dblPHIC);
-            innerRowData.push(dblHDMF);
-            innerRowData.push(dblHDMFMP2);
-            innerRowData.push(dblTaxableIncome);
-            innerRowData.push(dblWTax);
-            innerRowData.push(dblLoanDeduction);
-            innerRowData.push(dblOtherDeduction);
-            innerRowData.push(dblTotalDeduction);
-            innerRowData.push(dblNetPay);
-            createXLSLFormatObj.push(innerRowData);
-            intRowCnt = intRowCnt + 1;
+        intRowCnt = intRowCnt + 1;
 
-            var ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
-            for (var i = 6; i < intRowCnt; i++) {
-                for (var c = 2; c < xlsHeader.length; c++){
-                    var ExcelCol = ExcelColumn(i, c);
+        var ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+        for (var i = 6; i < intRowCnt; i++) {
+            for (var c = 2; c < xlsHeader.length; c++){
+                var ExcelCol = ExcelColumn(i, c);
+                if (ws[ExcelCol]) {
                     ws[ExcelCol].z = '#,##0.00_);\\(#,##0.00\\)';
                     ws[ExcelCol].t = 'n';
                 }
             }
+        }
 
-            const countheader = Object.keys(createXLSLFormatObj); // columns name header to
+        const countheader = Object.keys(createXLSLFormatObj); // columns name header to
 
-             var wscols = [];
-              for (var i = 0; i < countheader.length; i++) {  // columns length added
-                 wscols.push({ wch: Math.max(countheader[i].toString().length + 27) })
-              }
-              
-            ws['!cols'] = wscols;
-                       
-            /* File Name */
-            var wb = XLSX.utils.book_new();
-
-            if(Status=='Approved'){
-                XLSX.utils.book_append_sheet(wb, ws,"Posted Payroll Register");  
-            }else{
-                XLSX.utils.book_append_sheet(wb, ws,"Un-Posted Payroll Register");    
+            var wscols = [];
+            for (var i = 0; i < countheader.length; i++) {  // columns length added
+                wscols.push({ wch: Math.max(countheader[i].toString().length + 27) })
             }
             
+        ws['!cols'] = wscols;
+                    
+        /* File Name */
+        var wb = XLSX.utils.book_new();
 
-            /* generate file and download */
-            const wbout = XLSX.write(wb, { type: "array", bookType: "xlsx" });
-            saveAs(new Blob([wbout], { type: "application/octet-stream" }), "Payroll-Register-Report.xlsx");
+        if(Status=='Approved'){
+            XLSX.utils.book_append_sheet(wb, ws,"Posted Payroll Register");  
+        }else{
+            XLSX.utils.book_append_sheet(wb, ws,"Un-Posted Payroll Register");    
+        }
+        
 
-            showHasSuccessMessage('Excel file has successfully created & downloaded at Download Folder');  
+        /* generate file and download */
+        const wbout = XLSX.write(wb, { type: "array", bookType: "xlsx" });
+        saveAs(new Blob([wbout], { type: "application/octet-stream" }), "Payroll-Register-Report.xlsx");
+
+        showHasSuccessMessage('Excel file has successfully created & downloaded at Download Folder');  
                           
-     }
+    }
+
+    function pushSubtotalRow(label, totals) {
+        return [
+            label, "",
+            totals.BasicPay,
+            totals.ECOLA,
+            totals.Late,
+            totals.Undertime,
+            totals.Absent,
+            totals.SL,
+            totals.VL,
+            totals.OL,
+            totals.NightDiff,
+            totals.OTPay,
+            totals.OTND,
+            totals.OtherTaxable,
+            totals.OtherNonTaxable,
+            totals.GrossPay,
+            totals.SSS,
+            totals.PHIC,
+            totals.HDMF,
+            totals.HDMFMP2,
+            totals.Taxable,
+            totals.WTax,
+            totals.Loan,
+            totals.OtherDed,
+            totals.TotalDed,
+            totals.NetPay,
+            ""
+        ];
+    }
 
     $("#GenerateFilter").change(function(){
 

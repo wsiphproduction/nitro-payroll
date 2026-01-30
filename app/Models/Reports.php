@@ -2644,6 +2644,7 @@ public function getPayrollRegisterApprovedReport($param){
               COALESCE(paytrnemp.Late,0) as LateAmount,
               COALESCE(paytrnemp.Undertime,0) as UndertimeAmount,
               COALESCE(paytrnemp.Absent,0) as AbsentAmount,
+              sec.Section as TeamLeader,
 
               COALESCE(paytrnemp.Leave1,0) as SL,
               COALESCE(paytrnemp.Leave2,0) as VL,
@@ -2827,6 +2828,8 @@ public function getPayrollRegisterPendingReport($param){
               COALESCE(paytrnemp.Late,0) as LateAmount,
               COALESCE(paytrnemp.Undertime,0) as UndertimeAmount,
               COALESCE(paytrnemp.Absent,0) as AbsentAmount,
+
+              sec.Section as TeamLeader,
 
               COALESCE(paytrnemp.Leave1,0) as SL,
               COALESCE(paytrnemp.Leave2,0) as VL,

@@ -1221,7 +1221,7 @@ public function generatePayrollRegisterApprovedListExcel($param){
 
             COALESCE(paytrnemp.TotalDeductions,0) as OtherDeduction,
 
-            COALESCE(paytrnemp.TotalEEInsurancePremiums,0) + COALESCE(paytrnemp.TotalOtherDeductions,0) as TotalDeduction,
+            COALESCE(paytrnemp.TotalEEInsurancePremiums,0) + COALESCE(paytrnemp.TotalOtherDeductions,0) + COALESCE(paytrnemp.TotalLoanDeductions,0) + COALESCE(paytrnemp.TotalDeductions,0) as TotalDeduction,
 
             COALESCE(paytrnemp.NetPay,0) as NetPay,
 
@@ -1330,7 +1330,7 @@ public function generatePayrollRegisterPendingListExcel($param){
 
             COALESCE(paytrnemp.TotalDeductions,0) as OtherDeduction,
 
-            COALESCE(paytrnemp.TotalEEInsurancePremiums,0) + COALESCE(paytrnemp.TotalOtherDeductions,0) as TotalDeduction,
+            COALESCE(paytrnemp.TotalEEInsurancePremiums,0) + COALESCE(paytrnemp.TotalOtherDeductions,0) + COALESCE(paytrnemp.TotalLoanDeductions,0) + COALESCE(paytrnemp.TotalDeductions,0) as TotalDeduction,
 
             COALESCE(paytrnemp.NetPay,0) as NetPay,
 

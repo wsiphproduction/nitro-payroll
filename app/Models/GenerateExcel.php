@@ -1200,7 +1200,8 @@ public function generatePayrollRegisterApprovedListExcel($param){
 
               COALESCE(paytrnemp.NightDifferential,0) as NightDiff,
 
-              COALESCE(paytrnemp.OvertimeReg,0) as OTPay,
+              COALESCE(paytrnemp.OvertimeReg,0) - COALESCE(paytrnemp.Overtime3,0) as OTPay,
+              COALESCE(paytrnemp.Overtime3,0) as RDDPay,
               COALESCE(paytrnemp.OvertimeND,0) as OTND,
 
             COALESCE(paytrnemp.TotalOtherTaxableIncome,0) as OtherTaxableEarnings,
@@ -1308,7 +1309,8 @@ public function generatePayrollRegisterPendingListExcel($param){
               COALESCE(paytrnemp.Leave,0) - COALESCE(paytrnemp.Leave1,0) - COALESCE(paytrnemp.Leave2,0) as OL,
 
               COALESCE(paytrnemp.NightDifferential,0) as NightDiff,
-              COALESCE(paytrnemp.OvertimeReg,0) as OTPay,
+              COALESCE(paytrnemp.OvertimeReg,0) - COALESCE(paytrnemp.Overtime3,0) as OTPay,
+              COALESCE(paytrnemp.Overtime3,0) as RDDPay,
               COALESCE(paytrnemp.OvertimeND,0) as OTND,
 
             COALESCE(paytrnemp.TotalOtherTaxableIncome,0) as OtherTaxableEarnings,

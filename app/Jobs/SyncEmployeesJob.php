@@ -47,10 +47,10 @@ class SyncEmployeesJob implements ShouldQueue
 
 
             //upload new employees from hris to payroll
-            $dd = sqlsrv_query($conn_hris, "select TOP (10) * from users");
+            $dd = sqlsrv_query($conn_hris, "select * from users");
             while($d=sqlsrv_fetch_array($dd)){
             $qry="";
-                $check = sqlsrv_fetch_array(sqlsrv_query($conn_payroll,"select TOP (10) * from users where hris_ref_id='".$d['id']."'"));
+                $check = sqlsrv_fetch_array(sqlsrv_query($conn_payroll,"select * from users where hris_ref_id='".$d['id']."'"));
                 
                 if(!isset($check)){
                 $if="(";
@@ -102,7 +102,7 @@ class SyncEmployeesJob implements ShouldQueue
 
 
             //update employment details of all employees
-            $q = sqlsrv_query($conn_hris,"select TOP (10) u.id as uid, u.employee_number,
+            $q = sqlsrv_query($conn_hris,"select u.id as uid, u.employee_number,
             di.id as division_id,di.name as division_name,
             de.id as department_idd, de.department_name as department_name,
             loc.id as location_id,loc.location as location_name,

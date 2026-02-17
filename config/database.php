@@ -93,22 +93,6 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
-        'hris' => [
-            'driver' => 'sqlsrv',
-            'host' => env('HRIS_DB_HOST'),
-            'database' => env('HRIS_DB_DATABASE'),
-            'username' => env('HRIS_DB_USERNAME'),
-            'password' => env('HRIS_DB_PASSWORD'),
-        ],
-
-        'payroll' => [
-            'driver' => 'sqlsrv',
-            'host' => env('PAYROLL_DB_HOST'),
-            'database' => env('PAYROLL_DB_DATABASE'),
-            'username' => env('PAYROLL_DB_USERNAME'),
-            'password' => env('PAYROLL_DB_PASSWORD'),
-        ],
-
     ],
 
     /*

@@ -177,6 +177,11 @@ nav > div a.nav-item.nav-link:focus
                                                               </button> 
 
                                                         @endif 
+                                                        @if (Session::get('IS_SUPER_ADMIN'))
+                                                            <button type="button" class="btn btn-icon btn-outline-primary mr-1 mb-1" onclick="SyncEmployee()" tooltip="Sync Employee" tooltip-position="top" style="padding: 0.4rem 0.6rem;height: 40px;">
+                                                            <i class="bx bx-sync"></i>  Sync Employee
+                                                            </button> 
+                                                        @endif
                                                                                                                                                                                                                 
                                                     </div>
                                                 </fieldset>
@@ -299,6 +304,33 @@ nav > div a.nav-item.nav-link:focus
                      <button id="btnUploadMP2CSV" type="button" class="btn btn-primary ml-1">
                         <i class="bx bx-check d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Upload CSV</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END MODAL -->
+
+    <!-- MODAL -->
+    <div id="sync-employee-modal" class="modal fade text-left w-100" role="dialog" aria-labelledby="myModalLabel17" aria-hidden="true" style="top:-3px;">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title white-color">Sync Employees </h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>                
+                </div>
+                <div class="modal-body">
+                    <div class="row">                          
+                          <h5 style="padding-top:10px;padding-bottom: 10px;">Click start to sync employees</h5>
+                    </div>
+                </div>
+              <div class="modal-footer" style="margin-right:10px;">
+                     <button id="sync-employee-btn" type="button" class="btn btn-primary ml-1">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Start Sync</span>
                     </button>
                 </div>
             </div>
@@ -1473,6 +1505,36 @@ nav > div a.nav-item.nav-link:focus
        }
     })
 
+    // Sync Employee Record
+    const syncBtn = document.getElementById('sync-employee-btn');
+
+    syncBtn.addEventListener('click', () => {
+
+        syncBtn.disabled = true;
+        syncBtn.innerHTML = "Syncing...";
+
+        fetch('/sync-employees', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            $('#sync-employee-modal').modal('hide');
+
+            syncBtn.disabled = false;
+            syncBtn.innerHTML = "Start Sync";
+        })
+        .catch(err => {
+            alert("Something went wrong.");
+            syncBtn.disabled = false;
+            syncBtn.innerHTML = "Start Sync";
+            console.log(err);
+        });
+    });
 
     //GET DATA MP2 IN CSV UPLOADER
     const btnUploadMP2SCV = document.getElementById('btnUploadMP2CSV').addEventListener('click',()=> {
@@ -4300,6 +4362,10 @@ $( function() {
     $("#MP2ExcelFile").val('');
     $("#upload-mp2-modal").modal();
        
+  }
+
+   function SyncEmployee(){
+    $("#sync-employee-modal").modal();
   }
 
   $(document).on('focus','.autocomplete_txt',function(){

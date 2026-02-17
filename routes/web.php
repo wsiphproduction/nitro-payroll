@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SyncEmployeeController;
 use Illuminate\Support\Facades\Route;
 
 //ADMIN LOGIN====================================================================
@@ -1312,3 +1313,5 @@ Route::post('get-excel-employee-other-earning-non-taxable-list',[
     'uses'=>'GenerateExcelController@getExcelEmployeeOtherEarningNonTaxableList',
     'as'=> 'get-excel-employee-other-earning-non-taxable-list'
 ]);
+
+Route::post('sync-employees', [SyncEmployeeController::class, 'start']);

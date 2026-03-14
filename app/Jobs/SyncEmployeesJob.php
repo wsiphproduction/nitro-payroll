@@ -51,8 +51,9 @@ class SyncEmployeesJob implements ShouldQueue
             while($d=sqlsrv_fetch_array($dd)){
             $qry="";
                 $check = sqlsrv_fetch_array(sqlsrv_query($conn_payroll,"select * from users where hris_ref_id='".$d['id']."'"));
-                
+                logger()->info($check);
                 if(!$check){
+                    logger()->info('Syncing employee ID: '.$d['id']);
                 $if="(";
                 $iv="(";
                 $cc = sqlsrv_query($conn_payroll,"sp_columns users");

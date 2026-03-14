@@ -58,9 +58,6 @@ class SyncEmployeesJob implements ShouldQueue
             while($d=sqlsrv_fetch_array($dd)){
             $qry="";
                 $check = sqlsrv_fetch_array(sqlsrv_query($conn_payroll,"select * from users where hris_ref_id='".$d['id']."'"));
-                logger()->info('Processing employee ID: '.$d['id']);
-
-                logger()->info('Checking payroll for HRIS ID: '.$d['id']);
 
                 $res = sqlsrv_query($conn_payroll,
                     "select id, hris_ref_id from users where hris_ref_id='".$d['id']."'");
@@ -112,8 +109,15 @@ class SyncEmployeesJob implements ShouldQueue
                 $iv = rtrim($iv,",").")";
                 $if = rtrim($if,",").")";
                 $qry = "insert into users ".$if." values ".$iv;
-                
-            $exec = sqlsrv_query($conn_payroll,$qry);
+
+                logger()->info('Insert Query: '.$qry);
+                $exec = sqlsrv_query($conn_payroll,$qry);
+
+                if($exec === false){
+                    logger()->error('Insert failed: '.print_r(sqlsrv_errors(), true));
+                } else {
+                    logger()->info('Insert success for HRIS ID: '.$d['id']);
+                }
             }
             
             }

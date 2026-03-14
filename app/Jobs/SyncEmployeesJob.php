@@ -48,12 +48,16 @@ class SyncEmployeesJob implements ShouldQueue
 
             //upload new employees from hris to payroll
             $dd = sqlsrv_query($conn_hris, "select * from users");
+            // check users whose id is 1620. 
+            $check_user = sqlsrv_query($conn_hris, "select * from users where id=1620");
+            logger()->info('Checking if employee with ID 1620 exists in HRIS: '.(sqlsrv_num_rows($check_user) > 0 ? 'Yes' : 'No'));
             while($d=sqlsrv_fetch_array($dd)){
             $qry="";
                 $check = sqlsrv_fetch_array(sqlsrv_query($conn_payroll,"select * from users where hris_ref_id='".$d['id']."'"));
-                logger()->info($check);
+                logger()->info('total employees to sync: '.sqlsrv_num_rows($dd));
+                logger()->info('Processing employee ID: '.$d['id']);
                 if(!$check){
-                    logger()->info('Syncing employee ID: '.$d['id']);
+                logger()->info('Syncing employee ID: '.$d['id']);
                 $if="(";
                 $iv="(";
                 $cc = sqlsrv_query($conn_payroll,"sp_columns users");

@@ -103,8 +103,6 @@ class SyncEmployeesJob implements ShouldQueue
 
                     if ($exec === false) {
                         logger()->error('Insert failed: ' . print_r(sqlsrv_errors(), true));
-                    } else {
-                        logger()->info('Insert success for HRIS ID: ' . $d['id']);
                     }
                 } else {
                     $qryUpdate = "
@@ -118,8 +116,6 @@ class SyncEmployeesJob implements ShouldQueue
 
                     if($execUpdate === false){
                         logger()->error('Update failed: '.print_r(sqlsrv_errors(), true));
-                    } else {
-                        logger()->info('Update success for HRIS ID: '.$d['id']);
                     }
                 }
             }

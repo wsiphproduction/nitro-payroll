@@ -53,9 +53,7 @@ class SyncEmployeesJob implements ShouldQueue
                 $check = sqlsrv_fetch_array(
                     sqlsrv_query($conn_payroll,"select id, hris_ref_id from users where hris_ref_id='".$d['id']."'")
                 );
-
-                logger()->info('Processing employee ID: '.$d['id']);
-                logger()->info('Payroll match: '.json_encode($check));
+                
                 if(!$check){
                 $if="(";
                 $iv="(";
@@ -134,7 +132,7 @@ class SyncEmployeesJob implements ShouldQueue
             ");
 
             while($r = sqlsrv_fetch_array($q)){     
-                $upd = sqlsrv_query($conn_payroll,"update users set department_id='".$r['department_idd']."',
+                $upd = sqlsrv_query($conn_payroll,"update users set department_id='".$r['department_idd']."', status='".$r['status']."'
                 job_title_id='".$r['position_idd']."',company_branch_id=3,section_id='".$r['section_idd']."',
                 company_branch_site_id=2,hdmf_ee=200,hdmf_er=200,employee_number='".$r['employee_number']."',salary_type='".$r['saltype']."',shortid='".$r['employee_number']."' where hris_ref_id='".$r['uid']."'");
             

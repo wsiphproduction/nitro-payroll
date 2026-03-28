@@ -109,7 +109,7 @@ class SyncEmployeesJob implements ShouldQueue
                 } else {
                     $qryUpdate = "
                         UPDATE users SET
-                            status = '".$d['status']."'
+                            status = '".$d['status']."',
                             department_id = '".$department_id."',
                         WHERE hris_ref_id = '".$d['id']."'
                     ";

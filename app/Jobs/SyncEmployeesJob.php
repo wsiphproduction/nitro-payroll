@@ -109,10 +109,8 @@ class SyncEmployeesJob implements ShouldQueue
                 } else {
                     $qryUpdate = "
                         UPDATE users SET
-                            last_name = '".str_replace("'", "''", $d['last_name'])."',
-                            status = '".str_replace("'", "''", $d['status'])."',
+                            status = '".$d['status']."'
                             department_id = '".$department_id."',
-                            updated_at = GETDATE()
                         WHERE hris_ref_id = '".$d['id']."'
                     ";
 

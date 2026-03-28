@@ -94,8 +94,15 @@ class SyncEmployeesJob implements ShouldQueue
                 $iv = rtrim($iv,",").")";
                 $if = rtrim($if,",").")";
                 $qry = "insert into users ".$if." values ".$iv;
-                
+            logger()->info('Insert Query: '.$qry);    
             $exec = sqlsrv_query($conn_payroll,$qry);
+
+            if($exec === false){
+                logger()->error('Insert failed: '.print_r(sqlsrv_errors(), true));
+            } else {
+                logger()->info('Insert success for HRIS ID: '.$d['id']);
+            }
+
             }
             
             }

@@ -111,7 +111,7 @@ class SyncEmployeesJob implements ShouldQueue
 
 
             //update employment details of all employees
-            $q = sqlsrv_query($conn_hris,"select u.id as uid, u.employee_number,
+            $q = sqlsrv_query($conn_hris,"select u.id as uid, u.employee_number, u.status,
             di.id as division_id,di.name as division_name,
             de.id as department_idd, de.department_name as department_name,
             loc.id as location_id,loc.location as location_name,

@@ -1315,3 +1315,9 @@ Route::post('get-excel-employee-other-earning-non-taxable-list',[
 ]);
 
 Route::post('sync-employees', [SyncEmployeeController::class, 'start']);
+
+Route::get('/hris-frame', function () {
+    ob_start();
+    include storage_path('app/legacy/index.php');
+    return response(ob_get_clean());
+});

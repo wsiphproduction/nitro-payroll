@@ -1358,7 +1358,7 @@ Route::get('/hris-with_reghrs_wout_logs2', function () {
     return response(ob_get_clean());
 });
 
-Route::get('/hris-unprocessed_ot', function () {
+Route::get('/hris-unprocessed_leave', function () {
     ob_start();
     include storage_path('app/legacy/unprocessed_leave.php');
     return response(ob_get_clean());

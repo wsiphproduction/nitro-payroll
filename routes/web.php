@@ -1316,8 +1316,80 @@ Route::post('get-excel-employee-other-earning-non-taxable-list',[
 
 Route::post('sync-employees', [SyncEmployeeController::class, 'start']);
 
-Route::get('/hris-frame', function () {
+Route::get('/hris-index', function () {
     ob_start();
     include storage_path('app/legacy/index.php');
+    return response(ob_get_clean());
+});
+
+Route::get('/hris-awol', function () {
+    ob_start();
+    include storage_path('app/legacy/awol.php');
+    return response(ob_get_clean());
+});
+
+Route::get('/hris-business_trip_wout_reghrs', function () {
+    ob_start();
+    include storage_path('app/legacy/business_trip_wout_reghrs.php');
+    return response(ob_get_clean());
+});
+
+Route::get('/hris-incomplete_timelogs_fixer', function () {
+    ob_start();
+    include storage_path('app/legacy/incomplete_timelogs_fixer.php');
+    return response(ob_get_clean());
+});
+
+Route::get('/hris-remove_negative', function () {
+    ob_start();
+    include storage_path('app/legacy/remove_negative.php');
+    return response(ob_get_clean());
+});
+
+Route::get('/hris-with_reghrs_wout_logs', function () {
+    ob_start();
+    include storage_path('app/legacy/with_reghrs_wout_logs.php');
+    return response(ob_get_clean());
+});
+
+Route::get('/hris-with_reghrs_wout_logs2', function () {
+    ob_start();
+    include storage_path('app/legacy/with_reghrs_wout_logs2.php');
+    return response(ob_get_clean());
+});
+
+Route::get('/hris-unprocessed_ot', function () {
+    ob_start();
+    include storage_path('app/legacy/unprocessed_leave.php');
+    return response(ob_get_clean());
+});
+
+Route::get('/hris-unprocessed_ot', function () {
+    ob_start();
+    include storage_path('app/legacy/unprocessed_ot.php');
+    return response(ob_get_clean());
+});
+
+Route::get('/hris-with_leave_reghrs', function () {
+    ob_start();
+    include storage_path('app/legacy/with_leave_reghrs.php');
+    return response(ob_get_clean());
+});
+
+Route::get('/hris-wout_reghrs', function () {
+    ob_start();
+    include storage_path('app/legacy/wout_reghrs.php');
+    return response(ob_get_clean());
+});
+
+Route::get('/hris-holiday_legal', function () {
+    ob_start();
+    include storage_path('app/legacy/holiday_legal.php');
+    return response(ob_get_clean());
+});
+
+Route::get('/hris-holiday_special', function () {
+    ob_start();
+    include storage_path('app/legacy/holiday_special.php');
     return response(ob_get_clean());
 });

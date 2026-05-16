@@ -616,6 +616,8 @@ body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation l
                             location.reload();
                         }, 3000);
                     }else{
+                        $("#spnTotalData").hide();
+                        $("#divLoader").hide()
                         showHasErrorMessage('', data.ResponseMessage);
                         return; 
                     }

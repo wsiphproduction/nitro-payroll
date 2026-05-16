@@ -29,6 +29,11 @@ Route::post('do-admin-check-login',[
     'as'=> 'do-admin-check-login'
 ]);
 
+Route::post('do-admin-change-period',[
+    'uses'=>'AdminUserController@doAdminChangePeriod',
+    'as'=> 'do-admin-change-period'
+]);
+
 Route::get('forgot-password',[
     'uses'=>'AdminUserController@showAdminForgotPassword',
     'as'=> 'forgot-password'

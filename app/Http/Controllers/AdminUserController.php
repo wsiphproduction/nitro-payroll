@@ -1007,6 +1007,62 @@ public function doAdminRequestForChangePassword(Request $request){
     return response()->json($RetVal);
   }
 
+  public function doAdminChangePeriod(Request $request){
+
+      try {
+        $PayrollPeriodCode = $request['PayrollPeriod'];
+
+        $PayrollPeriod = new PayrollPeriod();
+        $payroll_info = $PayrollPeriod->getPayrollPeriodScheduleInfoByCode($PayrollPeriodCode); 
+
+        $PayrollPeriodScheduleID = '';
+        $PayrollPeriodScheduleCode = '';
+        $PayrollPeriodScheduleStart = '';
+        $PayrollPeriodScheduleEnd = '';
+        $PayrollPeriodSchedule = '';
+        $PayrollPeriodScheduleYear = '';
+
+        if($payroll_info != null || $payroll_info != '' || $payroll_info != '0') {
+
+          $PayrollPeriodScheduleID = $payroll_info->ID;
+          $PayrollPeriodScheduleCode = $payroll_info->Code;
+          $PayrollPeriodScheduleStart = date('m/d/Y', strtotime($payroll_info->StartDate ));
+          $PayrollPeriodScheduleEnd = date('m/d/Y', strtotime($payroll_info->EndDate ));
+          $PayrollPeriodSchedule = date('m/d/Y', strtotime($payroll_info->StartDate )).' -  '. date('m/d/Y', strtotime($payroll_info->EndDate ));
+          $PayrollPeriodScheduleYear = $payroll_info->Year;
+        }
+
+        Session::put('ADMIN_PAYROLL_PERIOD_SCHED_ID', $PayrollPeriodScheduleID);
+        Session::put('ADMIN_PAYROLL_PERIOD_SCHED', $PayrollPeriodSchedule);
+        Session::put('ADMIN_PAYROLL_PERIOD_SCHED_CODE', $PayrollPeriodScheduleCode);
+        Session::put('ADMIN_PAYROLL_PERIOD_SCHED_START', $PayrollPeriodScheduleStart);
+        Session::put('ADMIN_PAYROLL_PERIOD_SCHED_END', $PayrollPeriodScheduleEnd);
+        Session::put('ADMIN_PAYROLL_PERIOD_SCHED_YEAR', $PayrollPeriodScheduleYear);
+
+        return response()->json([
+            'PayrollPeriodScheduleID' => $PayrollPeriodScheduleID,
+            'PayrollPeriodScheduleCode' => $PayrollPeriodScheduleCode,
+            'PayrollPeriodScheduleStart' => $PayrollPeriodScheduleStart,
+            'PayrollPeriodScheduleEnd' => $PayrollPeriodScheduleEnd,
+            'PayrollPeriodSchedule' => $PayrollPeriodSchedule,
+            'PayrollPeriodScheduleYear' => $PayrollPeriodScheduleYear,
+            'Response' => 'Success'
+        ]);
+      } catch (\Throwable $th) {
+        
+        return response()->json([
+            'PayrollPeriodScheduleID' => '',
+            'PayrollPeriodScheduleCode' => '',
+            'PayrollPeriodScheduleStart' => '',
+            'PayrollPeriodScheduleEnd' => '',
+            'PayrollPeriodSchedule' => '',
+            'PayrollPeriodScheduleYear' => '',
+            'Response' => 'Failed'
+        ]);
+      }
+
+  }
+
 
 }
 

@@ -18,6 +18,17 @@ body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation l
 }
 </style>
     
+@php
+    $param['SearchText']='';
+    $param["Limit"] = 0;
+    $param["PageNo"] = 0;
+    $param["Status"]='Open';
+
+
+    $PayrollPeriod = new \App\Models\PayrollPeriod();
+    $PayrollPeriodList = $PayrollPeriod->getPayrollPeriodList($param);
+@endphp
+
     <!-- BEGIN: Header-->
     <div class="header-navbar-shadow"></div>
     <nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu fixed-top ">
@@ -55,6 +66,9 @@ body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation l
                             <a class="dropdown-item" href="{{URL::route('admin-change-password')}}">
                               <i class="bx bx-lock-open-alt mr-50"></i> Change Password
                             </a>
+                            <div class="dropdown-item" onclick="changepayrollperiod()">
+                              <i class="bx bx-calendar mr-50"></i> Change Payroll Period
+                            </div>
                             <div class="dropdown-divider mb-0"></div>
                             <a class="dropdown-item" href="{{ URL::route('admin-logout') }}">
                               <i class="bx bx-power-off mr-50"></i> Logout
@@ -67,6 +81,45 @@ body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation l
         </div>
     </nav>
     <!-- END: Header-->
+
+    <!-- MODAL -->
+    <div id="change-period-modal" class="modal fade text-left w-100" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true" style="top:-3px;">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title white-color">Change Period </h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>                
+                </div>
+                <div class="modal-body">
+                    <div class="row">                          
+                          <h5 style="padding-top:10px;padding-bottom: 10px;">Select a Payroll Period:</h5>
+                         <fieldset class="form-group">
+                                <select id="payrol_period" name="payrol_period" class="form-control" required>
+                                    <option value="">Please select</option>
+                                    @foreach($PayrollPeriodList as $list)
+                                        <option value="{{$list->Code}}"> Period: {{$list->Code}} - {{date('m/d/Y',strtotime($list->StartDate))}} - {{date('m/d/Y',strtotime($list->EndDate))}}</option>
+                                    @endforeach
+                                </select>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnChangePeriod" type="button" class="btn btn-primary ml-1" onclick="ChangePeriod()">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block"> <i class='bx bx-calendar mr-1' style="font-size: 21px;"></i> Change Period</span>
+                    </button>
+                    <button id="btnCancelRecord" type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Cancel</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END MODAL -->
 
     <!-- BEGIN: Main Menu-->
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
@@ -518,3 +571,66 @@ body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation l
         </div>
     </div>
     <!-- END: Main Menu-->
+
+    <script>
+        $(window).on('load',  function(){
+            $('#change-period-modal').modal({
+                backdrop: 'static',
+                keyboard: true,
+                show: false 
+            });
+        })
+
+        changepayrollperiod = function(){
+            $("#change-period-modal").modal();
+        }
+
+        ChangePeriod = function(){
+            if ($("#payrol_period").val() == '') {
+                alert('Please select a Payroll Period');
+                return false;
+            }
+
+            const period = $("#payrol_period").val();
+
+            $.ajax({
+                type: "post",
+                url: "{{ route('do-admin-change-period') }}",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    Platform: "{{ config('app.PLATFORM_ADMIN') }}",
+                    PayrollPeriod: period
+                },
+                dataType: "json",
+                success: function(data){
+
+                    buttonOneClick("btnChangePeriod", "Change Period", false);
+
+                    if(data.Response =='Success'){
+                        $("#spnTotalData").hide();
+                        $("#divLoader").hide()
+                        $("#change-period-modal").modal('hide');
+                    }else{
+                        showHasErrorMessage('', data.ResponseMessage);
+                        return; 
+                    }
+                },
+                error: function(data){
+
+                    $("#divLoader").hide();
+                    $("#divLoader1").hide();
+
+                    buttonOneClick("btnChangePeriod", "Saving...", false);                
+                },
+                beforeSend:function(vData){
+
+                    $("#divLoader").show(); 
+                    $("#divLoader1").show(); 
+
+                    $("#spnLoadingLabel").text('Saving...');
+                    
+                    buttonOneClick("btnChangePeriod", "", true);
+                }
+            });
+        }
+    </script>

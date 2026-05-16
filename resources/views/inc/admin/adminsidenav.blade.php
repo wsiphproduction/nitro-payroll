@@ -610,6 +610,11 @@ body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation l
                         $("#spnTotalData").hide();
                         $("#divLoader").hide()
                         $("#change-period-modal").modal('hide');
+
+                        // reload after 3 secs
+                        setTimeout(function(){
+                            location.reload();
+                        }, 3000);
                     }else{
                         showHasErrorMessage('', data.ResponseMessage);
                         return; 

@@ -64,7 +64,7 @@
                                                                         <option value="Site">Site</option>
                                                                         <option value="Division">Division</option>
                                                                         <option value="Department">Department</option>
-                                                                        <option value="Section">Section</option>
+                                                                        <option value="Section">Team Leader</option>
                                                                         <option value="Job Type">Job Type</option>
                                                                         <option value="Employee">Employee</option>
                                                                     </select>
@@ -161,6 +161,7 @@
                                                     <th></th>
                                                         <th style="min-width: 110px;">EMPLOYEE ID</th>                                              
                                                         <th style="min-width: 130px">EMPLOYEE NAME</th>                                              
+                                                        <th style="min-width: 130px">TEAM LEADER</th>                                              
                                                         <th style="min-width: 60px">PERIOD</th>                                              
                                                         <th style="min-width: 80px">BASIC PAY</th>                                              
                                                         <th style="min-width: 60px">ECOLA</th>                                              
@@ -388,6 +389,7 @@
             
             tdEmployeeNo = "<span class='font-normal'>" + vData.EmployeeNo + "</span>";   
             tdEmployeeName = "<span class='font-normal'>" + vData.EmployeeName + "</span>";
+            tdTeamLeader = "<span class='font-normal'>" + vData.TeamLeader + "</span>";
             tdPayrollPeriodCode = "<span class='font-normal'>" + vData.PayrollPeriodCode + "</span>";
 
             tdBasicPay = "<span class='font-normal'>" + FormatDecimal(vData.BasicPay,2) + "</span>";
@@ -441,31 +443,32 @@
                     curData[0] = tdID;                    
                     curData[1] = tdEmployeeNo;
                     curData[2] = tdEmployeeName;
-                    curData[3] = tdPayrollPeriodCode;                    
-                    curData[4] = tdBasicPay;                  
-                    curData[5] = tdECOLA;                  
-                    curData[6] = tdLate;                      
-                    curData[7] = tdUnderTime;                      
-                    curData[8] = tdAbsent;                                       
-                    curData[9] = tdVL;                  
-                    curData[10] = tdSL;                  
-                    curData[11] = tdOL;                  
-                    curData[12] = tdNightDiff;                  
-                    curData[13] = tdOvertimePay;
-                    curData[14] = tdOvertimeND;
-                    curData[15] = tdOtherTaxableEarnings;
-                    curData[16] = tdOtherNonTaxableEarnings;
-                    curData[17] = tdGrossPay;
-                    curData[18] = tdSSS;
-                    curData[19] = tdPHIC;
-                    curData[20] = tdHDMF;
-                    curData[21] = tdTaxableIncome;
-                    curData[22] = tdWTax;
-                    curData[23] = tdLoanDeduction;
-                    curData[24] = tOtherDeduction;
-                    curData[25] = tdTotalDeduction;
-                    curData[26] = tdNetPay;                
-                    curData[27] = tdStatus; 
+                    curData[3] = tdTeamLeader;
+                    curData[4] = tdPayrollPeriodCode;                    
+                    curData[5] = tdBasicPay;                  
+                    curData[6] = tdECOLA;                  
+                    curData[7] = tdLate;                      
+                    curData[8] = tdUnderTime;                      
+                    curData[9] = tdAbsent;                                       
+                    curData[10] = tdVL;                  
+                    curData[11] = tdSL;                  
+                    curData[12] = tdOL;                  
+                    curData[13] = tdNightDiff;                  
+                    curData[14] = tdOvertimePay;
+                    curData[15] = tdOvertimeND;
+                    curData[16] = tdOtherTaxableEarnings;
+                    curData[17] = tdOtherNonTaxableEarnings;
+                    curData[18] = tdGrossPay;
+                    curData[19] = tdSSS;
+                    curData[20] = tdPHIC;
+                    curData[21] = tdHDMF;
+                    curData[22] = tdTaxableIncome;
+                    curData[23] = tdWTax;
+                    curData[24] = tdLoanDeduction;
+                    curData[25] = tOtherDeduction;
+                    curData[26] = tdTotalDeduction;
+                    curData[27] = tdNetPay;                
+                    curData[28] = tdStatus; 
                     this.data(curData).invalidate().draw();
                 }
             });
@@ -476,6 +479,7 @@
                 tdID,    
                 tdEmployeeNo,      
                 tdEmployeeName,
+                tdTeamLeader,
                 tdPayrollPeriodCode,                      
                 tdBasicPay,
                 tdECOLA,
@@ -532,35 +536,35 @@
     setTimeout(function (){     
        
        if(vFilterType=='All'){
-        window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+        window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Location'){
-        window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&BranchID='+ vBranchID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+        window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&BranchID='+ vBranchID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Site'){
-        window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&BranchSiteID='+ vBranchSiteID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+        window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&BranchSiteID='+ vBranchSiteID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Division'){
-         window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&DivisionID='+ vDivisionID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+         window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&DivisionID='+ vDivisionID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Department'){
-         window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&DepartmentID='+ vDepartmentID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+         window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&DepartmentID='+ vDepartmentID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Section'){
-       window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&SectionID='+ vSectionID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+       window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&SectionID='+ vSectionID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Job Type'){
-       window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&JobTypeID='+ vJobTypeID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+       window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&JobTypeID='+ vJobTypeID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Employee'){
-       window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&EmployeeID='+ vEmployeeID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+       window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&EmployeeID='+ vEmployeeID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
            
         let toastMain = document.getElementsByClassName('toast-success')[0];
@@ -625,7 +629,7 @@
                  
          // Excel Headers
           var xlsHeader = [
-                            " Emlpoyee No "," Emlpoyee Name "," Period Month Code "," Basic Pay ", " ECOLA "," Late ", " Under Time ", " Absent ",
+                            " Emlpoyee No "," Emlpoyee Name "," Team Leader "," Period Month Code "," Basic Pay ", " ECOLA "," Late ", " Under Time ", " Absent ",
                             " VL ", " SL "," OL ", " Night Differential "," Overtime Pay "," ND Overtime  "," Other Taxable Earning ", 
                             " Other Non Taxable Earning "," Taxable Income "," Gross Pay ",  " SSS "," Phil Health ", " PagIbig ",
                             " Withholding Tax "," Loan Deduction "," Other Deduction ",  " Total Deduction ", " Net Pay " 
@@ -703,7 +707,7 @@
         $("#divDepartment").show();
     }else if($("#GenerateFilter").val() == "Section"){
         $("#divFilters").show();
-        $("#GeneratePayrollFilterLabel").text("Section");
+        $("#GeneratePayrollFilterLabel").text("Team Leader");
         $("#spnTypeSearch").hide();
         $("#divSection").show();
     }else if($("#GenerateFilter").val() == "Job Type"){

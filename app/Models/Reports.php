@@ -1452,6 +1452,8 @@ public function getEmployeePaySlipReport($param){
               COALESCE(paytrn.TransNo,'') as TransNo,
               FORMAT(paytrn.TransDateTime, 'MM/dd/yyyy hh:mm:dd t') as TransDateTime,
               COALESCE(paytrn.Status,'') as Status,
+
+              COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
      
               COALESCE(paytrn.PayrollPeriodID,0) as PayrollPeriodID,
               COALESCE(payperiod.Code,'') as PayrollPeriodCode,

@@ -335,6 +335,8 @@ public function generatePayrollApprovedJournalListExcel($param){
 
                 CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' , COALESCE(usr.middle_name,'')) as EmployeeName,
 
+                COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
+
               COALESCE(payperiod.Code,'') as PayrollPeriodCode,              
                           
               COALESCE(paytrnemp.BasicSalary,0) as BasicPay,
@@ -421,6 +423,8 @@ public function generatePayrollPendingJournalListExcel($param){
               COALESCE(usr.shortid,'') as EmployeeNo,
 
                 CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' ,COALESCE(usr.middle_name,'')) as EmployeeName,
+
+                COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
 
               COALESCE(payperiod.Code,'') as PayrollPeriodCode,              
                           
@@ -1678,7 +1682,7 @@ public function generateEmployeeDTRListExcel($param){
             COALESCE(peds.EmployeeNumber,'') as EmployeeNumber,
 
                 CONCAT(COALESCE(emp.last_name,''), ', ', COALESCE(emp.first_name,''), ' ' , COALESCE(emp.middle_name,'')) as FullName,
-            sec.Section as TeamLeader,
+            COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
             
             COALESCE(peds.EmployeeRate,0) as EmployeeRate,
             COALESCE(peds.RegularHours,0) as RegularHours,

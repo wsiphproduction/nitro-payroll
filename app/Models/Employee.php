@@ -167,6 +167,152 @@ public function getEmployeeList($param){
 
 }
 
+public function getTeamList($param){
+
+  $SearchText = trim($param['SearchText']);
+  $Limit = $param['Limit'];
+  $PageNo = $param['PageNo'];
+  $Status = $param['Status'];
+
+   $query = DB::table('users as emp')
+    ->join('payroll_department as dept', 'dept.ID', '=', 'emp.department_id')
+    ->join('payroll_branch as brnch', 'brnch.ID', '=', 'emp.company_branch_id')
+    ->join('payroll_branch_site as brnchsite', 'brnchsite.ID', '=', 'emp.company_branch_site_id')
+    ->join('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
+    ->leftjoin('payroll_section as sec', 'sec.id', '=', 'emp.section_id')  
+    ->leftjoin('payroll_job_type as job', 'job.ID', '=', 'emp.job_title_id')
+
+    ->selectraw("
+        emp.id as employee_id,
+        COALESCE(emp.employee_number,'') as employee_number,
+        COALESCE(emp.first_name,'') as first_name,
+        COALESCE(emp.last_name,'') as last_name,
+        COALESCE(emp.middle_name,'') as middle_name,
+        CONCAT(COALESCE(emp.last_name,''), ', ', COALESCE(emp.first_name,''), ' ' , COALESCE(emp.middle_name,'')) as FullName,
+
+        COALESCE(job.ID,0) as PostitionID,
+        COALESCE(job.JobTitle,'') as Position,
+
+        COALESCE(dept.DivisionID,0) as DivisionID,
+        COALESCE(div.Division,'') as Division,
+
+        COALESCE(emp.department_id,0) as DepartmentID,
+        COALESCE(dept.Department,'') as Department,
+
+        COALESCE(brnch.ID,0) as BranchID,
+        COALESCE(brnch.BranchName,'') as BranchName,
+
+        COALESCE(emp.company_branch_site_id,0) as SiteID,
+        COALESCE(brnchsite.SiteName,'') as SiteName,
+
+         ISNULL((SELECT TOP 1 FORMAT(EffectivityDate, 'MM/dd/yyyy') 
+                FROM payroll_employee_rates 
+                WHERE EmployeeID = emp.id
+                ORDER BY EffectivityDate DESC),'') as EffectivityDateFormat,     
+
+        ISNULL((SELECT TOP 1 MonthlyRate 
+                        FROM payroll_employee_rates 
+                        WHERE EmployeeID = emp.id
+                        ORDER BY EffectivityDate DESC),0) as MonthlyRate,
+
+        ISNULL((SELECT TOP 1 ID 
+                        FROM payroll_employee_rates 
+                        WHERE EmployeeID = emp.id
+                        ORDER BY EffectivityDate DESC),0) as EmployeeRateID,                
+                        
+        ISNULL((SELECT TOP 1 DailyRate 
+                        FROM payroll_employee_rates 
+                        WHERE EmployeeID = emp.id
+                        ORDER BY EffectivityDate DESC),0) as DailyRate, 
+
+        ISNULL((SELECT TOP 1 HourlyRate 
+                        FROM payroll_employee_rates 
+                        WHERE EmployeeID = emp.id
+                        ORDER BY EffectivityDate DESC),0) as HourlyRate, 
+
+        COALESCE(sec.ID,0) as SectionID,
+        COALESCE(sec.Section,'') as Section,   
+
+        COALESCE(emp.sss_number,'') as sss_number,
+        COALESCE(emp.pagibig_number,'') as pagibig_number,
+        COALESCE(emp.tin_number,'') as tin_number,
+        COALESCE(emp.philhealth_number,'') as philhealth_number,
+
+        COALESCE(emp.salary_type,0) as salary_type,
+        COALESCE(emp.contact_number,'') as MobileNo,
+        COALESCE(emp.email,'') as EmailAddress,
+        COALESCE(emp.status,'') as Status,
+
+         CASE emp.status WHEN 1 THEN 'Active' ELSE 'Inactive' END as emp_status,  
+         CASE emp.salary_type WHEN 1 THEN 'Daily' ELSE 'Monthly' END as emp_salary_type  
+    ");
+
+    if($Status!=''){
+        if($Status=='Active'){
+           $query->where("emp.status",1);    
+        }
+        if($Status=='Inactive'){
+           $query->where("emp.status",2);    
+        }
+   
+         if($Status=='Daily'){
+             $query->where("emp.salary_type",1);  
+         }
+
+         if($Status=='Monthly'){
+             $query->where("emp.salary_type",2);  
+         }
+    }
+
+   if(!empty($Status)){
+      $arFilter = explode("|",$Status);
+      if(trim($arFilter[0]) == "Location"){
+       $query->where("emp.company_branch_id",trim($arFilter[1]));  
+      }else if(trim($arFilter[0]) == "Site"){
+       $query->where("emp.company_branch_site_id",trim($arFilter[1]));  
+      }
+    }
+
+    if($SearchText != ''){
+        $arSearchText = explode(" ",$SearchText);
+        if(count($arSearchText) > 0){
+            for($x=0; $x< count($arSearchText); $x++) {
+                $query->whereraw(
+                    "CONCAT_WS(' ',
+                        COALESCE(emp.employee_number,''),
+                        COALESCE(emp.first_name,''),
+                        COALESCE(emp.last_name,''),
+                        COALESCE(emp.middle_name,''),
+                        CONCAT(COALESCE(emp.last_name,''), ', ', COALESCE(emp.first_name,''), ' ' , COALESCE(emp.middle_name,'')),
+                        COALESCE(emp.email,''),
+                        COALESCE(div.Division,''),                        
+                        COALESCE(dept.Department,''),
+                        COALESCE(sec.Section,''),
+                        COALESCE(job.JobTitle,''),
+                        COALESCE(brnch.BranchName,''),
+                        COALESCE(emp.sss_number,''),
+                        COALESCE(emp.pagibig_number,''),
+                        COALESCE(emp.tin_number,''),
+                        COALESCE(emp.philhealth_number,''),
+                        (CASE emp.status WHEN 1 THEN 'Active' ELSE 'Inactive' END),
+                        (CASE emp.salary_type WHEN 1 THEN 'Daily' ELSE 'Monthly' END), 
+                        COALESCE(emp.status,'')
+                    ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
+            }
+        }
+    }
+
+    if($Limit > 0){
+      $query->limit($Limit);
+      $query->offset(($PageNo-1) * $Limit);
+    }
+
+    $query->orderBy("FullName","ASC");
+    $list = $query->get();
+
+    return $list;
+
+}
 public function getEmployeeInfo($OptionSearch,$OptionValue){
 
   $info = DB::table('users as emp')

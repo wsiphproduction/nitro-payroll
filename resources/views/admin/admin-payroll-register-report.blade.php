@@ -205,7 +205,7 @@ nav > div a.nav-item.nav-link:focus
                                                                         <option value="Site">Site</option>
                                                                         <option value="Division">Division</option>
                                                                         <option value="Department">Department</option>
-                                                                        <option value="Section">Section</option>
+                                                                        <option value="Section">Team Leader</option>
                                                                         <option value="Job Type">Job Type</option>
                                                                         <option value="Employee">Employee</option>
                                                                     </select>
@@ -748,6 +748,7 @@ nav > div a.nav-item.nav-link:focus
           var xlsHeader = [
                 "{{ strtoupper('Employee No.') }}",
                 "{{ strtoupper('Employee Name') }}",
+                "{{ strtoupper('Team Leader') }}",
                 "{{ strtoupper('Basic Pay') }}", 
                 "{{ strtoupper('ECOLA') }}",
                 "{{ strtoupper('Late') }}", 
@@ -872,7 +873,7 @@ nav > div a.nav-item.nav-link:focus
 
             // EMPLOYEE ROW
             createXLSLFormatObj.push([
-                v.EmployeeNo, v.EmployeeName, v.BasicPay, v.ECOLA, v.LateAmount,
+                v.EmployeeNo, v.EmployeeName, v.TeamLeader,  v.BasicPay, v.ECOLA, v.LateAmount,
                 v.UndertimeAmount, v.AbsentAmount, v.SL, v.VL, v.OL,
                 v.NightDiff, v.OTPay, v.RDDPay, v.OTND,
                 v.OtherTaxableEarnings, v.OtherNonTaxableEarnings,
@@ -1053,7 +1054,7 @@ nav > div a.nav-item.nav-link:focus
         $("#divDepartment").show();
     }else if($("#GenerateFilter").val() == "Section"){
         $("#divFilters").show();
-        $("#GeneratePayrollFilterLabel").text("Section");
+        $("#GeneratePayrollFilterLabel").text("Team Leader");
         $("#spnTypeSearch").hide();
         $("#divSection").show();
     }else if($("#GenerateFilter").val() == "Job Type"){

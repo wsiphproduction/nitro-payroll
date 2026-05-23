@@ -205,6 +205,7 @@ nav > div a.nav-item.nav-link:focus
                                                                         <option value="Site">Site</option>
                                                                         <!-- <option value="Division">Division</option> -->
                                                                         <option value="Department">Department</option>
+                                                                        <option value="Section">Team Leader</option>
                                                                         <option value="Job Type">Job Type</option>
                                                                         <option value="Employee">Employee</option>
                                                                     </select>
@@ -234,6 +235,14 @@ nav > div a.nav-item.nav-link:focus
                                                                         <select id="GeneratePayrollDepartment" class="form-control select2" multiple="multiple">
                                                                             @foreach($DepartmentList as $deptrow)
                                                                             <option value="{{ $deptrow->ID }}">{{ $deptrow->Department }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div> 
+
+                                                                    <div id="divSection" class="div-percent" style="display:none;">
+                                                                        <select id="GeneratePayrollSection" class="form-control select2" multiple="multiple">
+                                                                            @foreach($SectionList as $secrow)
+                                                                            <option value="{{ $secrow->ID }}">{{ $secrow->Section }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div> 
@@ -294,7 +303,8 @@ nav > div a.nav-item.nav-link:focus
                                                     <tr>
                                                         <th></th>  
                                                         <th style="min-width: 110px;">EMPLOYEE ID</th>
-                                                        <th style="min-width: 120px;">EMPLOYEE NAME</th>
+                                                        <th style="min-width: 120px;">EMPLOYEE NAME</th>                                           
+                                                        <th style="min-width: 120px;">TEAM LEADER</th>   
 
                                                         <th style="min-width: 60px;">PERIOD</th>
                                                         <th style="min-width: 60px;">YEAR</th>
@@ -461,8 +471,8 @@ nav > div a.nav-item.nav-link:focus
                 BranchID: $("#GeneratePayrollBranch").val(),
                 SiteID: $("#GeneratePayrollSite").val(),
                 DepartmentID: $("#GeneratePayrollDepartment").val(),
-                DivisionID: 0,
-                SectionID: 0,
+                DivisionID: $("#GeneratePayrollDivision").val(),
+                SectionID: $("#GeneratePayrollSection").val(),
                 JobTypeID: $("#GeneratePayrollJobType").val(),
                 EmployeeID: $("#GeneratePayrollEmployee").val(),
                 Status: $("#Status").val(),
@@ -552,6 +562,8 @@ nav > div a.nav-item.nav-link:focus
 
         tdEmployeeCode = "<span>" + vData.EmployeeNumber + "</span>";
         tdEmployeeName = "<span>" + vData.FullName + "</span>";
+
+        tdTeamLeader = "<span class='font-normal'>" + (vData.TeamLeader ?? 'NO TEAM LEADER') + "</span>";
                     
         tdYear = "<span>" + vData.Year + "</span>";
         tdPayrollPeriodCode = "<span>" + vData.PayrollPeriodCode + "</span>";
@@ -633,60 +645,61 @@ nav > div a.nav-item.nav-link:focus
                 curData[0] = tdID;
                 curData[1] = tdEmployeeCode;
                 curData[2] = tdEmployeeName;  
-                curData[3] = tdPayrollPeriodCode;
-                curData[4] = tdYear;
-                curData[5] = tdEmployeeRate;
-                curData[6] = tdRegularHours;
-                curData[7] = tdLateHours;
-                curData[8] = tdUndertimeHours;
-                curData[9] = tdNDHours;
-                curData[10] = tdAbsent;
-                curData[11] = tdLeave01;
-                curData[12] = tdLeave02;
-                curData[13] = tdLeave03;
-                curData[14] = tdLeave04;
-                curData[15] = tdLeave05;
-                curData[16] = tdLeave06;
-                curData[17] = tdLeave07;
-                curData[18] = tdLeave08;
-                curData[19] = tdLeave09;
-                curData[20] = tdLeave10;
-                curData[21] = tdLeave11;
-                curData[22] = tdLeave12;
-                curData[23] = tdLeave13;
-                curData[24] = tdLeave14;
-                curData[25] = tdLeave15;
-                curData[26] = tdLeave16;
-                curData[27] = tdLeave17;
-                curData[28] = tdLeave18;
-                curData[29] = tdLeave19;
-                curData[30] = tdLeave20;
-                curData[31] = tdOTHours01;
-                curData[32] = tdOTHours02;
-                curData[33] = tdOTHours03;
-                curData[34] = tdOTHours04;
-                curData[35] = tdOTHours05;
-                curData[36] = tdOTHours06;
-                curData[37] = tdOTHours07;
-                curData[38] = tdOTHours08;
-                curData[39] = tdOTHours09;
-                curData[40] = tdOTHours10;
-                curData[41] = tdOTHours11;
-                curData[42] = tdOTHours12;
-                curData[43] = tdOTHours13;
-                curData[44] = tdOTHours14;
-                curData[45] = tdOTHours15;
-                curData[46] = tdOTHours16;
-                curData[47] = tdOTHours17;
-                curData[48] = tdOTHours18;
-                curData[49] = tdOTHours19;
-                curData[50] = tdOTHours20;
-                curData[51] = tdOTHours21;
-                curData[52] = tdOTHours22;
-                curData[53] = tdOTHours23;
-                curData[54] = tdOTHours24;
-                curData[55] = tdOTHours25;
-                curData[56] = tdStatus;
+                curData[3] = tdTeamLeader;
+                curData[4] = tdPayrollPeriodCode;
+                curData[5] = tdYear;
+                curData[6] = tdEmployeeRate;
+                curData[7] = tdRegularHours;
+                curData[8] = tdLateHours;
+                curData[9] = tdUndertimeHours;
+                curData[10] = tdNDHours;
+                curData[11] = tdAbsent;
+                curData[12] = tdLeave01;
+                curData[13] = tdLeave02;
+                curData[14] = tdLeave03;
+                curData[15] = tdLeave04;
+                curData[16] = tdLeave05;
+                curData[17] = tdLeave06;
+                curData[18] = tdLeave07;
+                curData[19] = tdLeave08;
+                curData[20] = tdLeave09;
+                curData[21] = tdLeave10;
+                curData[22] = tdLeave11;
+                curData[23] = tdLeave12;
+                curData[24] = tdLeave13;
+                curData[25] = tdLeave14;
+                curData[26] = tdLeave15;
+                curData[27] = tdLeave16;
+                curData[28] = tdLeave17;
+                curData[29] = tdLeave18;
+                curData[30] = tdLeave19;
+                curData[31] = tdLeave20;
+                curData[32] = tdOTHours01;
+                curData[33] = tdOTHours02;
+                curData[34] = tdOTHours03;
+                curData[35] = tdOTHours04;
+                curData[36] = tdOTHours05;
+                curData[37] = tdOTHours06;
+                curData[38] = tdOTHours07;
+                curData[39] = tdOTHours08;
+                curData[40] = tdOTHours09;
+                curData[41] = tdOTHours10;
+                curData[42] = tdOTHours11;
+                curData[43] = tdOTHours12;
+                curData[44] = tdOTHours13;
+                curData[45] = tdOTHours14;
+                curData[46] = tdOTHours15;
+                curData[47] = tdOTHours16;
+                curData[48] = tdOTHours17;
+                curData[49] = tdOTHours18;
+                curData[50] = tdOTHours19;
+                curData[51] = tdOTHours20;
+                curData[52] = tdOTHours21;
+                curData[53] = tdOTHours22;
+                curData[54] = tdOTHours23;
+                curData[55] = tdOTHours24;
+                curData[56] = tdOTHours25;
+                curData[57] = tdStatus;
                 tblList.row(rowIdx).data(curData).invalidate().draw();
             }
         });
@@ -698,6 +711,7 @@ nav > div a.nav-item.nav-link:focus
                 tdID,
                 tdEmployeeCode,
                 tdEmployeeName,
+                tdTeamLeader,
                 tdPayrollPeriodCode,
                 tdYear,
                 tdEmployeeRate,
@@ -786,8 +800,8 @@ nav > div a.nav-item.nav-link:focus
                       FilterType: $("#GenerateFilter").val(),
                       BranchID: $("#GeneratePayrollBranch").val(),
                       SiteID: $("#GeneratePayrollSite").val(),
-                      DivisionID: 0,
-                      SectionID: 0,
+                      DivisionID: $("#GeneratePayrollDivision").val(),
+                      SectionID: $("#GeneratePayrollSection").val(),
                       DepartmentID: $("#GeneratePayrollDepartment").val(),
                       JobTypeID: $("#GeneratePayrollJobType").val(),
                       EmployeeID: $("#GeneratePayrollEmployee").val(), 
@@ -852,6 +866,7 @@ nav > div a.nav-item.nav-link:focus
                             "PERIOD CODE",
                             "EMPLOYEE NO.",
                             "EMPLOYEE NAME",
+                            "TEAM LEADER",
                             "HOUR RATE",
                             "REGULAR HRS",
                             "LATE HRS", 
@@ -915,7 +930,13 @@ nav > div a.nav-item.nav-link:focus
                   $.each(value, function(ind, val) {
                
                       
-                    if(ind=='PayrollPeriodCode' || ind=='EmployeeNumber' || ind=='FullName' || ind=='Status'){
+                    if(
+                        ind=='PayrollPeriodCode' || 
+                        ind=='EmployeeNumber' || 
+                        ind=='FullName' || 
+                        ind=='TeamLeader' ||
+                        ind=='Status'
+                    ){
 
                       if(ind=='Status'){                            
                           if(val=='Approved'){
@@ -942,12 +963,26 @@ nav > div a.nav-item.nav-link:focus
 
             for (var i = 6; i <= intRowCnt; i++) {
 
-                for (var c = 0; c < xlsHeader.length; c++){
-                    var ExcelCol = ExcelColumn(i, c);
-                    ws[ExcelCol].z = '#,##0.00_);\\(#,##0.00\\)';
-                    ws[ExcelCol].t = 'n';
-                }
+                for (var c = 0; c < xlsHeader.length; c++) {
 
+                    var ExcelCol = ExcelColumn(i, c);
+
+                    if (
+                        c == 0 || // PERIOD CODE
+                        c == 1 || // EMPLOYEE NO.
+                        c == 2 || // EMPLOYEE NAME
+                        c == 3 || // TEAM LEADER
+                        c == 56   // STATUS
+                    ) {
+                        continue;
+                    }
+
+                    if(ws[ExcelCol]){
+                        ws[ExcelCol].z = '#,##0.00_);\\(#,##0.00\\)';
+                        ws[ExcelCol].t = 'n';
+                    }
+
+                }
             }
 
             const countheader = Object.keys(createXLSLFormatObj); // columns name header to

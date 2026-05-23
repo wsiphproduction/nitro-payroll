@@ -1678,6 +1678,7 @@ public function generateEmployeeDTRListExcel($param){
             COALESCE(peds.EmployeeNumber,'') as EmployeeNumber,
 
                 CONCAT(COALESCE(emp.last_name,''), ', ', COALESCE(emp.first_name,''), ' ' , COALESCE(emp.middle_name,'')) as FullName,
+            sec.Section as TeamLeader,
             
             COALESCE(peds.EmployeeRate,0) as EmployeeRate,
             COALESCE(peds.RegularHours,0) as RegularHours,

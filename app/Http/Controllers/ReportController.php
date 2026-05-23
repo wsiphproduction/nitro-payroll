@@ -2004,6 +2004,9 @@ public function showAdminPayrollRegisterReport(Request $request){
   $Employee = new Employee();
   $data["EmployeeList"] = $Employee->getEmployeeList($param);
 
+  $Employee = new Employee();
+  $data["TeamList"] = $Employee->getTeamList($param);
+
   return View::make('admin/admin-payroll-register-report')->with($data);
 
 }

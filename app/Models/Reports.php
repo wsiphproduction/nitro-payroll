@@ -3761,6 +3761,8 @@ public function getEmployeeDTRReport($param){
             FORMAT(pp.StartDate,'MM/dd/yyyy') as StartDateFormat,
             FORMAT(pp.EndDate,'MM/dd/yyyy') as EndDateFormat,
 
+            sec.Section as TeamLeader,
+
             CONVERT(varchar(10),pp.StartDate,101) as SearchStartDateFormat,
             CONVERT(varchar(10),pp.EndDate,101) as SearchEndDateFormat,
       

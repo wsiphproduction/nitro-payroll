@@ -294,14 +294,66 @@ public function doSaveUploadFinalEmployeeIncomeDeductionTransaction($data){
         } 
     }
 
+  
     // if($hasDataError){
     //     $RetVal['Response'] = "Failed";
     //     $RetVal['ResponseMessage'] = "Sorry! Employee income and deduction data cannot be saved. Data still has issues that need to be resolved.";
     // }else{
 
-        DB::statement("insert into payroll_employee_income_deduction_transaction(TransactionDate,ReleaseTypeID,EmployeeID,EmployeeNumber,IncomeDeductionTypeID,IncomeDeductionTypeCode,VoucherNo,DateIssue,PaymentStartDate,InterestAmount,AmortizationAmount,IncomeDeductionAmount,MonthsToPay,TotalIncomeDeductionAmount,Remarks,Status,CreatedByID,DateTimeCreated) 
-         Select TransactionDate,ReleaseTypeID,EmployeeID,EmployeeNumber,IncomeDeductionTypeID,IncomeDeductionTypeCode,VoucherNo,DateIssue,PaymentStartDate,InterestAmount,AmortizationAmount,IncomeDeductionAmount,MonthsToPay,TotalIncomeDeductionAmount,Remarks,'Approved',UploadedByID,DateTimeUploaded from payroll_employee_income_deduction_temp where IsUploadError!=1 AND UploadedByID=?",[Session::get('ADMIN_USER_ID')]);
-                           
+        DB::statement("
+            INSERT INTO payroll_employee_income_deduction_transaction (
+                TransactionDate,
+                ReleaseTypeID,
+                EmployeeID,
+                EmployeeNumber,
+                IncomeDeductionTypeID,
+                IncomeDeductionTypeCode,
+                VoucherNo,
+                DateIssue,
+                PaymentStartDate,
+                InterestAmount,
+                AmortizationAmount,
+                IncomeDeductionAmount,
+                MonthsToPay,
+                TotalIncomeDeductionAmount,
+                Remarks,
+                Status,
+                CreatedByID,
+                DateTimeCreated
+            )
+            SELECT
+                temp.TransactionDate,
+                temp.ReleaseTypeID,
+                temp.EmployeeID,
+                temp.EmployeeNumber,
+                temp.IncomeDeductionTypeID,
+                temp.IncomeDeductionTypeCode,
+                temp.VoucherNo,
+                temp.DateIssue,
+                temp.PaymentStartDate,
+                temp.InterestAmount,
+                temp.AmortizationAmount,
+                temp.IncomeDeductionAmount,
+                temp.MonthsToPay,
+                temp.TotalIncomeDeductionAmount,
+                temp.Remarks,
+                'Approved',
+                temp.UploadedByID,
+                temp.DateTimeUploaded
+            FROM payroll_employee_income_deduction_temp temp
+            WHERE temp.IsUploadError != 1
+                AND temp.UploadedByID = ?
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM payroll_employee_income_deduction_transaction trn
+                    WHERE trn.EmployeeID = temp.EmployeeID
+                        AND trn.PaymentStartDate = temp.PaymentStartDate
+                        AND trn.IncomeDeductionTypeID = temp.IncomeDeductionTypeID
+                )
+        ", [
+            Session::get('ADMIN_USER_ID')
+        ]);
+
         //CLEAR TEMP TABLE AFTER SAVE
         DB::table('payroll_employee_income_deduction_temp')->where('UploadedByID',Session::get('ADMIN_USER_ID'))->delete();        
         $RetVal['Response'] = "Success";

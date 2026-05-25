@@ -2313,6 +2313,7 @@ public function generateHDMFApprovedEmployeeContributionListExcel($param){
               COALESCE(usr.shortid,'') as EmployeeNo,     
 
                 CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' , COALESCE(usr.middle_name,'')) as FullName,
+                COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
               ".$strFields."
 
               'Posted' as Status
@@ -2380,6 +2381,7 @@ public function generateHDMFApprovedEmployeeContributionListExcel($param){
      
               COALESCE(usr.shortid,'') as EmployeeNo,     
                 CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' , COALESCE(usr.middle_name,'')) as FullName,
+                COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
               ".$strFields."
               
               'Un-Posted' as Status

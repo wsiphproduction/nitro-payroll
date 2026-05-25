@@ -202,7 +202,7 @@ nav > div a.nav-item.nav-link:focus
                                                                         <option value="Site">Site</option>
                                                                         <option value="Division">Division</option>
                                                                         <option value="Department">Department</option>
-                                                                        <option value="Section">Section</option>
+                                                                        <option value="Section">Team Leader</option>
                                                                         <option value="Job Type">Job Type</option>
                                                                         <option value="Employee">Employee</option>
                                                                     </select>
@@ -306,6 +306,7 @@ nav > div a.nav-item.nav-link:focus
                                                        <th></th>
                                                         <th style="min-width: 110px;">EMPLOYEE ID</th>
                                                         <th style="min-width: 120px;">EMPLOYEE NAME</th>
+                                                        <th style="min-width: 120px;">TEAM LEADER</th>
                                                         @foreach($LoanTypeList as $lrow)
                                                                 @if($lrow->ID <= 25)
                                                             <th style="min-width: 110px;">{{ $lrow->Name }}</th>
@@ -516,7 +517,9 @@ nav > div a.nav-item.nav-link:focus
             tdID = vData.ID;
    
             tdEmployeeNo = "<span class='font-normal'>" + vData.EmployeeNo + "</span>";
+            tdEmployeeNo = "<span class='font-normal'>" + vData.EmployeeNo + "</span>";
             tdEmployeeName = "<span class='font-normal'>" + vData.FullName + "</span>";
+            tdTeamLeader = "<span class='font-normal'>" + vData.TeamLeader + "</span>";
 
             @foreach($LoanTypeList as $lrow)
                 @if($lrow->ID <= 25)
@@ -542,6 +545,7 @@ nav > div a.nav-item.nav-link:focus
                     curData[0] = tdID;
                     curData[1] = tdEmployeeNo;
                     curData[2] = tdEmployeeName;
+                    curData[3] = tdTeamLeader;
 
                     @php($intCol = 2)
                     @foreach($LoanTypeList as $lrow)
@@ -562,6 +566,7 @@ nav > div a.nav-item.nav-link:focus
                         tdID,
                         tdEmployeeNo,
                         tdEmployeeName,
+                        tdTeamLeader,
                         @foreach($LoanTypeList as $lrow)
                             @if($lrow->ID <= 25)
                                 tdLoan{{$lrow->ID}},
@@ -716,6 +721,7 @@ nav > div a.nav-item.nav-link:focus
           var xlsHeader = [
                             "{{ strtoupper('Employee No.') }}",
                             "{{ strtoupper('Employee Name') }}",
+                            "{{ strtoupper('Team Leader') }}",
                             @foreach($LoanTypeList as $lrow)
                                 @if($lrow->ID <= 25)
                                     "{{ strtoupper($lrow->Name) }}",  
@@ -742,6 +748,7 @@ nav > div a.nav-item.nav-link:focus
 
                     if(ind == "EmployeeNo" ||
                         ind == "FullName" ||
+                        ind == "TeamLeader" ||
                         @foreach($LoanTypeList as $lrow)
                             @if($lrow->ID <= 25)
                                 ind == "Loan{{$lrow->ID}}" ||
@@ -783,6 +790,7 @@ nav > div a.nav-item.nav-link:focus
             //Total
             var innerRowData = [];   
             innerRowData.push("Total");
+            innerRowData.push("");
             innerRowData.push("");
             @foreach($LoanTypeList as $lrow)
                 @if($lrow->ID <= 25)                    
@@ -857,7 +865,7 @@ $("#GenerateFilter").change(function(){
         $("#divDepartment").show();
     }else if($("#GenerateFilter").val() == "Section"){
         $("#divFilters").show();
-        $("#GeneratePayrollFilterLabel").text("Section");
+        $("#GeneratePayrollFilterLabel").text("Team Leader");
         $("#spnTypeSearch").hide();
         $("#divSection").show();
     }else if($("#GenerateFilter").val() == "Job Type"){

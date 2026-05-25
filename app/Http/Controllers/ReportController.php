@@ -406,6 +406,9 @@ public function showAdminPHICDeductionReport(Request $request){
   $param["PageNo"] = 0;
   $param["Limit"] = 0;
 
+  $Section = new Section();
+  $data["SectionList"] = $Section->getSectionList($param);
+
   $Branch = new Branch();
   $data["BranchList"] = $Branch->getBranchList($param);
 
@@ -436,6 +439,8 @@ public function showAdminPHICContributionPrintReport(Request $request){
   $data["Status"] = request("Status");
   $data["Filter"] = request("Filter");
   $data["SearchText"] = request("SearchText");
+
+  $data['SectionID'] = $request->SectionID;
 
   $PayrollSetting = new PayrollSetting();
   $data['CompanyInfo']=$PayrollSetting->getPayrollSettingInfo(config('app.DEFAULT_SYSTEM_SETTING'));
@@ -468,6 +473,8 @@ public function getPHICEmployeeContributionList(Request $request){
     $param["Year"] = request("Year");
     $param["Month"] = request("Month");
     $param["Status"] = request("Status");
+
+    $param["SectionID"] = request("SectionID");
 
     $RetVal['Response'] = "Success";
     $RetVal['ResponseMessage'] = "";

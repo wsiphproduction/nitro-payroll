@@ -187,8 +187,8 @@ nav > div a.nav-item.nav-link:focus
                                                                           @foreach($BranchSite as $siterow)
                                                                           <option value="Site|{{ $siterow->ID }}">Site : {{ $siterow->SiteName }}</option>
                                                                           @endforeach
-                                                                          <option disabled="disabled">[ By Section ]</option>
-                                                                        <option value="Section">Team Leader</option>
+                                                                            <option disabled="disabled">[ By Section ]</option>
+                                                                            <option value="Section">Team Leader</option>
                                                                       </select>
                                                             </div>
                                                         </fieldset>

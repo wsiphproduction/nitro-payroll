@@ -1293,16 +1293,20 @@ public function getPHICApprovedEmployeeContribution($param){
   $Filter=$param['Filter'];
   $SearchText=$param['SearchText'];
 
+  $SectionIDs = $param['SectionID'];
+
   $query = DB::table('payroll_transaction_employee as paytrnemp')
         ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
         ->join('payroll_period_schedule as prd', 'prd.ID', '=', 'paytrn.PayrollPeriodID')
         ->join('users as emp', 'emp.id', '=', 'paytrnemp.EmployeeID')
+        ->leftjoin('payroll_section as sec', 'sec.id', '=', 'emp.section_id')
         ->selectraw("
                 emp.id as EmployeeID,
                 emp.shortid as EmployeeNo,
                 emp.last_name as LastName,
                 emp.first_name as FirstName,
                 emp.middle_name as MiddleName,
+                COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
                 emp.philhealth_number as PHICNo,
 
                 SUM(COALESCE(paytrnemp.PHICEEContribution,0)) as EmployeeShare,
@@ -1320,7 +1324,8 @@ public function getPHICApprovedEmployeeContribution($param){
               'emp.last_name',
               'emp.first_name',
               'emp.middle_name',
-              'emp.philhealth_number'
+              'emp.philhealth_number',
+              'sec.Section'
           )
           ->havingraw("SUM(COALESCE(paytrnemp.PHICEEContribution,0)) + SUM(COALESCE(paytrnemp.PHICERContribution,0)) > 0");
 
@@ -1331,6 +1336,9 @@ public function getPHICApprovedEmployeeContribution($param){
        $query->where("emp.company_branch_id",trim($arFilter[1]));  
       }else if(trim($arFilter[0]) == "Site"){
        $query->where("emp.company_branch_site_id",trim($arFilter[1]));  
+      }else if (trim($Filter) == "Section"){
+        $sectionIds = $SectionIDs;
+        $query->whereIn("emp.section_id",$sectionIds);
       }
     }
 
@@ -1375,16 +1383,20 @@ public function getPHICPendingEmployeeContribution($param){
   $Filter=$param['Filter'];
   $SearchText=$param['SearchText'];
 
+  $SectionIDs = $param['SectionID'];
+
   $query = DB::table('payroll_transaction_employee_temp as paytrnemp')
         ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
         ->join('payroll_period_schedule as prd', 'prd.ID', '=', 'paytrn.PayrollPeriodID')
         ->join('users as emp', 'emp.id', '=', 'paytrnemp.EmployeeID')
+        ->leftjoin('payroll_section as sec', 'sec.id', '=', 'emp.section_id')
         ->selectraw("
                 emp.id as EmployeeID,
                 emp.shortid as EmployeeNo,
                 emp.last_name as LastName,
                 emp.first_name as FirstName,
                 emp.middle_name as MiddleName,
+                COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
                 emp.philhealth_number as PHICNo,
 
                 SUM(COALESCE(paytrnemp.PHICEEContribution,0)) as EmployeeShare,
@@ -1402,7 +1414,8 @@ public function getPHICPendingEmployeeContribution($param){
               'emp.last_name',
               'emp.first_name',
               'emp.middle_name',
-              'emp.philhealth_number'
+              'emp.philhealth_number',
+              'sec.Section'
           )
           ->havingraw("SUM(COALESCE(paytrnemp.PHICEEContribution,0)) + SUM(COALESCE(paytrnemp.PHICERContribution,0)) > 0");
 
@@ -1412,6 +1425,9 @@ public function getPHICPendingEmployeeContribution($param){
        $query->where("emp.company_branch_id",trim($arFilter[1]));  
       }else if(trim($arFilter[0]) == "Site"){
        $query->where("emp.company_branch_site_id",trim($arFilter[1]));  
+      }else if(trim($Filter) == "Section"){
+        $sectionIds = $SectionIDs;
+        $query->whereIn("emp.section_id",$sectionIds);
       }
     }
 

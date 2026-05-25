@@ -186,8 +186,24 @@ nav > div a.nav-item.nav-link:focus
                                                                           @foreach($BranchSite as $siterow)
                                                                           <option value="Site|{{ $siterow->ID }}">Site : {{ $siterow->SiteName }}</option>
                                                                           @endforeach
+                                                                            <option disabled="disabled">[ By Section ]</option>
+                                                                            <option value="Section">Team Leader</option>
                                                                       </select>
                                                             </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div id="divFilters" class="col-md-2" style="display: none;">
+                                                        <fieldset class="form-group">
+                                                            <label id="GeneratePayrollFilterLabel">Location: <span class="required_field">* </span></label>
+                                                            <span id='spnTypeSearch' class="search-txt">(Type & search from the list)</span>
+                                                            <div id="divSection" class="div-percent" style="display:none;">
+                                                                <select id="GeneratePayrollSection" class="form-control select2" multiple="multiple">
+                                                                    @foreach($SectionList as $secrow)
+                                                                    <option value="{{ $secrow->ID }}">{{ $secrow->Section }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div> 
                                                         </fieldset>
                                                     </div>
                                                 
@@ -248,6 +264,7 @@ nav > div a.nav-item.nav-link:focus
                                                         <th>EMPLOYEE Last NAME</th>
                                                         <th>EMPLOYEE First NAME</th>
                                                         <th>EMPLOYEE MIDDLE NAME</th>
+                                                        <th>TEAM LEADER</th>
                                                         <th>PHIC NO</th>
                                                         <th>EMPLOYEE SHARE</th>
                                                         <th>EMPLOYEE SHARE</th>
@@ -344,6 +361,20 @@ nav > div a.nav-item.nav-link:focus
         }
     });
 
+    $("#Filter").change(function(){
+        if ($("#Filter").val() == 'Section') {
+            $("#divFilters").show();
+            $("#GeneratePayrollFilterLabel").text("Section");
+            $("#spnTypeSearch").hide();
+            $("#divSection").show();
+        } else {
+            $("#divFilters").hide();
+            $("#GeneratePayrollFilterLabel").text("");
+            $("#spnTypeSearch").show();
+            $("#divSection").hide();
+        }
+    });
+
     function getRecordList(vPageNo){
 
      intCurrentPage = vPageNo;
@@ -366,6 +397,7 @@ nav > div a.nav-item.nav-link:focus
                 Month: vMonth,
                 Status: vStatus,
                 Filter: vFilter,
+                SectionID: $("#GeneratePayrollSection").val(),
                 SearchText: $('.searchtext').val(),
                 Limit: vLimit,
                 PageNo: vPageNo
@@ -448,10 +480,12 @@ nav > div a.nav-item.nav-link:focus
         var tblList = $("#tblList").DataTable();
 
         tdEmployeeID = "<span>" + vData.EmployeeID + "</span>";
+        tdEmployeeID = "<span>" + vData.EmployeeID + "</span>";
         tdEmployeeNo = "<span>" + vData.EmployeeNo + "</span>";
         tdLastName = "<span>" + vData.LastName + "</span>";
         tdFirstName = "<span>" + vData.FirstName + "</span>";
         tdMiddleName = "<span>" + vData.MiddleName + "</span>";
+        tdTeamLeader = "<span>" + vData.TeamLeader + "</span>";
 
         tdPHICNo = "<span>" + vData.PHICNo + "</span>";
         tdEmployeeShare = "<span class='font-normal float_right'>" + FormatDecimal(vData.EmployeeShare,2) + "</span>";
@@ -479,11 +513,12 @@ nav > div a.nav-item.nav-link:focus
                 curData[2] = tdLastName;
                 curData[3] = tdFirstName;
                 curData[4] = tdMiddleName;
-                curData[5] = tdPHICNo;
-                curData[6] = tdEmployeeShare;
-                curData[7] = tdEmployerShare;
-                curData[8] = tdTotal;
-                curData[9] = tdStatus;
+                curData[5] = tdTeamLeader;
+                curData[6] = tdPHICNo;
+                curData[7] = tdEmployeeShare;
+                curData[8] = tdEmployerShare;
+                curData[9] = tdTotal;
+                curData[10] = tdStatus;
   
                 tblList.row(rowIdx).data(curData).invalidate().draw();
             }
@@ -498,6 +533,7 @@ nav > div a.nav-item.nav-link:focus
                     tdLastName,
                     tdFirstName,
                     tdMiddleName,
+                    tdTeamLeader,
                     tdPHICNo,
                     tdEmployeeShare,
                     tdEmployerShare,
@@ -552,6 +588,7 @@ nav > div a.nav-item.nav-link:focus
                 Month: vMonth,
                 Status: vStatus,
                 Filter: vFilter,
+                SectionID: $("#GeneratePayrollSection").val(),
                 SearchText: '',
                 Limit: vLimit,
                 PageNo: intCurrentPage
@@ -617,6 +654,7 @@ nav > div a.nav-item.nav-link:focus
                             "{{ strtoupper('Last Name') }}",
                             "{{ strtoupper('First Name') }}",
                             "{{ strtoupper('Middle Name') }}", 
+                            "{{ strtoupper('Team Leader') }}",
                             "{{ strtoupper('PHIC No.') }}",
                             "{{ strtoupper('Employee Share') }}",
                             "{{ strtoupper('Employer Share') }}", 
@@ -642,6 +680,7 @@ nav > div a.nav-item.nav-link:focus
                         ind == "LastName" ||
                         ind == "FirstName" ||
                         ind == "MiddleName" ||
+                        ind == "TeamLeader" ||
                         ind == "PHICNo" ||
                         ind == "EmployeeShare" ||
                         ind == "EmployerShare" ||

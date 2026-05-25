@@ -364,7 +364,7 @@ nav > div a.nav-item.nav-link:focus
     $("#Filter").change(function(){
         if ($("#Filter").val() == 'Section') {
             $("#divFilters").show();
-            $("#GeneratePayrollFilterLabel").text("Section");
+            $("#GeneratePayrollFilterLabel").text("Team Leader");
             $("#spnTypeSearch").hide();
             $("#divSection").show();
         } else {

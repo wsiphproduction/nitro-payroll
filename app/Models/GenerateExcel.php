@@ -1783,6 +1783,8 @@ public function generateSSSApprovedEmployeeContributionListExcel($param){
   $Filter=$param['Filter'];
   $SearchText=$param['SearchText'];
 
+  $SectionIDs=$param['SectionID'];
+
   $query = DB::table('payroll_transaction_employee as paytrnemp')
         ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
         ->join('payroll_period_schedule as prd', 'prd.ID', '=', 'paytrn.PayrollPeriodID')
@@ -1824,6 +1826,9 @@ public function generateSSSApprovedEmployeeContributionListExcel($param){
        $query->where("emp.company_branch_id",trim($arFilter[1]));  
       }else if(trim($arFilter[0]) == "Site"){
        $query->where("emp.company_branch_site_id",trim($arFilter[1]));  
+      }else if (trim($Filter) == "Section"){
+        $sectionIds = $SectionIDs;
+        $query->whereIn("emp.section_id",$sectionIds);
       }
     }
 
@@ -1863,6 +1868,8 @@ public function generateSSSPendingEmployeeContributionListExcel($param){
 
   $Filter=$param['Filter'];
   $SearchText=$param['SearchText'];
+
+  $SectionIDs=$param['SectionID'];
 
    $query = DB::table('payroll_transaction_employee_temp as paytrnemp')
         ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
@@ -1905,6 +1912,9 @@ public function generateSSSPendingEmployeeContributionListExcel($param){
        $query->where("emp.company_branch_id",trim($arFilter[1]));  
       }else if(trim($arFilter[0]) == "Site"){
        $query->where("emp.company_branch_site_id",trim($arFilter[1]));  
+      }else if (trim($Filter) == "Section"){
+        $sectionIds = $SectionIDs;
+        $query->whereIn("emp.section_id",$sectionIds);
       }
     }
 

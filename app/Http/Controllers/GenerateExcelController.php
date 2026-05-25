@@ -559,6 +559,8 @@ public function getExcelWithHoldingTaxList(Request $request){
     $data["Filter"] = request("Filter");
     $data["SearchText"] = request("SearchText");
 
+    $data['SectionID'] = $request->SectionID;
+
     if($data["Status"]=='Approved'){
       $data['Limit']=0;  
       $data['PageNo']='0';  

@@ -400,6 +400,8 @@ nav > div a.nav-item.nav-link:focus
         vStatus= $("#Status").val();
         vFilter= $("#Filter").val();
 
+        console.log(vMonth,vYear,vStatus,vFilter);
+
         $.ajax({
             type: "post",
             data: {
@@ -409,6 +411,7 @@ nav > div a.nav-item.nav-link:focus
                 Month: vMonth,
                 Status: vStatus,
                 Filter: vFilter,
+                SectionID: $("#GeneratePayrollSection").val(),
                 SearchText: $('.searchtext').val(),
                 Limit: vLimit,
                 PageNo: vPageNo
@@ -573,7 +576,7 @@ nav > div a.nav-item.nav-link:focus
       vLimit=100;
 
       if(total_rec>0){
-          window.open('{{config('app.url')}}admin-sss-contribution-print-report?Year=' +vYear +'&Month=' +vMonth +'&Status=' +vStatus+'&Filter=' +vFilter+'&SearchText=' +vSearchText+'&PageNo=' +intCurrentPage+'&Limit=' +vLimit, '_blank');
+          window.open('{{config('app.url')}}/admin-sss-contribution-print-report?Year=' +vYear +'&Month=' +vMonth +'&Status=' +vStatus+'&Filter=' +vFilter+'&SearchText=' +vSearchText+'&PageNo=' +intCurrentPage+'&Limit=' +vLimit, '_blank');
       }else{
          showHasErrorMessage('','No record(s) found base on search criteria.');
       }
@@ -604,6 +607,7 @@ nav > div a.nav-item.nav-link:focus
                 Month: vMonth,
                 Status: vStatus,
                 Filter: vFilter,
+                SectionID: $("#GeneratePayrollSection").val(),
                 SearchText: '',
                 Limit: vLimit,
                 PageNo: intCurrentPage

@@ -218,6 +218,8 @@ public function getSSSEmployeeContributionList(Request $request){
     $param["Filter"] = request("Filter");
     $param["SearchText"] = request("SearchText");
 
+    $param["SectionID"] =  request("SectionID");
+
     $param["Year"] = request("Year");
     $param["Month"] = request("Month");
 

@@ -2700,6 +2700,7 @@ public function getLoanFields(){
      
               COALESCE(usr.shortid,'') as EmployeeNo,
                 CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' ,COALESCE(usr.middle_name,'')) as FullName,
+                COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
 
               ".$strFields."
 
@@ -2770,6 +2771,7 @@ public function getLoanFields(){
               COALESCE(usr.shortid,'') as EmployeeNo,
 
                 CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' , COALESCE(usr.middle_name,'')) as FullName,
+                COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
 
               
               ".$strFields."

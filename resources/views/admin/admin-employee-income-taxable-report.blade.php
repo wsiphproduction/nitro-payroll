@@ -200,7 +200,7 @@ nav > div a.nav-item.nav-link:focus
                                                                         <option value="Site">Site</option>
                                                                         <option value="Division">Division</option>
                                                                         <option value="Department">Department</option>
-                                                                        <option value="Section">Section</option>
+                                                                        <option value="Section">Team Leader</option>
                                                                         <option value="Job Type">Job Type</option>
                                                                         <option value="Employee">Employee</option>
                                                                     </select>
@@ -305,6 +305,7 @@ nav > div a.nav-item.nav-link:focus
                                                         <th></th>
                                                         <th style="min-width: 110px;">EMPLOYEE ID</th>
                                                         <th style="min-width: 130px;">EMPLOYEE NAME</th>
+                                                        <th style="min-width: 130px;">TEAM LEADER</th>
                                                         
                                                         @foreach($IncomeDeductionTypeList as $idrow)
                                                             @if($idrow->Type == "Taxable Income" && $idrow->ID >= 99 && $idrow->ID <= 148)
@@ -519,6 +520,7 @@ nav > div a.nav-item.nav-link:focus
    
             tdEmployeeNo = "<span class='font-normal'>" + vData.EmployeeNo + "</span>";
             tdEmployeeName = "<span class='font-normal'>" + vData.FullName + "</span>";
+            tdTeamLeader = "<span class='font-normal'>" + vData.TeamLeader + "</span>";
 
             @foreach($IncomeDeductionTypeList as $idrow)
                 @if($idrow->Type == "Taxable Income" && $idrow->ID >= 99 && $idrow->ID <= 148)
@@ -546,8 +548,9 @@ nav > div a.nav-item.nav-link:focus
                     curData[0] = tdID;
                     curData[1] = tdEmployeeNo;
                     curData[2] = tdEmployeeName;
+                    curData[3] = tdTeamLeader;
 
-                    @php($intCol = 2)
+                    @php($intCol = 3)
                     @foreach($IncomeDeductionTypeList as $idrow)
                         @if($idrow->Type == "Taxable Income" && $idrow->ID >= 99 && $idrow->ID <= 148)
                             @php($intCol = $intCol + 1)
@@ -569,6 +572,7 @@ nav > div a.nav-item.nav-link:focus
                     tdID,
                     tdEmployeeNo,
                     tdEmployeeName,
+                    tdTeamLeader,
 
                     @foreach($IncomeDeductionTypeList as $idrow)
                         @if($idrow->Type == "Taxable Income" && $idrow->ID >= 99 && $idrow->ID <= 148)
@@ -725,6 +729,7 @@ nav > div a.nav-item.nav-link:focus
           var xlsHeader = [
                             "{{ strtoupper('Employee No.') }}",
                             "{{ strtoupper('Employee Name') }}",
+                            "{{ strtoupper('Team Leader') }}",
                             @foreach($IncomeDeductionTypeList as $idrow)
                                 @if($idrow->Type == "Taxable Income" && $idrow->ID >= 99 && $idrow->ID <= 148)
                                     "{{ strtoupper($idrow->Name) }}",
@@ -754,6 +759,7 @@ nav > div a.nav-item.nav-link:focus
                     if(
                         ind == "EmployeeNo" ||
                         ind == "FullName" ||
+                        ind == "TeamLeader" ||
                         @foreach($IncomeDeductionTypeList as $idrow)
                             @if($idrow->Type == "Taxable Income" && $idrow->ID >= 99 && $idrow->ID <= 148)
                                 ind == "Income{{$idrow->ID}}" ||
@@ -799,6 +805,7 @@ nav > div a.nav-item.nav-link:focus
             //Total
             var innerRowData = [];   
             innerRowData.push("Total");
+            innerRowData.push("");
             innerRowData.push("");
             @foreach($IncomeDeductionTypeList as $idrow)
                 @if($idrow->Type == "Taxable Income" && $idrow->ID >= 99 && $idrow->ID <= 148)
@@ -874,7 +881,7 @@ $("#GenerateFilter").change(function(){
         $("#divDepartment").show();
     }else if($("#GenerateFilter").val() == "Section"){
         $("#divFilters").show();
-        $("#GeneratePayrollFilterLabel").text("Section");
+        $("#GeneratePayrollFilterLabel").text("Team Leader");
         $("#spnTypeSearch").hide();
         $("#divSection").show();
     }else if($("#GenerateFilter").val() == "Job Type"){

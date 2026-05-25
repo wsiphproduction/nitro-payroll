@@ -1041,7 +1041,7 @@ nav > div a.nav-item.nav-link:focus
         $("#divDepartment").show();
     }else if($("#GenerateFilter").val() == "Section"){
         $("#divFilters").show();
-        $("#GeneratePayrollFilterLabel").text("Section");
+        $("#GeneratePayrollFilterLabel").text("Team Leader");
         $("#spnTypeSearch").hide();
         $("#divSection").show();
     }else if($("#GenerateFilter").val() == "Job Type"){

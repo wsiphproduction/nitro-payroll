@@ -197,44 +197,67 @@ nav > div a.nav-item.nav-link:focus
                                     <div class="card-body card-dashboard">
                                         <div class="row">
                                             <div class="col-md-12 mb-1">
-                                                <fieldset>
-                                                    <div class="input-group">
-                                                          <select id="selSearchStatus" class="form-control" style="width:15%">
-                                                          <option value="">All Record</option>
-                                                          <option disabled="disabled">[ By Location Option ]</option>
-                                                          @foreach($BranchList as $brnrow)
-                                                          <option value="Location|{{ $brnrow->ID }}">Location : {{ $brnrow->BranchName }}</option>
-                                                          @endforeach
-                                                          <option disabled="disabled">[ By Site ]</option>
-                                                          @foreach($BranchSite as $siterow)
-                                                          <option value="Site|{{ $siterow->ID }}">Site : {{ $siterow->SiteName }}</option>
-                                                          @endforeach
-                                                          <option disabled="disabled">[ By Status ]</option>
-                                                          <option value="Pending">Status: Pending</option>
-                                                          <option value="Approved">Status: Approved</option>
-                                                          <option value="Cancelled">Status: Cancelled</option>
-                                                        </select>
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <fieldset>
+                                                            <div class="input-group">
+                                                                <select id="selSearchStatus" class="form-control">
+                                                                <option value="">All Record</option>
+                                                                <option disabled="disabled">[ By Location Option ]</option>
+                                                                @foreach($BranchList as $brnrow)
+                                                                <option value="Location|{{ $brnrow->ID }}">Location : {{ $brnrow->BranchName }}</option>
+                                                                @endforeach
+                                                                <option disabled="disabled">[ By Site ]</option>
+                                                                @foreach($BranchSite as $siterow)
+                                                                <option value="Site|{{ $siterow->ID }}">Site : {{ $siterow->SiteName }}</option>
+                                                                @endforeach
+                                                                <option disabled="disabled">[ By Status ]</option>
+                                                                <option value="Pending">Status: Pending</option>
+                                                                <option value="Approved">Status: Approved</option>
+                                                                <option value="Cancelled">Status: Cancelled</option>
+                                                                    <option disabled="disabled">[ By Section ]</option>
+                                                                    <option value="Section">Team Leader</option>
+                                                                </select>
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+                                                    <div id="divFilters" class="col-md-2" style="display: none; z-index: 1">
+                                                        <fieldset class="form-group">
+                                                            <span id='spnTypeSearch' class="search-txt">(Type & search from the list)</span>
+                                                            <div id="divSection" class="div-percent" style="display:none;">
+                                                                <select id="GeneratePayrollSection" class="form-control select2" multiple="multiple" placeholder="sdfsdfdf">
+                                                                    @foreach($SectionList as $secrow)
+                                                                    <option value="{{ $secrow->ID }}">{{ $secrow->Section }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div> 
+                                                        </fieldset>
+                                                    </div>
+                                                    <div class="col-md-4">
 
-                                                        <input type="text" class="form-control searchtext" placeholder="Search Here.." style="width: 39%;margin-left: 6px;">
+                                                        <div class="input-group">
+                                                            <input id="searchinput" type="text" class="form-control searchtext" placeholder="Search Here.." style="width: 39%;margin-left: 6px;">
 
-                                                        <button id="btnSearch" type="button" class="btn btn-icon btn-outline-primary mr-1 mb-1 disabled_border" tooltip="Search Here.." tooltip-position="top" > 
-                                                            <i class="bx bx-search"></i>
-                                                        </button>
-                                                        
-                                                      @if(Session::get('IS_SUPER_ADMIN') || $Allow_Add_Create_Import_Upload==1)
+                                                            <button id="btnSearch" type="button" class="btn btn-icon btn-outline-primary mr-1 mb-1 disabled_border" tooltip="Search Here.." tooltip-position="top" > 
+                                                                <i class="bx bx-search"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                            
+                                                    <div class="d-flex gap-1 align-items-start">
+                                                        @if(Session::get('IS_SUPER_ADMIN') || $Allow_Add_Create_Import_Upload==1)
                                                         <button type="button" class="btn btn-icon btn-outline-primary mr-1 mb-1" onclick="NewRecord()" tooltip="Create New" tooltip-position="top">
                                                             <i class="bx bx-plus"></i> New
                                                         </button>
-                                                       @endif    
+                                                        @endif    
 
-                                                      @if(Session::get('IS_SUPER_ADMIN') || $Allow_Add_Create_Import_Upload==1)
-                                                         <button type="button" class="btn btn-icon btn-outline-primary mr-1 mb-1" onclick="UploadExcelRecord()" tooltip="Upload DTR/TSS Excel" tooltip-position="top">
-                                                           <i class="bx bx-upload"></i> Upload TSS/DTR Excel
+                                                        @if(Session::get('IS_SUPER_ADMIN') || $Allow_Add_Create_Import_Upload==1)
+                                                            <button type="button" class="btn btn-icon btn-outline-primary mr-1 mb-1" onclick="UploadExcelRecord()" tooltip="Upload DTR/TSS Excel" tooltip-position="top">
+                                                            <i class="bx bx-upload"></i> Upload TSS/DTR Excel
                                                         </button>
-                                                      @endif 
-
+                                                        @endif 
                                                     </div>
-                                                </fieldset>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -246,6 +269,7 @@ nav > div a.nav-item.nav-link:focus
                                                         <th style="width:1%;">
                                                         <th style="width: 10%;color: white;">EMPLOYEE ID </th>
                                                         <th style="width: 12%;color: white;">EMPLOYEE NAME </th>
+                                                        <th style="width: 12%;color: white;">TEAM LEADER </th>
                                                         <th style="width: 3%;color: white;">CODE</th>
                                                         <th style="width: 6%;color: white;">YEAR</th>                                                        
                                                         <th style="width: 4%;color: white;">HOUR RATE </th>
@@ -1192,6 +1216,19 @@ nav > div a.nav-item.nav-link:focus
     $("#selSearchStatus").change(function(){
         $("#tblList").DataTable().clear().draw();
         intCurrentPage = 1;
+
+        if ($("#selSearchStatus").val() == 'Section') {
+            $("#divFilters").show();
+            $("#GeneratePayrollFilterLabel").text("Section");
+            $("#spnTypeSearch").hide();
+            $("#divSection").show();
+        } else {
+            $("#divFilters").hide();
+            $("#GeneratePayrollFilterLabel").text("");
+            $("#spnTypeSearch").show();
+            $("#divSection").hide();
+        }
+
         getRecordList(1);
     });
 
@@ -1222,6 +1259,7 @@ nav > div a.nav-item.nav-link:focus
                 Platform: "{{ config('app.PLATFORM_ADMIN') }}",
                 SearchText: $('.searchtext').val(),
                 Status: $("#selSearchStatus").val(),
+                SectionID: $("#GeneratePayrollSection").val(),
                 Limit: vLimit,
                 PageNo: vPageNo
             },
@@ -1362,6 +1400,7 @@ nav > div a.nav-item.nav-link:focus
         tdPayrollPeriodCode = "<span>" + vData.PayrollPeriodCode + "</span>";
         tdEmployeeCode = "<span>" + vData.EmployeeNumber + "</span>";
         tdEmployeeName = "<span>" + vData.FullName + "</span>";
+        tdTeamLeader = "<span>" + vData.TeamLeader + "</span>";
 
         tdEmployeeRate = "<span>" + FormatDecimal(vData.EmployeeRate,2) + "</span>";
         tdRegularHours = "<span>" + FormatDecimal(vData.RegularHours,2) + "</span>";
@@ -1442,61 +1481,62 @@ nav > div a.nav-item.nav-link:focus
                 curData[0] = tdID;
                 curData[1] = tdAction;
                  curData[2] = tdEmployeeCode;
-                curData[3] = tdEmployeeName;        
-                curData[4] = tdPayrollPeriodCode;
-                curData[5] = tdYear;
-                curData[6] = tdEmployeeRate;
-                curData[7] = tdRegularHours;
-                curData[8] = tdLateHours;
-                curData[9] = tdUndertimeHours;
-                curData[10] = tdNDHours;
-                curData[11] = tdAbsent;
-                curData[12] = tdLeave01;
-                curData[13] = tdLeave02;
-                curData[14] = tdLeave03;
-                curData[15] = tdLeave04;
-                curData[16] = tdLeave05;
-                curData[17] = tdLeave06;
-                curData[18] = tdLeave07;
-                curData[19] = tdLeave08;
-                curData[20] = tdLeave09;
-                curData[21] = tdLeave10;
-                curData[22] = tdLeave11;
-                curData[23] = tdLeave12;
-                curData[24] = tdLeave13;
-                curData[25] = tdLeave14;
-                curData[26] = tdLeave15;
-                curData[27] = tdLeave16;
-                curData[28] = tdLeave17;
-                curData[29] = tdLeave18;
-                curData[30] = tdLeave19;
-                curData[31] = tdLeave20;
-                curData[32] = tdOTHours01;
-                curData[33] = tdOTHours02;
-                curData[34] = tdOTHours03;
-                curData[35] = tdOTHours04;
-                curData[36] = tdOTHours05;
-                curData[37] = tdOTHours06;
-                curData[38] = tdOTHours07;
-                curData[39] = tdOTHours08;
-                curData[40] = tdOTHours09;
-                curData[41] = tdOTHours10;
-                curData[42] = tdOTHours11;
-                curData[43] = tdOTHours12;
-                curData[44] = tdOTHours13;
-                curData[45] = tdOTHours14;
-                curData[46] = tdOTHours15;
-                curData[47] = tdOTHours16;
-                curData[48] = tdOTHours17;
-                curData[49] = tdOTHours18;
-                curData[50] = tdOTHours19;
-                curData[51] = tdOTHours20;
-                curData[52] = tdOTHours21;
-                curData[53] = tdOTHours22;
-                curData[54] = tdOTHours23;
-                curData[55] = tdOTHours24;
-                curData[56] = tdOTHours25;
-                curData[57] = tdStatus;                
+                curData[3] = tdEmployeeName;   
+                curData[4] = tdTeamLeader;        
+                curData[5] = tdPayrollPeriodCode;
+                curData[6] = tdYear;
+                curData[7] = tdEmployeeRate;
+                curData[8] = tdRegularHours;
+                curData[9] = tdLateHours;
+                curData[10] = tdUndertimeHours;
+                curData[11] = tdNDHours;
+                curData[12] = tdAbsent;
+                curData[13] = tdLeave01;
+                curData[14] = tdLeave02;
+                curData[15] = tdLeave03;
+                curData[16] = tdLeave04;
+                curData[17] = tdLeave05;
+                curData[18] = tdLeave06;
+                curData[19] = tdLeave07;
+                curData[20] = tdLeave08;
+                curData[21] = tdLeave09;
+                curData[22] = tdLeave10;
+                curData[23] = tdLeave11;
+                curData[24] = tdLeave12;
+                curData[25] = tdLeave13;
+                curData[26] = tdLeave14;
+                curData[27] = tdLeave15;
+                curData[28] = tdLeave16;
+                curData[29] = tdLeave17;
+                curData[30] = tdLeave18;
+                curData[31] = tdLeave19;
+                curData[32] = tdLeave20;
+                curData[33] = tdOTHours01;
+                curData[34] = tdOTHours02;
+                curData[35] = tdOTHours03;
+                curData[36] = tdOTHours04;
+                curData[37] = tdOTHours05;
+                curData[38] = tdOTHours06;
+                curData[39] = tdOTHours07;
+                curData[40] = tdOTHours08;
+                curData[41] = tdOTHours09;
+                curData[42] = tdOTHours10;
+                curData[43] = tdOTHours11;
+                curData[44] = tdOTHours12;
+                curData[45] = tdOTHours13;
+                curData[46] = tdOTHours14;
+                curData[47] = tdOTHours15;
+                curData[48] = tdOTHours16;
+                curData[49] = tdOTHours17;
+                curData[50] = tdOTHours18;
+                curData[51] = tdOTHours19;
+                curData[52] = tdOTHours20;
+                curData[53] = tdOTHours21;
+                curData[54] = tdOTHours22;
+                curData[55] = tdOTHours23;
+                curData[56] = tdOTHours24;
+                curData[57] = tdOTHours25;
+                curData[58] = tdStatus;                
                 tblList.row(rowIdx).data(curData).invalidate().draw();
             }
         });
@@ -1509,6 +1549,7 @@ nav > div a.nav-item.nav-link:focus
                 tdAction,
                  tdEmployeeCode,
                 tdEmployeeName,
+                tdTeamLeader,
                 tdPayrollPeriodCode,
                 tdYear,
                 tdEmployeeRate,
@@ -1579,7 +1620,7 @@ nav > div a.nav-item.nav-link:focus
     $("#EmployeeID").val(0);
     $("#EmployeeNo").val(''); 
     $("#EmployeeName").val('');
-
+    $("#TeamLeader").val('');
     $("#PayrollPeriodID").val(0);
     $("#PayrollPeriodYear").val('');
     $("#PayrollPeriodCode").val('');
@@ -1651,6 +1692,7 @@ nav > div a.nav-item.nav-link:focus
   function EnabledDisbledText(vEnabled){
     
     $("#EmployeeName").attr('disabled', vEnabled);
+    $("#TeamLeader").attr('disabled', vEnabled);
     
     $("#PayrollPeriodYear").attr('disabled', vEnabled);
     $("#PayrollPeriodCode").attr('disabled', vEnabled);
@@ -1716,6 +1758,7 @@ nav > div a.nav-item.nav-link:focus
     function resetTextBorderToNormal(){
 
     $("#EmployeeName").css({"border":"#ccc 1px solid"});
+    $("#TeamLeader").css({"border":"#ccc 1px solid"});
     $("#PayrollPeriod").css({"border":"#ccc 1px solid"});
     $("#PayrollPeriodName").css({"border":"#ccc 1px solid"});
     
@@ -1893,6 +1936,8 @@ nav > div a.nav-item.nav-link:focus
                         }else{
                             $("#EmployeeName").val(data.EmployeeDTRInfo.FullName); 
                         }
+
+                        $("#TeanLeader").val(data.EmployeeDTRInfo.TeamLeader);
                                                
                         $("#TransDate").val(data.EmployeeDTRInfo.TransactionDateFormat);
 
@@ -2033,7 +2078,8 @@ nav > div a.nav-item.nav-link:focus
         vDTR_ID=$("#EmployeeDTRID").val();
         vEmployeeID=$("#EmployeeID").val();
         vEmployeeNo=$("#EmployeeNo").val();
-        vEmployeeName=$("#EmployeeName").val();        
+        vEmployeeName=$("#EmployeeName").val();    
+        vTeamLeader=$("#TeamLeader").val();    
         vTransDate=$("#TransDate").val();
 
         vYear=$("#PayrollPeriodYear").val();
@@ -2219,6 +2265,7 @@ nav > div a.nav-item.nav-link:focus
         var vEmployeeID = $("#EmployeeID").val();
         var vEmployeeNo = $("#EmployeeNo").val();
         var vEmployeeName = $("#EmployeeName").val();
+        var vTeamLeader = $("#TeamLeader").val();
         
         var vPayrollPeriodID = $("#PayrollPeriodID").val();
         var vPayrollPeriod = $("#PayrollPeriod").val();
@@ -2929,6 +2976,7 @@ nav > div a.nav-item.nav-link:focus
         tdPayrollPeriodCode = "<span>" + vData.PayrollPeriodCode + "</span>";
         tdEmployeeCode = "<span>" + vData.EmployeeNumber + "</span>";
         tdEmployeeName = "<span>" + vData.FullName + "</span>";
+        tdTeamLeader = "<span>" + vData.TeamLeader + "</span>";
 
         tdEmployeeRate = "<span>" + FormatDecimal(vData.EmployeeRate,2) + "</span>";
         tdRegularHours = "<span>" + FormatDecimal(vData.RegularHours,2) + "</span>";
@@ -3012,60 +3060,61 @@ nav > div a.nav-item.nav-link:focus
                 curData[2] = tdPayrollPeriodCode;
                 curData[3] = tdYear;
                 curData[4] = tdEmployeeCode;
-                curData[5] = tdEmployeeName;                
-                curData[6] = tdEmployeeRate;
-                curData[7] = tdRegularHours;
-                curData[8] = tdLateHours;
-                curData[9] = tdUndertimeHours;
-                curData[10] = tdNDHours;
-                curData[11] = tdAbsent;
-                curData[12] = tdLeave01;
-                curData[13] = tdLeave02;
-                curData[14] = tdLeave03;
-                curData[15] = tdLeave04;
-                curData[16] = tdLeave05;
-                curData[17] = tdLeave06;
-                curData[18] = tdLeave07;
-                curData[19] = tdLeave08;
-                curData[20] = tdLeave09;
-                curData[21] = tdLeave10;
-                curData[22] = tdLeave11;
-                curData[23] = tdLeave12;
-                curData[24] = tdLeave13;
-                curData[25] = tdLeave14;
-                curData[26] = tdLeave15;
-                curData[27] = tdLeave16;
-                curData[28] = tdLeave17;
-                curData[29] = tdLeave18;
-                curData[30] = tdLeave19;
-                curData[31] = tdLeave20;
-                curData[32] = tdOTHours01;
-                curData[33] = tdOTHours02;
-                curData[34] = tdOTHours03;
-                curData[35] = tdOTHours04;
-                curData[36] = tdOTHours05;
-                curData[37] = tdOTHours06;
-                curData[38] = tdOTHours07;
-                curData[39] = tdOTHours08;
-                curData[40] = tdOTHours09;
-                curData[41] = tdOTHours10;
-                curData[42] = tdOTHours11;
-                curData[43] = tdOTHours12;
-                curData[44] = tdOTHours13;
-                curData[45] = tdOTHours14;
-                curData[46] = tdOTHours15;
-                curData[47] = tdOTHours16;
-                curData[48] = tdOTHours17;
-                curData[49] = tdOTHours18;
-                curData[50] = tdOTHours19;
-                curData[51] = tdOTHours20;
-                curData[52] = tdOTHours21;
-                curData[53] = tdOTHours22;
-                curData[54] = tdOTHours23;
-                curData[55] = tdOTHours24;
-                curData[56] = tdOTHours25;
-                curData[57] = tdStatus;
-                curData[58] = tdIsUploadError;
+                curData[5] = tdEmployeeName;   
+                curData[6] = tdTeamLeader;     
+                curData[7] = tdEmployeeRate;
+                curData[8] = tdRegularHours;
+                curData[9] = tdLateHours;
+                curData[10] = tdUndertimeHours;
+                curData[11] = tdNDHours;
+                curData[12] = tdAbsent;
+                curData[13] = tdLeave01;
+                curData[14] = tdLeave02;
+                curData[15] = tdLeave03;
+                curData[16] = tdLeave04;
+                curData[17] = tdLeave05;
+                curData[18] = tdLeave06;
+                curData[19] = tdLeave07;
+                curData[20] = tdLeave08;
+                curData[21] = tdLeave09;
+                curData[22] = tdLeave10;
+                curData[23] = tdLeave11;
+                curData[24] = tdLeave12;
+                curData[25] = tdLeave13;
+                curData[26] = tdLeave14;
+                curData[27] = tdLeave15;
+                curData[28] = tdLeave16;
+                curData[29] = tdLeave17;
+                curData[30] = tdLeave18;
+                curData[31] = tdLeave19;
+                curData[32] = tdLeave20;
+                curData[33] = tdOTHours01;
+                curData[34] = tdOTHours02;
+                curData[35] = tdOTHours03;
+                curData[36] = tdOTHours04;
+                curData[37] = tdOTHours05;
+                curData[38] = tdOTHours06;
+                curData[39] = tdOTHours07;
+                curData[40] = tdOTHours08;
+                curData[41] = tdOTHours09;
+                curData[42] = tdOTHours10;
+                curData[43] = tdOTHours11;
+                curData[44] = tdOTHours12;
+                curData[45] = tdOTHours13;
+                curData[46] = tdOTHours14;
+                curData[47] = tdOTHours15;
+                curData[48] = tdOTHours16;
+                curData[49] = tdOTHours17;
+                curData[50] = tdOTHours18;
+                curData[51] = tdOTHours19;
+                curData[52] = tdOTHours20;
+                curData[53] = tdOTHours21;
+                curData[54] = tdOTHours22;
+                curData[55] = tdOTHours23;
+                curData[56] = tdOTHours24;
+                curData[57] = tdOTHours25;
+                curData[58] = tdStatus;
+                curData[59] = tdIsUploadError;
                 tblList.row(rowIdx).data(curData).invalidate().draw();
             }
         });
@@ -3080,6 +3129,7 @@ nav > div a.nav-item.nav-link:focus
                 tdYear,
                 tdEmployeeCode,
                 tdEmployeeName,
+                tdTeamLeader,
                 tdEmployeeRate,
                 tdRegularHours,
                 tdLateHours,
@@ -3753,6 +3803,13 @@ $( document ).ready(function() {
         reader.readAsText(file);
         //Clear File Input
         fileInput.value = '';
+    });
+
+    $(document).ready(function() {
+        $("#GeneratePayrollSection").select2({
+            placeholder: "TEAM LEADER",
+            width: '100%'
+        });
     });
 </script>
 

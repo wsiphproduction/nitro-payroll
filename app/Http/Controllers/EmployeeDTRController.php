@@ -28,6 +28,7 @@ use App\Models\EmployeeRate;
 use App\Models\PayrollPeriod;
 use App\Models\Branch;
 use App\Models\BranchSite;
+use App\Models\Section;
 
 class EmployeeDTRController extends Controller {
  
@@ -98,6 +99,9 @@ public function showAdminDTRUploader(Request $request){
   $BranchSite = new BranchSite();
   $data["BranchSite"] = $BranchSite->getBranchSiteList($param);
 
+  $Section = new Section();
+  $data["SectionList"] = $Section->getSectionList($param);
+
   return View::make('admin/admin-employee-dtr-uploader')->with($data);
 
 }
@@ -112,6 +116,12 @@ public function showAdminDTRUploader(Request $request){
     $param["PageNo"] = request("PageNo");
     $param["Limit"] = config('app.ListRowLimit');
     $param["cutoffid"] = Session('ADMIN_PAYROLL_PERIOD_SCHED_ID') ?? 0;
+
+    $param['SectionID'] = request("SectionID");
+
+    if (!$request->has('SectionID')) {
+      $param["Status"] = '';
+    }
     
     $RetVal['Response'] = "Success";
     $RetVal['ResponseMessage'] = "";

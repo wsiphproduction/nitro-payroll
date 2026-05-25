@@ -33,11 +33,14 @@ public function getEmployeeDTRList($param){
     $Status = $param['Status'];
     $cutoffid = $param['cutoffid'];
 
+    $SectionIDs = $param['SectionID'] ?? [];
+
     $SearchText = trim($param['SearchText']);
 
     $query = DB::table('payroll_employee_dtr_summary as peds')    
         ->join('users as emp', 'emp.id', '=', 'peds.EmployeeID')     
         ->join('payroll_period_schedule as pp', 'pp.ID', '=', 'peds.PayrollPeriodID')   
+        ->leftjoin('payroll_section as sec', 'sec.id', '=', 'emp.section_id')  
         ->selectraw("
             peds.ID,
                         
@@ -59,6 +62,8 @@ public function getEmployeeDTRList($param){
             COALESCE(peds.EmployeeID,'') as EmployeeID,
             COALESCE(peds.EmployeeNumber,'') as EmployeeNumber,
             CONCAT(COALESCE(emp.last_name,''), ', ', COALESCE(emp.first_name,''), ' ' , COALESCE(emp.middle_name,'')) as FullName,
+
+            COALESCE(sec.Section,'') as TeamLeader,
 
             COALESCE(peds.EmployeeRateID,0) as EmployeeRateID,
             COALESCE(peds.EmployeeRate,0) as EmployeeRate,
@@ -135,6 +140,9 @@ public function getEmployeeDTRList($param){
           $query->where("peds.status",'Approved');    
         }else if($Status=='Cancelled'){
           $query->where("peds.status",'Cancelled');    
+        }else if (trim($Status) == "Section"){
+            $sectionIds = $SectionIDs;
+            $query->whereIn("emp.section_id",$sectionIds);
         }else{
             $arStatus = explode("|",$Status);
             if(trim($arStatus[0]) == "Location"){

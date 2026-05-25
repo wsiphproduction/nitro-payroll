@@ -561,6 +561,10 @@ public function getExcelWithHoldingTaxList(Request $request){
 
     $data['SectionID'] = $request->SectionID;
 
+    if (!$request->has('SectionID')) {
+      $data["Filter"] = '';
+    }
+
     if($data["Status"]=='Approved'){
       $data['Limit']=0;  
       $data['PageNo']='0';  
@@ -597,6 +601,10 @@ public function getExcelWithHoldingTaxList(Request $request){
 
     $data['SectionID'] = $request->SectionID;
 
+    if (!$request->has('SectionID')) {
+      $data["Filter"] = '';
+    }
+
     if($data["Status"]=='Approved'){
       $data['Limit']=0;  
       $data['PageNo']='0';  
@@ -632,6 +640,10 @@ public function getExcelWithHoldingTaxList(Request $request){
     $data["SearchText"] = request("SearchText");
 
     $data['SectionID'] = $request->SectionID;
+
+    if (!$request->has('SectionID')) {
+      $data["Filter"] = '';
+    }
 
    if($data["Status"]=='Approved'){
       $data['Limit']=0;  

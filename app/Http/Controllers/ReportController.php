@@ -220,6 +220,10 @@ public function getSSSEmployeeContributionList(Request $request){
 
     $param["SectionID"] =  request("SectionID");
 
+    if (!$request->has('SectionID')) {
+      $param["Filter"] = '';
+    }
+
     $param["Year"] = request("Year");
     $param["Month"] = request("Month");
 
@@ -328,6 +332,10 @@ public function getHDMFEmployeeContributionList(Request $request){
     $param["SearchText"] = request("SearchText");
 
     $param["SectionID"] =  request("SectionID");
+
+    if (!$request->has('SectionID')) {
+      $param["Filter"] = '';
+    }
 
     $param["Year"] = request("Year");
     $param["Month"] = request("Month");
@@ -475,6 +483,10 @@ public function getPHICEmployeeContributionList(Request $request){
     $param["Status"] = request("Status");
 
     $param["SectionID"] = request("SectionID");
+
+    if (!$request->has('SectionID')) {
+      $param["Filter"] = '';
+    }
 
     $RetVal['Response'] = "Success";
     $RetVal['ResponseMessage'] = "";

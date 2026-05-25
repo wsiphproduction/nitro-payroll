@@ -202,7 +202,7 @@ nav > div a.nav-item.nav-link:focus
                                                                         <option value="Site">Site</option>
                                                                         <option value="Division">Division</option>
                                                                         <option value="Department">Department</option>
-                                                                        <option value="Section">Section</option>
+                                                                        <option value="Section">Team Leader</option>
                                                                         <option value="Job Type">Job Type</option>
                                                                         <option value="Employee">Employee</option>
                                                                     </select>
@@ -305,6 +305,7 @@ nav > div a.nav-item.nav-link:focus
                                                         <th></th>                                                        
                                                         <th style="min-width: 110px;">EMPLOYEE ID</th>
                                                         <th style="min-width: 130px;">EMPLOYEE NAME</th>
+                                                        <th style="min-width: 130px;">TEAM LEADER</th>
                                                         <th style="min-width: 100px;">UNION DUES</th>
                                                         <th style="min-width: 110px;">UNION DUES ADJ.</th>
                                                         <th style="min-width: 130px;">UNION MEMBERSHIP FEE</th>
@@ -544,6 +545,7 @@ nav > div a.nav-item.nav-link:focus
    
             tdEmployeeNo = "<span class='font-normal'>" + vData.EmployeeNo + "</span>";
             tdEmployeeName = "<span class='font-normal'>" + vData.FullName + "</span>";
+            tdTeamLeader = "<span class='font-normal'>" + vData.TeamLeader + "</span>";
 
             tdUnionDues = "<span class='font-normal'>" +  FormatDecimal(vData.UnionDues,2) + "</span>";
 
@@ -595,31 +597,32 @@ nav > div a.nav-item.nav-link:focus
                     curData[0] = tdID;
                     curData[1] = tdEmployeeNo;
                     curData[2] = tdEmployeeName;
-                    curData[3] = tdUnionDues;
-                    curData[4] = tdUnionDuesAdjustments;
-                    curData[5] = tdUnionMembershipFee;
-                    curData[6] = tdMembershipID;
-                    curData[7] = tdStPeterLifePlanPremium;
-                    curData[8] = tdPGECCMembershipFee;
-                    curData[9] = tdExcessMedicalBenefit;
-                    curData[10] = tdPGECCShares;
-                    curData[11] = tdUnliquidatedAdvances;
-                    curData[12] = tdMESS;
-                    curData[13] = tdAdjustment;
-                    curData[14] = tdChargeableSupplies;
-                    curData[15] = tdPGECCLongTermLoan;
-                    curData[16] = tdAccomRental;
-                    curData[17] = tdAccomRentalAdjustment;
-                    curData[18] = tdMortuaryForNonUnionMember;
-                    curData[19] = tdNonBusinessAdvances17;
-                    curData[20] = tdNonBusinessAdvances18;
-                    curData[21] = tdAdditionalStatutoryDeduction;
-                    curData[22] = tdMotorcycleExpenses;
-                    curData[23] = tdPGECCConsumer;
-                    curData[24] = tdPGECCCarenderia;
-                    curData[25] = tdPGECCShortTermLoan;
-                    curData[26] = tdBusFare;
-                    curData[27] = tdStatus;
+                    curData[3] = tdTeamLeader;
+                    curData[4] = tdUnionDues;
+                    curData[5] = tdUnionDuesAdjustments;
+                    curData[6] = tdUnionMembershipFee;
+                    curData[7] = tdMembershipID;
+                    curData[8] = tdStPeterLifePlanPremium;
+                    curData[9] = tdPGECCMembershipFee;
+                    curData[10] = tdExcessMedicalBenefit;
+                    curData[11] = tdPGECCShares;
+                    curData[12] = tdUnliquidatedAdvances;
+                    curData[13] = tdMESS;
+                    curData[14] = tdAdjustment;
+                    curData[15] = tdChargeableSupplies;
+                    curData[16] = tdPGECCLongTermLoan;
+                    curData[17] = tdAccomRental;
+                    curData[18] = tdAccomRentalAdjustment;
+                    curData[19] = tdMortuaryForNonUnionMember;
+                    curData[20] = tdNonBusinessAdvances17;
+                    curData[21] = tdNonBusinessAdvances18;
+                    curData[22] = tdAdditionalStatutoryDeduction;
+                    curData[23] = tdMotorcycleExpenses;
+                    curData[24] = tdPGECCConsumer;
+                    curData[25] = tdPGECCCarenderia;
+                    curData[26] = tdPGECCShortTermLoan;
+                    curData[27] = tdBusFare;
+                    curData[28] = tdStatus;
                     this.data(curData).invalidate().draw();
                 }
             });
@@ -630,6 +633,7 @@ nav > div a.nav-item.nav-link:focus
                         tdID,
                         tdEmployeeNo,
                         tdEmployeeName,
+                        tdTeamLeader,
                         tdUnionDues,
                         tdUnionDuesAdjustments,
                         tdUnionMembershipFee,
@@ -803,6 +807,7 @@ nav > div a.nav-item.nav-link:focus
           var xlsHeader = [
                             "{{ strtoupper('Employee No.') }}",
                             "{{ strtoupper('Employee Name') }}",
+                            "{{ strtoupper('Team Leader') }}",
                             "{{ strtoupper('Union Dues') }}", 
                             "{{ strtoupper('Union Dues Adjustment') }}",
                             "{{ strtoupper('Union Membership Fee') }}",
@@ -868,6 +873,7 @@ nav > div a.nav-item.nav-link:focus
                     if(
                         ind == "EmployeeNo" ||
                         ind == "FullName" ||
+                        ind == "TeamLeader" ||
                         
                         ind == "UnionDues" ||
                         ind == "UnionDuesAdjustments" ||
@@ -1086,7 +1092,7 @@ $("#GenerateFilter").change(function(){
         $("#divDepartment").show();
     }else if($("#GenerateFilter").val() == "Section"){
         $("#divFilters").show();
-        $("#GeneratePayrollFilterLabel").text("Section");
+        $("#GeneratePayrollFilterLabel").text("Team Leader");
         $("#spnTypeSearch").hide();
         $("#divSection").show();
     }else if($("#GenerateFilter").val() == "Job Type"){

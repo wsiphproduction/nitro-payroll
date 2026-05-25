@@ -2515,7 +2515,9 @@ public function getLoanFields(){
           ->selectraw("
                    
               COALESCE(usr.shortid,'') as EmployeeNo,     
-                CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' , COALESCE(usr.middle_name,'')) as FullName,              
+                CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' , COALESCE(usr.middle_name,'')) as FullName,    
+                
+                COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
 
               COALESCE(paytrnincded.Deduction74,0) as UnionDues,
               COALESCE(paytrnincded.Deduction75,0) as UnionDuesAdjustments,
@@ -2604,7 +2606,9 @@ public function getLoanFields(){
                    
               COALESCE(usr.shortid,'') as EmployeeNo,     
 
-                CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' , COALESCE(usr.middle_name,'')) as FullName,              
+              CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' , COALESCE(usr.middle_name,'')) as FullName,       
+              
+              COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
 
               COALESCE(paytrnincded.Deduction74,0) as UnionDues,
               COALESCE(paytrnincded.Deduction75,0) as UnionDuesAdjustments,

@@ -200,6 +200,9 @@ public function showAdminSSSContributionReport(Request $request){
   $BranchSite = new BranchSite();
   $data["BranchSite"] = $BranchSite->getBranchSiteList($param);
 
+  $Section = new Section();
+  $data["SectionList"] = $Section->getSectionList($param);
+
   return View::make('admin/admin-sss-contribution-report')->with($data);
 
 }

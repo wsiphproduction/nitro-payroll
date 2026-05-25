@@ -937,6 +937,7 @@ public function getSSSApprovedEmployeeContribution($param){
         ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
         ->join('payroll_period_schedule as prd', 'prd.ID', '=', 'paytrn.PayrollPeriodID')
         ->join('users as emp', 'emp.id', '=', 'paytrnemp.EmployeeID')
+        ->leftjoin('payroll_section as sec', 'sec.id', '=', 'emp.section_id')  
         ->selectraw("
                 emp.id as EmployeeID,
                 emp.shortid as EmployeeNo,
@@ -944,6 +945,8 @@ public function getSSSApprovedEmployeeContribution($param){
                 emp.first_name as FirstName,
                 emp.middle_name as MiddleName,
                 emp.sss_number as SSSNo,
+
+                COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
 
                 SUM(COALESCE(paytrnemp.SSSEEContribution,0)) as EmployeeShare,
                 SUM(COALESCE(paytrnemp.SSSWISPEE,0)) as EmployeeWISPEE,
@@ -961,7 +964,8 @@ public function getSSSApprovedEmployeeContribution($param){
               'emp.last_name',
               'emp.first_name',
               'emp.middle_name',
-              'emp.sss_number'
+              'emp.sss_number',
+              'sec.Section'
           )
           ->havingraw("SUM(COALESCE(paytrnemp.SSSEEContribution,0)) + SUM(COALESCE(paytrnemp.SSSERContribution,0)) > 0");
 

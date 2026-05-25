@@ -1787,12 +1787,14 @@ public function generateSSSApprovedEmployeeContributionListExcel($param){
         ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
         ->join('payroll_period_schedule as prd', 'prd.ID', '=', 'paytrn.PayrollPeriodID')
         ->join('users as emp', 'emp.id', '=', 'paytrnemp.EmployeeID')
+        ->leftjoin('payroll_section as sec', 'sec.ID', '=', 'emp.section_id')
         ->selectraw("
                 emp.id as EmployeeID,
                 emp.shortid as EmployeeNo,
                 emp.last_name as LastName,
                 emp.first_name as FirstName,
                 emp.middle_name as MiddleName,
+                COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
                 emp.sss_number as SSSNo,
 
                 SUM(COALESCE(paytrnemp.SSSEEContribution,0)) as EmployeeShare,
@@ -1811,7 +1813,8 @@ public function generateSSSApprovedEmployeeContributionListExcel($param){
               'emp.last_name',
               'emp.first_name',
               'emp.middle_name',
-              'emp.sss_number'
+              'emp.sss_number',
+              'sec.Section'
           )
           ->havingraw("SUM(COALESCE(paytrnemp.SSSEEContribution,0)) + SUM(COALESCE(paytrnemp.SSSERContribution,0)) > 0");
 
@@ -1865,12 +1868,14 @@ public function generateSSSPendingEmployeeContributionListExcel($param){
         ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
         ->join('payroll_period_schedule as prd', 'prd.ID', '=', 'paytrn.PayrollPeriodID')
         ->join('users as emp', 'emp.id', '=', 'paytrnemp.EmployeeID')
+        ->leftjoin('payroll_section as sec', 'sec.ID', '=', 'emp.section_id')
         ->selectraw("
                 emp.id as EmployeeID,
                 emp.shortid as EmployeeNo,
                 emp.last_name as LastName,
                 emp.first_name as FirstName,
                 emp.middle_name as MiddleName,
+                COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
                 emp.sss_number as SSSNo,
 
                 SUM(COALESCE(paytrnemp.SSSEEContribution,0)) as EmployeeShare,
@@ -1889,7 +1894,8 @@ public function generateSSSPendingEmployeeContributionListExcel($param){
               'emp.last_name',
               'emp.first_name',
               'emp.middle_name',
-              'emp.sss_number'
+              'emp.sss_number',
+              'sec.Section'
           )
           ->havingraw("SUM(COALESCE(paytrnemp.SSSEEContribution,0)) + SUM(COALESCE(paytrnemp.SSSERContribution,0)) > 0");
 

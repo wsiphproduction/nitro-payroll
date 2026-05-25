@@ -187,8 +187,24 @@ nav > div a.nav-item.nav-link:focus
                                                                           @foreach($BranchSite as $siterow)
                                                                           <option value="Site|{{ $siterow->ID }}">Site : {{ $siterow->SiteName }}</option>
                                                                           @endforeach
+                                                                          <option disabled="disabled">[ By Section ]</option>
+                                                                        <option value="Section">Team Leader</option>
                                                                       </select>
                                                             </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div id="divFilters" class="col-md-2" style="display: none;">
+                                                        <fieldset class="form-group">
+                                                            <label id="GeneratePayrollFilterLabel">Location: <span class="required_field">* </span></label>
+                                                            <span id='spnTypeSearch' class="search-txt">(Type & search from the list)</span>
+                                                            <div id="divSection" class="div-percent" style="display:none;">
+                                                                <select id="GeneratePayrollSection" class="form-control select2" multiple="multiple">
+                                                                    @foreach($SectionList as $secrow)
+                                                                    <option value="{{ $secrow->ID }}">{{ $secrow->Section }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div> 
                                                         </fieldset>
                                                     </div>
                                                 
@@ -249,6 +265,7 @@ nav > div a.nav-item.nav-link:focus
                                                         <th>EMPLOYEE LAST NAME</th>
                                                         <th>EMPLOYEE FIRST NAME</th>
                                                         <th>EMPLOYEE MIDDLE NAME</th>
+                                                        <th>TEAM LEADER</th>
                                                         <th>SSS NO</th>
                                                         <th>EMPLOYEE SHARE</th>
                                                         <th>EMPLOYEE WISP</th>
@@ -343,10 +360,14 @@ nav > div a.nav-item.nav-link:focus
     //     getRecordList(1);
     // });
 
-    // $("#Filter").change(function(){
-    //     $("#tblList").DataTable().clear().draw();
-    //     getRecordList(1);
-    // });
+    $("#Filter").change(function(){
+        if ($("#Filter").val() == 'Section') {
+            $("#divFilters").show();
+            $("#GeneratePayrollFilterLabel").text("Section");
+            $("#spnTypeSearch").hide();
+            $("#divSection").show();
+        }
+    });
 
     $("#selSearchStatus").change(function(){
         $("#tblList").DataTable().clear().draw();
@@ -471,11 +492,13 @@ nav > div a.nav-item.nav-link:focus
         var tblList = $("#tblList").DataTable();
         var vStatus= $("#Status").val();
 
+        tdEmployeeID = "<span>" + vData.EmployeeNo + "</span>";
         tdEmployeeID = "<span>" + vData.EmployeeID + "</span>";
         tdEmployeeNo = "<span>" + vData.EmployeeNo + "</span>";
         tdLastName = "<span>" + vData.LastName + "</span>";
         tdFirstName = "<span>" + vData.FirstName + "</span>";
         tdMiddleName = "<span>" + vData.MiddleName + "</span>";
+        tdTeamLeader = "<span>" + vData.TeamLeader + "</span>";
 
         tdSSSNo = "<span>" + vData.SSSNo + "</span>";
         tdEmployeeShare = "<span class='font-normal float_right'>" + FormatDecimal(vData.EmployeeShare,2) + "</span>";
@@ -504,12 +527,13 @@ nav > div a.nav-item.nav-link:focus
                 curData[2] = tdLastName;
                 curData[3] = tdFirstName;
                 curData[4] = tdMiddleName;
-                curData[5] = tdSSSNo;
-                curData[6] = tdEmployeeShare;
-                curData[7] = tdEmployeeWISPEE;
-                curData[8] = tdEmployerShare;
-                curData[9] = tdTotal;
-                curData[10] = tdStatus;
+                curData[5] = tdTeamLeader;
+                curData[6] = tdSSSNo;
+                curData[7] = tdEmployeeShare;
+                curData[8] = tdEmployeeWISPEE;
+                curData[9] = tdEmployerShare;
+                curData[10] = tdTotal;
+                curData[11] = tdStatus;
   
                 tblList.row(rowIdx).data(curData).invalidate().draw();
             }
@@ -524,6 +548,7 @@ nav > div a.nav-item.nav-link:focus
                     tdLastName,
                     tdFirstName,
                     tdMiddleName,
+                    tdTeamLeader,
                     tdSSSNo,
                     tdEmployeeShare,
                     tdEmployeeWISPEE,
@@ -645,6 +670,7 @@ nav > div a.nav-item.nav-link:focus
                             "{{ strtoupper('Last Name') }}",
                             "{{ strtoupper('First Name') }}",
                             "{{ strtoupper('Middle Name') }}",
+                            "{{ strtoupper('Team Leader') }}",
                             "{{ strtoupper('SSS No.') }}",
                             "{{ strtoupper('Employee Share') }}",
                             "{{ strtoupper('Employee WISP') }}",
@@ -670,6 +696,7 @@ nav > div a.nav-item.nav-link:focus
                         ind == "LastName" ||
                         ind == "FirstName" ||
                         ind == "MiddleName" ||
+                        ind == "TeamLeader" ||
                         ind == "SSSNo" ||
                         ind == "EmployeeShare" ||
                         ind == "EmployeeWISPEE" ||

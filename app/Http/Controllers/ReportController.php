@@ -303,6 +303,9 @@ public function showAdminHDMFContributionReport(Request $request){
   $param["PageNo"] = 0;
   $param["Limit"] = 0;
 
+  $Section = new Section();
+  $data["SectionList"] = $Section->getSectionList($param);
+
   $Branch = new Branch();
   $data["BranchList"] = $Branch->getBranchList($param);
 
@@ -323,6 +326,8 @@ public function getHDMFEmployeeContributionList(Request $request){
     $param["Status"] = request("Status");
     $param["Filter"] = request("Filter");
     $param["SearchText"] = request("SearchText");
+
+    $param["SectionID"] =  request("SectionID");
 
     $param["Year"] = request("Year");
     $param["Month"] = request("Month");

@@ -366,6 +366,11 @@ nav > div a.nav-item.nav-link:focus
             $("#GeneratePayrollFilterLabel").text("Section");
             $("#spnTypeSearch").hide();
             $("#divSection").show();
+        } else {
+            $("#divFilters").hide();
+            $("#GeneratePayrollFilterLabel").text("");
+            $("#spnTypeSearch").show();
+            $("#divSection").hide();
         }
     });
 
@@ -399,8 +404,6 @@ nav > div a.nav-item.nav-link:focus
         vYear=$("#Year").val();
         vStatus= $("#Status").val();
         vFilter= $("#Filter").val();
-
-        console.log(vMonth,vYear,vStatus,vFilter);
 
         $.ajax({
             type: "post",

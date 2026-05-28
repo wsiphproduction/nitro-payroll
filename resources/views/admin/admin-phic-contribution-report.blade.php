@@ -719,6 +719,7 @@ nav > div a.nav-item.nav-link:focus
             innerRowData.push("");
             innerRowData.push("");
             innerRowData.push("");
+            innerRowData.push("");
             innerRowData.push(dblEmployeeShare);
             innerRowData.push(dblEmployerShare);
             innerRowData.push(dblTotal);

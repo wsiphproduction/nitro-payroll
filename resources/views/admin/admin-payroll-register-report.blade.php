@@ -308,7 +308,8 @@ nav > div a.nav-item.nav-link:focus
                                                      <th></th>                                 
                                                         <th style="min-width: 110px;">EMPLOYEE ID</th>                                              
                                                         <th style="min-width: 120px;">EMPLOYEE NAME</th>                                              
-                                                        <th style="min-width: 120px;">TEAM LEADER</th>                                             
+                                                        <th style="min-width: 120px;">TEAM LEADER</th>    
+                                                        <th style="min-width: 60px;">NO OF DAYS</th>                                        
                                                         <th style="min-width: 110px;">BASIC PAY</th>
                                                         <th style="min-width: 110px;">E-COLA</th>
                                                         <th style="min-width: 60px;">LATE</th>
@@ -538,6 +539,8 @@ nav > div a.nav-item.nav-link:focus
 
             tdTeamLeader = "<span class='font-normal'>" + (vData.TeamLeader ?? 'NO TEAM LEADER') + "</span>";
 
+            tdDays = "<span class='font-normal'>" + FormatDecimal(vData.Days,2) + "</span>";
+
             tdBasicPay = "<span class='font-normal'>" + FormatDecimal(vData.BasicPay,2) + "</span>";
             tdECOLA = "<span class='font-normal'>" + FormatDecimal(vData.ECOLA,2) + "</span>";
 
@@ -594,32 +597,33 @@ nav > div a.nav-item.nav-link:focus
                     curData[1] = tdEmployeeNo;
                     curData[2] = tdEmployeeName;
                     curData[3] = tdTeamLeader;
-                    curData[4] = tdBasicPay;
-                    curData[5] = tdECOLA;
-                    curData[6] = tdLate;                      
-                    curData[7] = tdUnderTime;                      
-                    curData[8] = tdAbsent;                      
-                    curData[9] = tdSL;
-                    curData[10] = tdVL;
-                    curData[11] = tdOL;
-                    curData[12] = tdNightDiff;
-                    curData[13] = tdOvertimePay;  
-                    curData[14] = tdRDDPay;   
-                    curData[15] = tdOvertimeND;    
-                    curData[16] = tdOtherTaxableEarnings;
-                    curData[17] = tdOtherNonTaxableEarnings;
-                    curData[18] = tdGrossPay;
-                    curData[19] = tdSSS;
-                    curData[20] = tdPHIC;
-                    curData[21] = tdHDMF;   
-                    curData[22] = tdHDMFMP2;
-                    curData[23] = tdTaxableIncome;                    
-                    curData[24] = tdWTax;
-                    curData[25] = tdLoanDeduction;
-                    curData[26] = tOtherDeduction;
-                    curData[27] = tdTotalDeduction;
-                    curData[28] = tdNetPay;
-                    curData[29] = tdStatus;
+                    curData[4] = tdDays;
+                    curData[5] = tdBasicPay;
+                    curData[6] = tdECOLA;
+                    curData[7] = tdLate;                      
+                    curData[8] = tdUnderTime;                      
+                    curData[9] = tdAbsent;                      
+                    curData[10] = tdSL;
+                    curData[11] = tdVL;
+                    curData[12] = tdOL;
+                    curData[13] = tdNightDiff;
+                    curData[14] = tdOvertimePay;  
+                    curData[15] = tdRDDPay;   
+                    curData[16] = tdOvertimeND;    
+                    curData[17] = tdOtherTaxableEarnings;
+                    curData[18] = tdOtherNonTaxableEarnings;
+                    curData[19] = tdGrossPay;
+                    curData[20] = tdSSS;
+                    curData[21] = tdPHIC;
+                    curData[22] = tdHDMF;   
+                    curData[23] = tdHDMFMP2;
+                    curData[24] = tdTaxableIncome;                    
+                    curData[25] = tdWTax;
+                    curData[26] = tdLoanDeduction;
+                    curData[27] = tOtherDeduction;
+                    curData[28] = tdTotalDeduction;
+                    curData[29] = tdNetPay;
+                    curData[30] = tdStatus;
                     
                     this.data(curData).invalidate().draw();
                 }
@@ -632,6 +636,7 @@ nav > div a.nav-item.nav-link:focus
                 tdEmployeeNo,
                 tdEmployeeName,
                 tdTeamLeader,
+                tdDays,
                 tdBasicPay,
                 tdECOLA,
                 tdLate,
@@ -749,6 +754,7 @@ nav > div a.nav-item.nav-link:focus
                 "{{ strtoupper('Employee No.') }}",
                 "{{ strtoupper('Employee Name') }}",
                 "{{ strtoupper('Team Leader') }}",
+                "{{ strtoupper('No. of Days') }}",
                 "{{ strtoupper('Basic Pay') }}", 
                 "{{ strtoupper('ECOLA') }}",
                 "{{ strtoupper('Late') }}", 
@@ -782,6 +788,7 @@ nav > div a.nav-item.nav-link:focus
             // createXLSLFormatObj.push(xlsHeader);
 
             var intRowCnt = 5;
+            var dblDays = 0;
             var dblBasicPay = 0;
             var dblECOLA = 0;
             var dblLateAmount = 0;
@@ -809,7 +816,7 @@ nav > div a.nav-item.nav-link:focus
             var dblNetPay = 0;
 
         // grand totals
-        var gBasicPay = 0, gECOLA = 0, gLate = 0, gUndertime = 0, gAbsent = 0,
+        var gDays = 0, gBasicPay = 0, gECOLA = 0, gLate = 0, gUndertime = 0, gAbsent = 0,
             gSL = 0, gVL = 0, gOL = 0, gNightDiff = 0, gOTPay = 0, gRDDPay = 0, gOTND = 0,
             gOtherTaxable = 0, gOtherNonTaxable = 0, gGrossPay = 0,
             gSSS = 0, gPHIC = 0, gHDMF = 0, gHDMFMP2 = 0,
@@ -817,7 +824,7 @@ nav > div a.nav-item.nav-link:focus
             gTotalDed = 0, gNetPay = 0;
 
         // team leader subtotals
-        var tBasicPay = 0, tECOLA = 0, tLate = 0, tUndertime = 0, tAbsent = 0,
+        var tDays = 0, tBasicPay = 0, tECOLA = 0, tLate = 0, tUndertime = 0, tAbsent = 0,
             tSL = 0, tVL = 0, tOL = 0, tNightDiff = 0, tOTPay = 0, tRDDPay = 0, tOTND = 0,
             tOtherTaxable = 0, tOtherNonTaxable = 0, tGrossPay = 0,
             tSSS = 0, tPHIC = 0, tHDMF = 0, tHDMFMP2 = 0,
@@ -838,6 +845,7 @@ nav > div a.nav-item.nav-link:focus
                 if (currentTeamLeader !== null) {
                     createXLSLFormatObj.push(
                         pushSubtotalRow("SUBTOTAL", {
+                            Days: tDays,
                             BasicPay: tBasicPay, ECOLA: tECOLA, Late: tLate,
                             Undertime: tUndertime, Absent: tAbsent,
                             SL: tSL, VL: tVL, OL: tOL,
@@ -855,7 +863,7 @@ nav > div a.nav-item.nav-link:focus
                 }
 
                 // reset TL totals
-                tBasicPay = tECOLA = tLate = tUndertime = tAbsent =
+                tDays = tBasicPay = tECOLA = tLate = tUndertime = tAbsent =
                 tSL = tVL = tOL = tNightDiff = tOTPay = tRDDPay = tOTND =
                 tOtherTaxable = tOtherNonTaxable = tGrossPay =
                 tSSS = tPHIC = tHDMF = tHDMFMP2 =
@@ -873,7 +881,7 @@ nav > div a.nav-item.nav-link:focus
 
             // EMPLOYEE ROW
             createXLSLFormatObj.push([
-                v.EmployeeNo, v.EmployeeName, v.TeamLeader,  v.BasicPay, v.ECOLA, v.LateAmount,
+                v.EmployeeNo, v.EmployeeName, v.TeamLeader, v.Days, v.BasicPay, v.ECOLA, v.LateAmount,
                 v.UndertimeAmount, v.AbsentAmount, v.SL, v.VL, v.OL,
                 v.NightDiff, v.OTPay, v.RDDPay, v.OTND,
                 v.OtherTaxableEarnings, v.OtherNonTaxableEarnings,
@@ -883,6 +891,7 @@ nav > div a.nav-item.nav-link:focus
             ]);
 
             // ACCUMULATE TOTALS
+            tDays += parseFloat(v.Days, 2);
             tBasicPay += parseFloat(v.BasicPay, 2);       gBasicPay += parseFloat(v.BasicPay, 2);
             tECOLA += parseFloat(v.ECOLA, 2);             gECOLA += parseFloat(v.ECOLA, 2);
             tLate += parseFloat(v.LateAmount, 2);         gLate += parseFloat(v.LateAmount, 2);
@@ -914,6 +923,7 @@ nav > div a.nav-item.nav-link:focus
         // last team leader subtotal
         createXLSLFormatObj.push(
             pushSubtotalRow("SUBTOTAL", {
+                Days: tDays,
                 BasicPay: tBasicPay, ECOLA: tECOLA, Late: tLate,
                 Undertime: tUndertime, Absent: tAbsent,
                 SL: tSL, VL: tVL, OL: tOL,
@@ -934,6 +944,7 @@ nav > div a.nav-item.nav-link:focus
         // GRAND TOTAL
         createXLSLFormatObj.push(
             pushSubtotalRow("GRAND TOTAL", {
+                Days: gDays,
                 BasicPay: gBasicPay, ECOLA: gECOLA, Late: gLate,
                 Undertime: gUndertime, Absent: gAbsent,
                 SL: gSL, VL: gVL, OL: gOL,
@@ -990,7 +1001,8 @@ nav > div a.nav-item.nav-link:focus
 
     function pushSubtotalRow(label, totals) {
         return [
-            label, "",
+            label, "", "",
+            totals.Days,
             totals.BasicPay,
             totals.ECOLA,
             totals.Late,

@@ -1175,6 +1175,12 @@ public function generatePayrollRegisterApprovedListExcel($param){
           $join->on('paytrnincded.EmployeeID','=', 'paytrnemp.EmployeeID');
       })
       ->join('payroll_transaction as paytrn', 'paytrnemp.PayrollTransactionID', '=', 'paytrn.ID')   
+
+      ->leftJoin('payroll_employee_dtr_summary as dtr', function($join){
+          $join->on('dtr.EmployeeID', '=', 'paytrnemp.EmployeeID');
+          $join->on('dtr.PayrollPeriodID', '=', 'paytrn.PayrollPeriodID');
+      })
+
       ->join('users as emp', 'paytrnemp.EmployeeID', '=', 'emp.id')  
       ->join('payroll_branch as brn', 'brn.ID', '=', 'paytrnemp.BranchID')
       ->join('payroll_branch_site as brnchsite', 'brnchsite.ID', '=', 'emp.company_branch_site_id')
@@ -1188,6 +1194,10 @@ public function generatePayrollRegisterApprovedListExcel($param){
 
                 CONCAT(COALESCE(emp.last_name,''), ', ', COALESCE(emp.first_name,''), ' ' ,COALESCE(emp.middle_name,'')) as EmployeeName,
 
+              COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
+              COALESCE(dtr.RegularHours,0) as RegularHours,
+              ROUND(COALESCE(dtr.RegularHours,0) / 8, 2) as Days,
+
              paytrnemp.BasicSalary as BasicPay,
 
               COALESCE(paytrnincded.ECOLA,0) as ECOLA,
@@ -1195,8 +1205,6 @@ public function generatePayrollRegisterApprovedListExcel($param){
               COALESCE(paytrnemp.Late,0) as LateAmount,
               COALESCE(paytrnemp.Undertime,0) as UndertimeAmount,
               COALESCE(paytrnemp.Absent,0) as AbsentAmount,
-
-              COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
 
               COALESCE(paytrnemp.Leave1,0) as SL,
               COALESCE(paytrnemp.Leave2,0) as VL,
@@ -1285,6 +1293,12 @@ public function generatePayrollRegisterPendingListExcel($param){
           $join->on('paytrnincded.EmployeeID','=', 'paytrnemp.EmployeeID');
       })
       ->join('payroll_transaction as paytrn', 'paytrnemp.PayrollTransactionID', '=', 'paytrn.ID')   
+
+      ->leftJoin('payroll_employee_dtr_summary as dtr', function($join){
+          $join->on('dtr.EmployeeID', '=', 'paytrnemp.EmployeeID');
+          $join->on('dtr.PayrollPeriodID', '=', 'paytrn.PayrollPeriodID');
+      })
+
       ->join('users as emp', 'paytrnemp.EmployeeID', '=', 'emp.id')  
       ->join('payroll_branch as brn', 'brn.ID', '=', 'paytrnemp.BranchID')
       ->join('payroll_branch_site as brnchsite', 'brnchsite.ID', '=', 'emp.company_branch_site_id')
@@ -1298,6 +1312,10 @@ public function generatePayrollRegisterPendingListExcel($param){
 
                 CONCAT(COALESCE(emp.last_name,''), ', ', COALESCE(emp.first_name,''), ' ' , COALESCE(emp.middle_name,'')) as EmployeeName,
 
+              COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
+              COALESCE(dtr.RegularHours,0) as RegularHours,
+              ROUND(COALESCE(dtr.RegularHours,0) / 8, 2) as Days,
+
              paytrnemp.BasicSalary as BasicPay,
 
              COALESCE(paytrnincded.ECOLA,0) as ECOLA,
@@ -1305,8 +1323,6 @@ public function generatePayrollRegisterPendingListExcel($param){
               COALESCE(paytrnemp.Late,0) as LateAmount,
               COALESCE(paytrnemp.Undertime,0) as UndertimeAmount,
               COALESCE(paytrnemp.Absent,0) as AbsentAmount,
-
-              COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
 
               COALESCE(paytrnemp.Leave1,0) as SL,
               COALESCE(paytrnemp.Leave2,0) as VL,

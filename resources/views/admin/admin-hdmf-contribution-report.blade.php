@@ -740,6 +740,7 @@ nav > div a.nav-item.nav-link:focus
             innerRowData.push("");
             innerRowData.push("");
             innerRowData.push("");
+            innerRowData.push("");
             innerRowData.push(dblEmployeeShare);
             innerRowData.push(dblEmployeeMP2);
             innerRowData.push(dblEmployerShare);

@@ -207,6 +207,7 @@ table.alt-background tr.selected td {
                                                         <th>TOTAL AMOUNT</th>                                                           
                                                         <th>PAYMENT MADE</th>  
                                                         <th>REMAINING BALANCE</th>  
+                                                        <th>DATE START RELEASE</th>
                                                         <th>STATUS</th>
                                                    </tr>
                                                 </thead>
@@ -1238,6 +1239,8 @@ table.alt-background tr.selected td {
           tdRemainingBalance = "<span>" + FormatDecimal(vData.TotalIncomeDeductionAmount - vData.TotalPayment,2) + "</span>";
         }
 
+        tdDateStartPaymentFormat = "<span>" + vData.DateStartPaymentFormat + "</span>";
+
          tdStatus = "";
         if(vData.Status == 'Approved'){
             tdStatus += "<span style='color:green;display:flex;'> <i class='bx bx-check-circle'></i> Approved </span>";
@@ -1271,8 +1274,9 @@ table.alt-background tr.selected td {
                 curData[7] = tdIncomdeDeductionName;                                
                 curData[8] = tdTotalIncomeDeductionAmount;
                 curData[9] = tdTotalPaymentMade;
-                curData[10] = tdRemainingBalance;                                              
-                curData[11] = tdStatus;
+                curData[10] = tdRemainingBalance;   
+                curData[11] = tdDateStartPaymentFormat;                                              
+                curData[12] = tdStatus;
                 tblList.row(rowIdx).data(curData).invalidate().draw();
             }
         });
@@ -1290,7 +1294,8 @@ table.alt-background tr.selected td {
                     tdIncomdeDeductionName,                                      
                     tdTotalIncomeDeductionAmount,
                     tdTotalPaymentMade,        
-                    tdRemainingBalance,            
+                    tdRemainingBalance,  
+                    tdDateStartPaymentFormat,          
                     tdStatus
                 ]).draw();          
         }

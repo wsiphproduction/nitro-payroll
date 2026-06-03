@@ -160,7 +160,6 @@ class SyncEmployeesJob implements ShouldQueue
                     department_id,
                     section_name
                 FROM sections
-                WHERE deletedAt IS NULL
             ");
 
             while ($section = sqlsrv_fetch_array($sections, SQLSRV_FETCH_ASSOC)) {

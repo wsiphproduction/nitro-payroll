@@ -146,6 +146,51 @@ class SyncEmployeesJob implements ShouldQueue
                 job_title_id='" . $r['position_idd'] . "',company_branch_id=3,section_id='" . $r['section_idd'] . "',
                 company_branch_site_id=2,hdmf_ee=200,hdmf_er=200,employee_number='" . $r['employee_number'] . "',salary_type='" . $r['saltype'] . "',shortid='" . $r['employee_number'] . "' where hris_ref_id='" . $r['uid'] . "'");
             }
+
+            // Sync Sections from HRIS to Payroll
+
+            // Clear payroll sections first
+            sqlsrv_query($conn_payroll, "TRUNCATE TABLE payroll_section");
+
+            sqlsrv_query($conn_payroll, "SET IDENTITY_INSERT payroll_section ON");
+
+            $sections = sqlsrv_query($conn_hris, "
+                SELECT
+                    id,
+                    department_id,
+                    section_name
+                FROM sections
+                WHERE deletedAt IS NULL
+            ");
+
+            while ($section = sqlsrv_fetch_array($sections, SQLSRV_FETCH_ASSOC)) {
+
+                $insertQry = "
+                    INSERT INTO payroll_section
+                    (
+                        ID,
+                        DepartmentID,
+                        Section,
+                        RefID
+                    )
+                    VALUES
+                    (
+                        '".$section['id']."',
+                        '".$section['department_id']."',
+                        '".str_replace("'", "''", $section['section_name'])."',
+                        '".$section['id']."'
+                    )
+                ";
+
+                $exec = sqlsrv_query($conn_payroll, $insertQry);
+
+                if ($exec === false) {
+                    logger()->error('Section Insert Failed: '.print_r(sqlsrv_errors(), true));
+                }
+            }
+
+            sqlsrv_query($conn_payroll, "SET IDENTITY_INSERT payroll_section OFF");
+
         } catch (\Throwable $e) {
             \Log::error('SyncEmployeesJob failed: ' . $e->getMessage());
             throw $e; // let queue mark as failed

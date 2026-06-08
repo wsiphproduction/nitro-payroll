@@ -320,6 +320,8 @@ nav > div a.nav-item.nav-link:focus
                                                         <th style="min-width: 60px;">OL</th>
                                                         <th style="min-width: 80px;">NIGHT DIFF</th>
                                                         <th style="min-width: 110px;">OVERTIME PAY</th>
+                                                        <th style="min-width: 110px;">LEGAL HOLIDAY</th>
+                                                        <th style="min-width: 110px;">SPECIAL HOLIDAY</th>
                                                         <th style="min-width: 110px;">RDD PAY</th>
                                                         <th style="min-width: 110px;">ND OT</th>
                                                         <th style="min-width: 130px;">OTHER TAXABLE EARNING </th> 
@@ -554,6 +556,10 @@ nav > div a.nav-item.nav-link:focus
 
             tdNightDiff = "<span class='font-normal'>" + FormatDecimal(vData.NightDiff,2) + "</span>"; 
             tdOvertimePay = "<span class='font-normal'>" + FormatDecimal(vData.OTPay,2) + "</span>"; 
+
+            tdLH = "<span class='font-normal'>" + FormatDecimal(vData.LH,2) + "</span>"; 
+            tdSH = "<span class='font-normal'>" + FormatDecimal(vData.SH,2) + "</span>"; 
+
             tdRDDPay = "<span class='font-normal'>" + FormatDecimal(vData.RDDPay,2) + "</span>"; 
 
             tdOvertimeND = "<span class='font-normal'>" + FormatDecimal(vData.OTND,2) + "</span>"; 
@@ -607,23 +613,25 @@ nav > div a.nav-item.nav-link:focus
                     curData[11] = tdVL;
                     curData[12] = tdOL;
                     curData[13] = tdNightDiff;
-                    curData[14] = tdOvertimePay;  
-                    curData[15] = tdRDDPay;   
-                    curData[16] = tdOvertimeND;    
-                    curData[17] = tdOtherTaxableEarnings;
-                    curData[18] = tdOtherNonTaxableEarnings;
-                    curData[19] = tdGrossPay;
-                    curData[20] = tdSSS;
-                    curData[21] = tdPHIC;
-                    curData[22] = tdHDMF;   
-                    curData[23] = tdHDMFMP2;
-                    curData[24] = tdTaxableIncome;                    
-                    curData[25] = tdWTax;
-                    curData[26] = tdLoanDeduction;
-                    curData[27] = tOtherDeduction;
-                    curData[28] = tdTotalDeduction;
-                    curData[29] = tdNetPay;
-                    curData[30] = tdStatus;
+                    curData[14] = tdOvertimePay; 
+                    curData[15] = tdLH;  
+                    curData[16] = tdSH;  
+                    curData[17] = tdRDDPay;   
+                    curData[18] = tdOvertimeND;    
+                    curData[19] = tdOtherTaxableEarnings;
+                    curData[20] = tdOtherNonTaxableEarnings;
+                    curData[21] = tdGrossPay;
+                    curData[22] = tdSSS;
+                    curData[23] = tdPHIC;
+                    curData[24] = tdHDMF;   
+                    curData[25] = tdHDMFMP2;
+                    curData[26] = tdTaxableIncome;                    
+                    curData[27] = tdWTax;
+                    curData[28] = tdLoanDeduction;
+                    curData[29] = tOtherDeduction;
+                    curData[30] = tdTotalDeduction;
+                    curData[31] = tdNetPay;
+                    curData[32] = tdStatus;
                     
                     this.data(curData).invalidate().draw();
                 }
@@ -647,6 +655,8 @@ nav > div a.nav-item.nav-link:focus
                 tdOL,
                 tdNightDiff,
                 tdOvertimePay,
+                tdLH,
+                tdSH,
                 tdRDDPay,
                 tdOvertimeND,
                 tdOtherTaxableEarnings,
@@ -765,6 +775,8 @@ nav > div a.nav-item.nav-link:focus
                 "{{ strtoupper('OL') }}", 
                 "{{ strtoupper('Night Differential') }}",
                 "{{ strtoupper('Overtime Pay') }}",
+                "{{ strtoupper('Legal Holiday') }}",
+                "{{ strtoupper('Special Holiday') }}",
                 "{{ strtoupper('RDD Pay') }}",
                 "{{ strtoupper('ND OT') }}",
                 "{{ strtoupper('Other Taxable Earnings') }}",
@@ -799,6 +811,8 @@ nav > div a.nav-item.nav-link:focus
             var dblOL = 0;
             var dblNightDiff = 0;
             var dblOTPay = 0;
+            var dbLH = 0;
+            var dbSH = 0;
             var dblRDDPay = 0;
             var dblOTND = 0;
             var dblOtherTaxableEarnings = 0;
@@ -817,7 +831,7 @@ nav > div a.nav-item.nav-link:focus
 
         // grand totals
         var gDays = 0, gBasicPay = 0, gECOLA = 0, gLate = 0, gUndertime = 0, gAbsent = 0,
-            gSL = 0, gVL = 0, gOL = 0, gNightDiff = 0, gOTPay = 0, gRDDPay = 0, gOTND = 0,
+            gSL = 0, gVL = 0, gOL = 0, gNightDiff = 0, gOTPay = 0, gLH = 0, gSH = 0, gRDDPay = 0, gOTND = 0,
             gOtherTaxable = 0, gOtherNonTaxable = 0, gGrossPay = 0,
             gSSS = 0, gPHIC = 0, gHDMF = 0, gHDMFMP2 = 0,
             gTaxable = 0, gWTax = 0, gLoan = 0, gOtherDed = 0,
@@ -825,7 +839,7 @@ nav > div a.nav-item.nav-link:focus
 
         // team leader subtotals
         var tDays = 0, tBasicPay = 0, tECOLA = 0, tLate = 0, tUndertime = 0, tAbsent = 0,
-            tSL = 0, tVL = 0, tOL = 0, tNightDiff = 0, tOTPay = 0, tRDDPay = 0, tOTND = 0,
+            tSL = 0, tVL = 0, tOL = 0, tNightDiff = 0, tOTPay = 0, tLH = 0, tSH = 0, tRDDPay = 0, tOTND = 0,
             tOtherTaxable = 0, tOtherNonTaxable = 0, tGrossPay = 0,
             tSSS = 0, tPHIC = 0, tHDMF = 0, tHDMFMP2 = 0,
             tTaxable = 0, tWTax = 0, tLoan = 0, tOtherDed = 0,
@@ -849,7 +863,7 @@ nav > div a.nav-item.nav-link:focus
                             BasicPay: tBasicPay, ECOLA: tECOLA, Late: tLate,
                             Undertime: tUndertime, Absent: tAbsent,
                             SL: tSL, VL: tVL, OL: tOL,
-                            NightDiff: tNightDiff, OTPay: tOTPay, RDDPay: tRDDPay, OTND: tOTND,
+                            NightDiff: tNightDiff, OTPay: tOTPay, LH: tLH, SH: tSH, RDDPay: tRDDPay, OTND: tOTND,
                             OtherTaxable: tOtherTaxable,
                             OtherNonTaxable: tOtherNonTaxable,
                             GrossPay: tGrossPay,
@@ -864,7 +878,7 @@ nav > div a.nav-item.nav-link:focus
 
                 // reset TL totals
                 tDays = tBasicPay = tECOLA = tLate = tUndertime = tAbsent =
-                tSL = tVL = tOL = tNightDiff = tOTPay = tRDDPay = tOTND =
+                tSL = tVL = tOL = tNightDiff = tOTPay = tLH = tSH = tRDDPay = tOTND =
                 tOtherTaxable = tOtherNonTaxable = tGrossPay =
                 tSSS = tPHIC = tHDMF = tHDMFMP2 =
                 tTaxable = tWTax = tLoan = tOtherDed =
@@ -883,7 +897,7 @@ nav > div a.nav-item.nav-link:focus
             createXLSLFormatObj.push([
                 v.EmployeeNo, v.EmployeeName, v.TeamLeader, v.Days, v.BasicPay, v.ECOLA, v.LateAmount,
                 v.UndertimeAmount, v.AbsentAmount, v.SL, v.VL, v.OL,
-                v.NightDiff, v.OTPay, v.RDDPay, v.OTND,
+                v.NightDiff, v.OTPay, v.LH, v.SH, v.RDDPay, v.OTND,
                 v.OtherTaxableEarnings, v.OtherNonTaxableEarnings,
                 v.GrossPay, v.SSS, v.PHIC, v.HDMF, v.HDMFMP2,
                 v.TaxableIncome, v.WTax, v.LoanDeduction,
@@ -917,6 +931,8 @@ nav > div a.nav-item.nav-link:focus
             tTotalDed += parseFloat(v.TotalDeduction, 2); gTotalDed += parseFloat(v.TotalDeduction, 2);
             tNetPay += parseFloat(v.NetPay, 2);           gNetPay += parseFloat(v.NetPay, 2);
             tRDDPay += parseFloat(v.RDDPay, 2);           gRDDPay += parseFloat(v.RDDPay, 2);
+            tLH += parseFloat(v.LH, 2);                   gLH += parseFloat(v.LH, 2);
+            tSH += parseFloat(v.SH, 2);                   gSH += parseFloat(v.SH, 2);
         });
 
 
@@ -927,7 +943,7 @@ nav > div a.nav-item.nav-link:focus
                 BasicPay: tBasicPay, ECOLA: tECOLA, Late: tLate,
                 Undertime: tUndertime, Absent: tAbsent,
                 SL: tSL, VL: tVL, OL: tOL,
-                NightDiff: tNightDiff, OTPay: tOTPay, RDDPay: tRDDPay, OTND: tOTND,
+                NightDiff: tNightDiff, OTPay: tOTPay, LH: tLH, SH: tSH, RDDPay: tRDDPay, OTND: tOTND,
                 OtherTaxable: tOtherTaxable,
                 OtherNonTaxable: tOtherNonTaxable,
                 GrossPay: tGrossPay,
@@ -948,7 +964,7 @@ nav > div a.nav-item.nav-link:focus
                 BasicPay: gBasicPay, ECOLA: gECOLA, Late: gLate,
                 Undertime: gUndertime, Absent: gAbsent,
                 SL: gSL, VL: gVL, OL: gOL,
-                NightDiff: gNightDiff, OTPay: gOTPay, RDDPay: gRDDPay, OTND: gOTND,
+                NightDiff: gNightDiff, OTPay: gOTPay, LH: gLH, SH: gSH, RDDPay: gRDDPay, OTND: gOTND,
                 OtherTaxable: gOtherTaxable,
                 OtherNonTaxable: gOtherNonTaxable,
                 GrossPay: gGrossPay,
@@ -1013,6 +1029,8 @@ nav > div a.nav-item.nav-link:focus
             totals.OL,
             totals.NightDiff,
             totals.OTPay,
+            totals.LH,
+            totals.SH,
             totals.RDDPay,
             totals.OTND,
             totals.OtherTaxable,

@@ -2691,6 +2691,36 @@ public function getPayrollRegisterApprovedReport($param){
       ->leftjoin('payroll_section as sec', 'sec.id', '=', 'emp.section_id')  
       ->leftjoin('payroll_job_type as job', 'job.ID', '=', 'emp.job_title_id')
 
+      ->leftJoin(
+          DB::raw("(
+              SELECT
+                  p.PayrollTransactionID,
+                  p.EmployeeID,
+
+                  SUM(CASE WHEN l.LoanTypeID = 1 THEN p.Total ELSE 0 END) AS SSSSalaryLoan,
+                  SUM(CASE WHEN l.LoanTypeID = 2 THEN p.Total ELSE 0 END) AS SSSCalamityLoan,
+                  SUM(CASE WHEN l.LoanTypeID = 3 THEN p.Total ELSE 0 END) AS HDMFLoan,
+                  SUM(CASE WHEN l.LoanTypeID = 8 THEN p.Total ELSE 0 END) AS HDMFCalamityLoan,
+
+                  SUM(CASE
+                          WHEN l.LoanTypeID NOT IN (1,2,3,8)
+                          THEN p.Total
+                          ELSE 0
+                      END) AS OtherLoanDeductions
+
+
+              FROM payroll_transaction_details p
+              INNER JOIN payroll_employee_loan_transaction l
+                  ON l.ID = p.ReferenceID
+              WHERE p.ReferenceType = 'Loan'
+              GROUP BY p.PayrollTransactionID, p.EmployeeID
+          ) AS LoanSummary"),
+          function ($join) {
+              $join->on('LoanSummary.PayrollTransactionID', '=', 'paytrn.ID')
+                  ->on('LoanSummary.EmployeeID', '=', 'paytrnemp.EmployeeID');
+          }
+      )
+
          ->selectraw("
               paytrn.ID as PayrollTransactionID,
               paytrnemp.EmployeeID,
@@ -2736,6 +2766,12 @@ public function getPayrollRegisterApprovedReport($param){
             COALESCE(paytrnemp.WithholdingTax,0) as WTax,
 
             COALESCE(paytrnemp.TotalLoanDeductions,0) as LoanDeduction,
+
+            COALESCE(LoanSummary.SSSSalaryLoan,0) as SSSSalaryLoan,
+            COALESCE(LoanSummary.SSSCalamityLoan,0) as SSSCalamityLoan,
+            COALESCE(LoanSummary.HDMFLoan,0) as HDMFLoan,
+            COALESCE(LoanSummary.HDMFCalamityLoan,0) as HDMFCalamityLoan,
+            COALESCE(LoanSummary.OtherLoanDeductions,0) as OtherLoanDeductions,
 
             COALESCE(paytrnemp.TotalDeductions,0) as OtherDeduction,
 
@@ -2888,6 +2924,35 @@ public function getPayrollRegisterPendingReport($param){
       ->leftjoin('payroll_section as sec', 'sec.id', '=', 'emp.section_id')  
       ->leftjoin('payroll_job_type as job', 'job.ID', '=', 'emp.job_title_id') 
 
+      ->leftJoin(
+                DB::raw("(
+                    SELECT
+                        p.PayrollTransactionID,
+                        p.EmployeeID,
+
+                        SUM(CASE WHEN l.LoanTypeID = 1 THEN p.Total ELSE 0 END) AS SSSSalaryLoan,
+                        SUM(CASE WHEN l.LoanTypeID = 2 THEN p.Total ELSE 0 END) AS SSSCalamityLoan,
+                        SUM(CASE WHEN l.LoanTypeID = 3 THEN p.Total ELSE 0 END) AS HDMFLoan,
+                        SUM(CASE WHEN l.LoanTypeID = 8 THEN p.Total ELSE 0 END) AS HDMFCalamityLoan,
+                        
+                        SUM(CASE
+                                WHEN l.LoanTypeID NOT IN (1,2,3,8)
+                                THEN p.Total
+                                ELSE 0
+                            END) AS OtherLoanDeductions
+                            
+                    FROM payroll_transaction_details p
+                    INNER JOIN payroll_employee_loan_transaction l
+                        ON l.ID = p.ReferenceID
+                    WHERE p.ReferenceType = 'Loan'
+                    GROUP BY p.PayrollTransactionID, p.EmployeeID
+                ) AS LoanSummary"),
+                function ($join) {
+                    $join->on('LoanSummary.PayrollTransactionID', '=', 'paytrn.ID')
+                        ->on('LoanSummary.EmployeeID', '=', 'paytrnemp.EmployeeID');
+                }
+            )
+
             ->selectraw("
               paytrn.ID as PayrollTransactionID,
               paytrnemp.EmployeeID,
@@ -2923,17 +2988,17 @@ public function getPayrollRegisterPendingReport($param){
 
             (COALESCE(paytrnemp.BasicSalary,0) + COALESCE(paytrnemp.NightDifferential,0) + COALESCE(paytrnemp.Overtime,0) + COALESCE(paytrnemp.Leave,0) + COALESCE(paytrnemp.TotalOtherTaxableIncome,0) + COALESCE(paytrnemp.TotalNonTaxableIncome,0) - COALESCE(paytrnemp.LateUnderTime,0)) as GrossPay,
 
-
-            COALESCE(paytrnemp.SSSEEContribution,0) + COALESCE(paytrnemp.SSSWISPEE,0) as SSS,
-            COALESCE(paytrnemp.PHICEEContribution,0) as PHIC,
-            COALESCE(paytrnemp.HDMFEEContribution,0) as HDMF,
-            COALESCE(paytrnemp.HDMFMP2,0) as HDMFMP2,
-
             COALESCE(paytrnemp.BasicSalary,0) + COALESCE(paytrnemp.NightDifferential,0) +  COALESCE(paytrnemp.Overtime,0) + COALESCE(paytrnemp.Leave,0) + COALESCE(paytrnemp.TotalOtherTaxableIncome,0) - COALESCE(paytrnemp.LateUnderTime,0) - COALESCE(paytrnemp.TotalEEInsurancePremiums,0) as TaxableIncome,
             
             COALESCE(paytrnemp.WithholdingTax,0) as WTax,
 
             COALESCE(paytrnemp.TotalLoanDeductions,0) as LoanDeduction,
+
+            COALESCE(LoanSummary.SSSSalaryLoan,0) as SSSSalaryLoan,
+            COALESCE(LoanSummary.SSSCalamityLoan,0) as SSSCalamityLoan,
+            COALESCE(LoanSummary.HDMFLoan,0) as HDMFLoan,
+            COALESCE(LoanSummary.HDMFCalamityLoan,0) as HDMFCalamityLoan,
+            COALESCE(LoanSummary.OtherLoanDeductions,0) as OtherLoanDeductions,
 
             COALESCE(paytrnemp.TotalDeductions,0) as OtherDeduction,
 

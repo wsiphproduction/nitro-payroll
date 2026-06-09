@@ -333,8 +333,11 @@ nav > div a.nav-item.nav-link:focus
                                                         <th style="min-width: 80px;">PAG IBIG MP2</th>                                                        
                                                         <th style="min-width: 110px;">TAXABLE INCOME</th>
                                                         <th style="min-width: 60px;">WTAX</th>
-                                                        <th style="min-width: 110px;">LOAN DEDUCTION</th>
-                                                        <th style="min-width: 110px;">OTHER DEDUCTION</th>
+                                                        <th style="min-width: 110px;">SSS SALARY LOAN</th>
+                                                        <th style="min-width: 110px;">SSS CALAMITY LOAN</th>
+                                                        <th style="min-width: 110px;">HDMF LOAN</th>
+                                                        <th style="min-width: 110px;">HDMF CALAMITY LOAN</th>
+                                                        <th style="min-width: 110px;">OTHER LOAN DEDUCTIONS</th>
                                                         <th style="min-width: 110px;">TOTAL DEDUCTION</th>
                                                         <th style="min-width: 80px;">TOTAL NETPAY</th>
                                                         <th style="min-width: 60px;">STATUS</th>
@@ -576,8 +579,13 @@ nav > div a.nav-item.nav-link:focus
 
             tdWTax = "<span class='font-normal'>" + FormatDecimal(vData.WTax,2) + "</span>";
 
-            tdLoanDeduction = "<span class='font-normal'>" + FormatDecimal(vData.LoanDeduction,2) + "</span>";
-            tOtherDeduction = "<span class='font-normal'>" + FormatDecimal(vData.OtherDeduction,2) + "</span>";
+
+            tdSSSSalaryLoan = "<span class='font-normal'>" + FormatDecimal(vData.SSSSalaryLoan,2) + "</span>";
+            tdSSSCalamityLoan = "<span class='font-normal'>" + FormatDecimal(vData.SSSCalamityLoan,2) + "</span>";
+            tdHDMFLoan = "<span class='font-normal'>" + FormatDecimal(vData.HDMFLoan,2) + "</span>";
+            tdHDMFCalamityLoan = "<span class='font-normal'>" + FormatDecimal(vData.HDMFCalamityLoan,2) + "</span>";
+
+            tOtherDeduction = "<span class='font-normal'>" + FormatDecimal(vData.OtherLoanDeductions,2) + "</span>";
 
             tdTotalDeduction = "<span class='font-normal'>" + FormatDecimal(vData.TotalDeduction,2) + "</span>";
 
@@ -627,11 +635,14 @@ nav > div a.nav-item.nav-link:focus
                     curData[25] = tdHDMFMP2;
                     curData[26] = tdTaxableIncome;                    
                     curData[27] = tdWTax;
-                    curData[28] = tdLoanDeduction;
-                    curData[29] = tOtherDeduction;
-                    curData[30] = tdTotalDeduction;
-                    curData[31] = tdNetPay;
-                    curData[32] = tdStatus;
+                    curData[28] = tdSSSSalaryLoan;
+                    curData[29] = tdSSSCalamityLoan;
+                    curData[30] = tdHDMFLoan;
+                    curData[31] = tdHDMFCalamityLoan;
+                    curData[32] = tOtherDeduction;
+                    curData[33] = tdTotalDeduction;
+                    curData[34] = tdNetPay;
+                    curData[35] = tdStatus;
                     
                     this.data(curData).invalidate().draw();
                 }
@@ -668,7 +679,10 @@ nav > div a.nav-item.nav-link:focus
                 tdHDMFMP2,           
                 tdTaxableIncome,
                 tdWTax,
-                tdLoanDeduction,
+                tdSSSSalaryLoan,
+                tdSSSCalamityLoan,
+                tdHDMFLoan,
+                tdHDMFCalamityLoan,
                 tOtherDeduction,
                 tdTotalDeduction,
                 tdNetPay,
@@ -788,8 +802,11 @@ nav > div a.nav-item.nav-link:focus
                 "{{ strtoupper('HDMF MP2') }}", 
                 "{{ strtoupper('Taxable Income') }}", 
                 "{{ strtoupper('Withholding Tax') }}",
-                "{{ strtoupper('Loan Deductions') }}",
-                "{{ strtoupper('Other Deductions') }}", 
+                "{{ strtoupper('SSS SALARY LOAN') }}",
+                "{{ strtoupper('SSS CALAMITY LOAN') }}",
+                "{{ strtoupper('HDMF LOAN') }}",
+                "{{ strtoupper('HDMF CALAMITY LOAN') }}",
+                "{{ strtoupper('OTHER LOAN DEDUCTIONS') }}", 
                 "{{ strtoupper('Total Deductions') }}", 
                 "{{ strtoupper('Net Pay') }}", 
                 "{{ strtoupper('Status') }}"                         
@@ -824,7 +841,10 @@ nav > div a.nav-item.nav-link:focus
             var dblHDMFMP2 = 0;
             var dblTaxableIncome = 0;
             var dblWTax = 0;
-            var dblLoanDeduction = 0;
+            var dblSSSSalaryLoan = 0;
+            var dblSSSCalamityLoan = 0;
+            var dblHDMFLoan = 0;
+            var dblHDMFCalamityLoan = 0;
             var dblOtherDeduction = 0;
             var dblTotalDeduction = 0;
             var dblNetPay = 0;
@@ -834,7 +854,7 @@ nav > div a.nav-item.nav-link:focus
             gSL = 0, gVL = 0, gOL = 0, gNightDiff = 0, gOTPay = 0, gLH = 0, gSH = 0, gRDDPay = 0, gOTND = 0,
             gOtherTaxable = 0, gOtherNonTaxable = 0, gGrossPay = 0,
             gSSS = 0, gPHIC = 0, gHDMF = 0, gHDMFMP2 = 0,
-            gTaxable = 0, gWTax = 0, gLoan = 0, gOtherDed = 0,
+            gTaxable = 0, gWTax = 0, gSSSSalaryLoan = 0, gSSSCalamityLoan = 0, gHDMFLoan = 0, gHDMFCalamityLoan = 0, gOtherDed = 0,
             gTotalDed = 0, gNetPay = 0;
 
         // team leader subtotals
@@ -842,7 +862,7 @@ nav > div a.nav-item.nav-link:focus
             tSL = 0, tVL = 0, tOL = 0, tNightDiff = 0, tOTPay = 0, tLH = 0, tSH = 0, tRDDPay = 0, tOTND = 0,
             tOtherTaxable = 0, tOtherNonTaxable = 0, tGrossPay = 0,
             tSSS = 0, tPHIC = 0, tHDMF = 0, tHDMFMP2 = 0,
-            tTaxable = 0, tWTax = 0, tLoan = 0, tOtherDed = 0,
+            tTaxable = 0, tWTax = 0, tSSSSalaryLoan = 0, tSSSCalamityLoan = 0, tHDMFLoan = 0, tHDMFCalamityLoan = 0, tOtherDed = 0,
             tTotalDed = 0, tNetPay = 0;
 
         var currentTeamLeader = null;
@@ -869,7 +889,7 @@ nav > div a.nav-item.nav-link:focus
                             GrossPay: tGrossPay,
                             SSS: tSSS, PHIC: tPHIC, HDMF: tHDMF, HDMFMP2: tHDMFMP2,
                             Taxable: tTaxable, WTax: tWTax,
-                            Loan: tLoan, OtherDed: tOtherDed,
+                            SSSSalaryLoan: tSSSSalaryLoan, SSSCalamityLoan: tSSSCalamityLoan, HDMFLoan: tHDMFLoan, HDMFCalamityLoan: tHDMFCalamityLoan, OtherDed: tOtherDed,
                             TotalDed: tTotalDed, NetPay: tNetPay
                         })
                     );
@@ -881,7 +901,7 @@ nav > div a.nav-item.nav-link:focus
                 tSL = tVL = tOL = tNightDiff = tOTPay = tLH = tSH = tRDDPay = tOTND =
                 tOtherTaxable = tOtherNonTaxable = tGrossPay =
                 tSSS = tPHIC = tHDMF = tHDMFMP2 =
-                tTaxable = tWTax = tLoan = tOtherDed =
+                tTaxable = tWTax = tSSSSalaryLoan = tSSSCalamityLoan = tHDMFLoan = tHDMFCalamityLoan = tOtherDed =
                 tTotalDed = tNetPay = 0;
 
                 // header block
@@ -900,7 +920,7 @@ nav > div a.nav-item.nav-link:focus
                 v.NightDiff, v.OTPay, v.LH, v.SH, v.RDDPay, v.OTND,
                 v.OtherTaxableEarnings, v.OtherNonTaxableEarnings,
                 v.GrossPay, v.SSS, v.PHIC, v.HDMF, v.HDMFMP2,
-                v.TaxableIncome, v.WTax, v.LoanDeduction,
+                v.TaxableIncome, v.WTax, v.SSSSalaryLoan, v.SSSCalamityLoan, v.HDMFLoan, v.HDMFCalamityLoan,
                 v.OtherDeduction, v.TotalDeduction, v.NetPay, v.Status
             ]);
 
@@ -926,13 +946,16 @@ nav > div a.nav-item.nav-link:focus
             tHDMFMP2 += parseFloat(v.HDMFMP2, 2);         gHDMFMP2 += parseFloat(v.HDMFMP2, 2);
             tTaxable += parseFloat(v.TaxableIncome, 2);   gTaxable += parseFloat(v.TaxableIncome, 2);
             tWTax += parseFloat(v.WTax, 2);               gWTax += parseFloat(v.WTax, 2);
-            tLoan += parseFloat(v.LoanDeduction, 2);      gLoan += parseFloat(v.LoanDeduction, 2);
-            tOtherDed += parseFloat(v.OtherDeduction, 2); gOtherDed += parseFloat(v.OtherDeduction, 2);
+            tOtherDed += parseFloat(v.OtherLoanDeductions, 2); gOtherDed += parseFloat(v.OtherLoanDeductions, 2);
             tTotalDed += parseFloat(v.TotalDeduction, 2); gTotalDed += parseFloat(v.TotalDeduction, 2);
             tNetPay += parseFloat(v.NetPay, 2);           gNetPay += parseFloat(v.NetPay, 2);
             tRDDPay += parseFloat(v.RDDPay, 2);           gRDDPay += parseFloat(v.RDDPay, 2);
             tLH += parseFloat(v.LH, 2);                   gLH += parseFloat(v.LH, 2);
             tSH += parseFloat(v.SH, 2);                   gSH += parseFloat(v.SH, 2);
+            tSSSSalaryLoan += parseFloat(v.SSSSalaryLoan, 2); gSSSSalaryLoan += parseFloat(v.SSSSalaryLoan, 2);
+            tSSSCalamityLoan += parseFloat(v.SSSCalamityLoan, 2); gSSSCalamityLoan += parseFloat(v.SSSCalamityLoan, 2);
+            tHDMFLoan += parseFloat(v.HDMFLoan, 2); gHDMFLoan += parseFloat(v.HDMFLoan, 2);
+            tHDMFCalamityLoan += parseFloat(v.HDMFCalamityLoan, 2); gHDMFCalamityLoan += parseFloat(v.HDMFCalamityLoan, 2);
         });
 
 
@@ -949,7 +972,7 @@ nav > div a.nav-item.nav-link:focus
                 GrossPay: tGrossPay,
                 SSS: tSSS, PHIC: tPHIC, HDMF: tHDMF, HDMFMP2: tHDMFMP2,
                 Taxable: tTaxable, WTax: tWTax,
-                Loan: tLoan, OtherDed: tOtherDed,
+                SSSSalaryLoan: tSSSSalaryLoan, SSSCalamityLoan: tSSSCalamityLoan, HDMFLoan: tHDMFLoan, HDMFCalamityLoan: tHDMFCalamityLoan, OtherDed: tOtherDed,
                 TotalDed: tTotalDed, NetPay: tNetPay
             })
         );
@@ -970,7 +993,7 @@ nav > div a.nav-item.nav-link:focus
                 GrossPay: gGrossPay,
                 SSS: gSSS, PHIC: gPHIC, HDMF: gHDMF, HDMFMP2: gHDMFMP2,
                 Taxable: gTaxable, WTax: gWTax,
-                Loan: gLoan, OtherDed: gOtherDed,
+                SSSSalaryLoan: gSSSSalaryLoan, SSSCalamityLoan: gSSSCalamityLoan, HDMFLoan: gHDMFLoan, HDMFCalamityLoan: gHDMFCalamityLoan, OtherDed: gOtherDed,
                 TotalDed: gTotalDed, NetPay: gNetPay
             })
         );
@@ -1042,7 +1065,10 @@ nav > div a.nav-item.nav-link:focus
             totals.HDMFMP2,
             totals.Taxable,
             totals.WTax,
-            totals.Loan,
+            totals.SSSSalaryLoan,
+            totals.SSSCalamityLoan,
+            totals.HDMFLoan,
+            totals.HDMFCalamityLoan,
             totals.OtherDed,
             totals.TotalDed,
             totals.NetPay,

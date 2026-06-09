@@ -337,13 +337,51 @@ nav > div a.nav-item.nav-link:focus
                                                         <th style="min-width: 110px;">SSS CALAMITY LOAN</th>
                                                         <th style="min-width: 110px;">HDMF LOAN</th>
                                                         <th style="min-width: 110px;">HDMF CALAMITY LOAN</th>
-                                                        <th style="min-width: 110px;">OTHER LOAN DEDUCTIONS</th>
+                                                        <th style="min-width: 110px;">OTHER LOAN</th>
                                                         <th style="min-width: 110px;">TOTAL DEDUCTION</th>
                                                         <th style="min-width: 80px;">TOTAL NETPAY</th>
                                                         <th style="min-width: 60px;">STATUS</th>
                                                    </thead>
                                                   <tbody>
                                                 </tbody>
+<tfoot>
+        <tr>
+            <th></th>
+            <th colspan="3">TOTAL</th>
+            <th id="ftDays" title="Days"></th>
+            <th id="ftBasicPay" title="Basic Pay"></th>
+            <th id="ftECOLA" title="E-Cola"></th>
+            <th id="ftLate" title="Late"></th>
+            <th id="ftUndertime" title="Undertime"></th>
+            <th id="ftAbsent" title="Absent"></th>
+            <th id="ftSL" title="SL"></th>
+            <th id="ftVL" title="VL"></th>
+            <th id="ftOL" title="OL"></th>
+            <th id="ftNightDiff" title="Night Diff"></th>
+            <th id="ftOTPay" title="Overtime Pay"></th>
+            <th id="ftLH" title="Legal Holiday"></th>
+            <th id="ftSH" title="Special Holiday"></th>
+            <th id="ftRDDPay" title="RDD Pay"></th>
+            <th id="ftOTND" title="ND OT"></th>
+            <th id="ftOtherTaxable" title="Other Taxable"></th>
+            <th id="ftOtherNonTaxable" title="Other Non Taxable"></th>
+            <th id="ftGrossPay" title="Gross Pay"></th>
+            <th id="ftSSS" title="SSS"></th>
+            <th id="ftPHIC" title="Philhealth"></th>
+            <th id="ftHDMF" title="HDMF"></th>
+            <th id="ftHDMFMP2" title="HDMF MP2"></th>
+            <th id="ftTaxableIncome" title="Taxable Income"></th>
+            <th id="ftWTax" title="WTax"></th>
+            <th id="ftSSSSalaryLoan" title="SSS Salary Loan"></th>
+            <th id="ftSSSCalamityLoan" title="SSS Calamity Loan"></th>
+            <th id="ftHDMFLoan" title="HDMF Loan"></th>
+            <th id="ftHDMFCalamityLoan" title="HDMF Calamity Loan"></th>
+            <th id="ftOtherLoan" title="Other Loan"></th>
+            <th id="ftTotalDeduction" title="Total Deduction"></th>
+            <th id="ftNetPay" title="Net Pay"></th>
+            <th></th>
+        </tr>
+    </tfoot>
                                             </table>
                                         </div>
 
@@ -476,6 +514,126 @@ nav > div a.nav-item.nav-link:focus
                         $("#paging_button_id"+vPageNo).css("color", "#fff");
                      }   
                         LoadRecordList(data.PayrollRegisterReport);
+
+                        $("#ftBasicPay").html(
+                            FormatDecimal(data.Totals.BasicPay,2)
+                        );
+
+                        $("#ftECOLA").html(
+                            FormatDecimal(data.Totals.ECOLA,2)
+                        );
+
+                        $("#ftLate").html(
+                            FormatDecimal(data.Totals.LateAmount,2)
+                        );
+
+                        $("#ftUndertime").html(
+                            FormatDecimal(data.Totals.UndertimeAmount,2)
+                        );
+
+                        $("#ftAbsent").html(
+                            FormatDecimal(data.Totals.AbsentAmount,2)
+                        );
+
+                        $("#ftSL").html(
+                            FormatDecimal(data.Totals.SL,2)
+                        );
+
+                        $("#ftVL").html(
+                            FormatDecimal(data.Totals.VL,2)
+                        );
+
+                        $("#ftOL").html(
+                            FormatDecimal(data.Totals.OL,2)
+                        );
+
+                        $("#ftNightDiff").html(
+                            FormatDecimal(data.Totals.NightDiff,2)
+                        );
+
+                        $("#ftOTPay").html(
+                            FormatDecimal(data.Totals.OTPay,2)
+                        );
+
+                        $("#ftLH").html(
+                            FormatDecimal(data.Totals.LH,2)
+                        );
+
+                        $("#ftSH").html(
+                            FormatDecimal(data.Totals.SH,2)
+                        );
+
+                        $("#ftRDDPay").html(
+                            FormatDecimal(data.Totals.RDDPay,2)
+                        );
+
+                        $("#ftOTND").html(
+                            FormatDecimal(data.Totals.OTND,2)
+                        );
+
+                        $("#ftOtherTaxable").html(
+                            FormatDecimal(data.Totals.OtherTaxableEarnings,2)
+                        );
+
+                        $("#ftOtherNonTaxable").html(
+                            FormatDecimal(data.Totals.OtherNonTaxableEarnings,2)
+                        );
+
+                        $("#ftGrossPay").html(
+                            FormatDecimal(data.Totals.GrossPay,2)
+                        );
+
+                        $("#ftSSS").html(
+                            FormatDecimal(data.Totals.SSS,2)
+                        );
+
+                        $("#ftPHIC").html(
+                            FormatDecimal(data.Totals.PHIC,2)
+                        );
+
+                        $("#ftHDMF").html(
+                            FormatDecimal(data.Totals.HDMF,2)
+                        );
+
+                        $("#ftHDMFMP2").html(
+                            FormatDecimal(data.Totals.HDMFMP2,2)
+                        );
+
+                        $("#ftTaxableIncome").html(
+                            FormatDecimal(data.Totals.TaxableIncome,2)
+                        );
+
+                        $("#ftWTax").html(
+                            FormatDecimal(data.Totals.WTax,2)
+                        );
+
+                        $("#ftSSSSalaryLoan").html(
+                            FormatDecimal(data.Totals.SSSSalaryLoan,2)
+                        );
+
+                        $("#ftSSSCalamityLoan").html(
+                            FormatDecimal(data.Totals.SSSCalamityLoan,2)
+                        );
+
+                        $("#ftHDMFLoan").html(
+                            FormatDecimal(data.Totals.HDMFLoan,2)
+                        );
+
+                        $("#ftHDMFCalamityLoan").html(
+                            FormatDecimal(data.Totals.HDMFCalamityLoan,2)
+                        );
+
+                        $("#ftOtherLoan").html(
+                            FormatDecimal(data.Totals.OtherLoanDeductions,2)
+                        );
+
+                        $("#ftTotalDeduction").html(
+                            FormatDecimal(data.Totals.TotalDeduction,2)
+                        );
+
+                        $("#ftNetPay").html(
+                            FormatDecimal(data.Totals.NetPay,2)
+                        );
                     }else{
                         showHasErrorMessage('','No record(s) found base on search criteria.');
                     }                    
@@ -526,11 +684,13 @@ nav > div a.nav-item.nav-link:focus
 
     function LoadRecordList(vList){
 
-        if(vList.length > 0){
-            for(var x=0; x < vList.length; x++){
-                LoadRecordRow(vList[x]);
-            }
+        if(vList.length == 0){
+            showHasErrorMessage('','No record(s) found base on search criteria.');
         }
+
+        $.each(vList,function(i,v){
+            LoadRecordRow(v);
+        });
     }
 
    function LoadRecordRow(vData){
@@ -806,7 +966,7 @@ nav > div a.nav-item.nav-link:focus
                 "{{ strtoupper('SSS CALAMITY LOAN') }}",
                 "{{ strtoupper('HDMF LOAN') }}",
                 "{{ strtoupper('HDMF CALAMITY LOAN') }}",
-                "{{ strtoupper('OTHER LOAN DEDUCTIONS') }}", 
+                "{{ strtoupper('OTHER LOAN') }}", 
                 "{{ strtoupper('Total Deductions') }}", 
                 "{{ strtoupper('Net Pay') }}", 
                 "{{ strtoupper('Status') }}"                         

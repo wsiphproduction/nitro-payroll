@@ -2163,7 +2163,9 @@ public function getPayrollRegisterReportList(Request $request){
 
    if($data["Status"]=='Approved'){
 
-       $RetVal["PayrollRegisterReport"] = $Reports->getPayrollRegisterApprovedReport($data);
+      $result = $Reports->getPayrollRegisterApprovedReport($data);      
+      $RetVal["PayrollRegisterReport"] = $result['Records'];
+      $RetVal["Totals"] = $result['Totals'];
 
        $data["PageNo"] = 0;
        $data["Limit"] = 0;
@@ -2172,8 +2174,10 @@ public function getPayrollRegisterReportList(Request $request){
 
    }else{
 
-      $RetVal["PayrollRegisterReport"] = $Reports->getPayrollRegisterPendingReport($data);
-      
+      $result = $Reports->getPayrollRegisterPendingReport($data);      
+      $RetVal["PayrollRegisterReport"] = $result['Records'];
+      $RetVal["Totals"] = $result['Totals'];
+
       $data["PageNo"] = 0;
       $data["Limit"] = 0;
       $PayrollRegisterReportCount = $Reports->getPayrollRegisterPendingReport($data);

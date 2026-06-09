@@ -2803,6 +2803,7 @@ public function getPayrollRegisterApprovedReport($param){
 
        $query->where("paytrn.status",'Approved');  
            
+    $totalsQuery = clone $query;
 
     if($Limit > 0){
       $query->limit($Limit);
@@ -2814,7 +2815,84 @@ public function getPayrollRegisterApprovedReport($param){
 
     $list = $query->get();
 
-    return $list;
+    $totals = $totalsQuery
+        ->select([])
+        ->selectRaw("
+            SUM(COALESCE(paytrnemp.BasicSalary,0)) as BasicPay,
+            SUM(COALESCE(paytrnincded.ECOLA,0)) as ECOLA,
+
+            SUM(COALESCE(paytrnemp.Late,0)) as LateAmount,
+            SUM(COALESCE(paytrnemp.Undertime,0)) as UndertimeAmount,
+            SUM(COALESCE(paytrnemp.Absent,0)) as AbsentAmount,
+
+            SUM(COALESCE(paytrnemp.Leave1,0)) as SL,
+            SUM(COALESCE(paytrnemp.Leave2,0)) as VL,
+
+            SUM(
+                COALESCE(paytrnemp.Leave,0)
+                - COALESCE(paytrnemp.Leave1,0)
+                - COALESCE(paytrnemp.Leave2,0)
+            ) as OL,
+
+            SUM(COALESCE(paytrnemp.NightDifferential,0)) as NightDiff,
+
+            SUM(
+                COALESCE(paytrnemp.OvertimeReg,0)
+                - COALESCE(paytrnemp.Overtime3,0)
+                - (COALESCE(paytrnemp.Overtime5,0) + COALESCE(paytrnemp.Overtime4,0))
+            ) as OTPay,
+
+            SUM(COALESCE(paytrnemp.Overtime5,0)) as LH,
+            SUM(COALESCE(paytrnemp.Overtime4,0)) as SH,
+            SUM(COALESCE(paytrnemp.Overtime3,0)) as RDDPay,
+            SUM(COALESCE(paytrnemp.OvertimeND,0)) as OTND,
+
+            SUM(COALESCE(paytrnemp.TotalOtherTaxableIncome,0)) as OtherTaxableEarnings,
+            SUM(COALESCE(paytrnemp.TotalNonTaxableIncome,0)) as OtherNonTaxableEarnings,
+
+            SUM(
+                COALESCE(paytrnemp.BasicSalary,0)
+                + COALESCE(paytrnemp.NightDifferential,0)
+                + COALESCE(paytrnemp.Overtime,0)
+                + COALESCE(paytrnemp.Leave,0)
+                + COALESCE(paytrnemp.TotalOtherTaxableIncome,0)
+                + COALESCE(paytrnemp.TotalNonTaxableIncome,0)
+                - COALESCE(paytrnemp.LateUnderTime,0)
+            ) as GrossPay,
+
+            SUM(
+                COALESCE(paytrnemp.BasicSalary,0)
+                + COALESCE(paytrnemp.NightDifferential,0)
+                + COALESCE(paytrnemp.Overtime,0)
+                + COALESCE(paytrnemp.Leave,0)
+                + COALESCE(paytrnemp.TotalOtherTaxableIncome,0)
+                - COALESCE(paytrnemp.LateUnderTime,0)
+                - COALESCE(paytrnemp.TotalEEInsurancePremiums,0)
+            ) as TaxableIncome,
+
+            SUM(COALESCE(paytrnemp.WithholdingTax,0)) as WTax,
+
+            SUM(COALESCE(LoanSummary.SSSSalaryLoan,0)) as SSSSalaryLoan,
+            SUM(COALESCE(LoanSummary.SSSCalamityLoan,0)) as SSSCalamityLoan,
+            SUM(COALESCE(LoanSummary.HDMFLoan,0)) as HDMFLoan,
+            SUM(COALESCE(LoanSummary.HDMFCalamityLoan,0)) as HDMFCalamityLoan,
+            SUM(COALESCE(LoanSummary.OtherLoanDeductions,0)) as OtherLoanDeductions,
+
+            SUM(
+                COALESCE(paytrnemp.TotalEEInsurancePremiums,0)
+                + COALESCE(paytrnemp.TotalOtherDeductions,0)
+                + COALESCE(paytrnemp.TotalLoanDeductions,0)
+                + COALESCE(paytrnemp.TotalDeductions,0)
+            ) as TotalDeduction,
+
+            SUM(COALESCE(paytrnemp.NetPay,0)) as NetPay
+        ")
+        ->first();
+
+    return [
+        'Records' => $list,
+        'Totals'  => $totals
+    ];
 
 }
 
@@ -3030,6 +3108,7 @@ public function getPayrollRegisterPendingReport($param){
 
        $query->where("paytrn.status",'Pending');  
            
+    $totalsQuery = clone $query;
 
     if($Limit > 0){
       $query->limit($Limit);
@@ -3037,11 +3116,87 @@ public function getPayrollRegisterPendingReport($param){
     }
 
     $query->orderBy("EmployeeName","ASC");
-    
 
     $list = $query->get();
 
-    return $list;
+    $totals = $totalsQuery
+        ->select([])
+        ->selectRaw("
+            SUM(COALESCE(paytrnemp.BasicSalary,0)) as BasicPay,
+            SUM(COALESCE(paytrnincded.ECOLA,0)) as ECOLA,
+
+            SUM(COALESCE(paytrnemp.Late,0)) as LateAmount,
+            SUM(COALESCE(paytrnemp.Undertime,0)) as UndertimeAmount,
+            SUM(COALESCE(paytrnemp.Absent,0)) as AbsentAmount,
+
+            SUM(COALESCE(paytrnemp.Leave1,0)) as SL,
+            SUM(COALESCE(paytrnemp.Leave2,0)) as VL,
+
+            SUM(
+                COALESCE(paytrnemp.Leave,0)
+                - COALESCE(paytrnemp.Leave1,0)
+                - COALESCE(paytrnemp.Leave2,0)
+            ) as OL,
+
+            SUM(COALESCE(paytrnemp.NightDifferential,0)) as NightDiff,
+
+            SUM(
+                COALESCE(paytrnemp.OvertimeReg,0)
+                - COALESCE(paytrnemp.Overtime3,0)
+                - (COALESCE(paytrnemp.Overtime5,0) + COALESCE(paytrnemp.Overtime4,0))
+            ) as OTPay,
+
+            SUM(COALESCE(paytrnemp.Overtime5,0)) as LH,
+            SUM(COALESCE(paytrnemp.Overtime4,0)) as SH,
+            SUM(COALESCE(paytrnemp.Overtime3,0)) as RDDPay,
+            SUM(COALESCE(paytrnemp.OvertimeND,0)) as OTND,
+
+            SUM(COALESCE(paytrnemp.TotalOtherTaxableIncome,0)) as OtherTaxableEarnings,
+            SUM(COALESCE(paytrnemp.TotalNonTaxableIncome,0)) as OtherNonTaxableEarnings,
+
+            SUM(
+                COALESCE(paytrnemp.BasicSalary,0)
+                + COALESCE(paytrnemp.NightDifferential,0)
+                + COALESCE(paytrnemp.Overtime,0)
+                + COALESCE(paytrnemp.Leave,0)
+                + COALESCE(paytrnemp.TotalOtherTaxableIncome,0)
+                + COALESCE(paytrnemp.TotalNonTaxableIncome,0)
+                - COALESCE(paytrnemp.LateUnderTime,0)
+            ) as GrossPay,
+
+            SUM(
+                COALESCE(paytrnemp.BasicSalary,0)
+                + COALESCE(paytrnemp.NightDifferential,0)
+                + COALESCE(paytrnemp.Overtime,0)
+                + COALESCE(paytrnemp.Leave,0)
+                + COALESCE(paytrnemp.TotalOtherTaxableIncome,0)
+                - COALESCE(paytrnemp.LateUnderTime,0)
+                - COALESCE(paytrnemp.TotalEEInsurancePremiums,0)
+            ) as TaxableIncome,
+
+            SUM(COALESCE(paytrnemp.WithholdingTax,0)) as WTax,
+
+            SUM(COALESCE(LoanSummary.SSSSalaryLoan,0)) as SSSSalaryLoan,
+            SUM(COALESCE(LoanSummary.SSSCalamityLoan,0)) as SSSCalamityLoan,
+            SUM(COALESCE(LoanSummary.HDMFLoan,0)) as HDMFLoan,
+            SUM(COALESCE(LoanSummary.HDMFCalamityLoan,0)) as HDMFCalamityLoan,
+            SUM(COALESCE(LoanSummary.OtherLoanDeductions,0)) as OtherLoanDeductions,
+
+            SUM(
+                COALESCE(paytrnemp.TotalEEInsurancePremiums,0)
+                + COALESCE(paytrnemp.TotalOtherDeductions,0)
+                + COALESCE(paytrnemp.TotalLoanDeductions,0)
+                + COALESCE(paytrnemp.TotalDeductions,0)
+            ) as TotalDeduction,
+
+            SUM(COALESCE(paytrnemp.NetPay,0)) as NetPay
+        ")
+        ->first();
+
+    return [
+        'Records' => $list,
+        'Totals'  => $totals
+    ];
 
 }
 

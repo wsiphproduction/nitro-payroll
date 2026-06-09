@@ -1265,6 +1265,9 @@ Route::post('get-excel-payroll-register-list',[
     'as'=> 'get-excel-payroll-register-list'
 ]);
 
+Route::post('/payroll-register-print', 'PayrollController@printPayrollRegister')
+    ->name('payroll-register-print');
+
 // PAYROLL RAW DATA EXCEL
 Route::post('get-excel-payroll-raw-data-list',[
     'uses'=>'GenerateExcelController@getExcelPayrollRawDataList',

@@ -295,6 +295,10 @@ nav > div a.nav-item.nav-link:focus
                                                            <i class="bx bx-file"></i>
                                                         </button>
 
+                                                        <button type="button" class="btn btn-icon btn-outline-primary mr-1 mb-1" onclick="Print()" tooltip="Print Report" tooltip-position="top" style="padding: 0.4rem 0.6rem;height: 40px;margin-top: 23px;margin-left: -13px;">
+                                                           <i class="bx bx-printer"></i>
+                                                        </button>
+
                                                       @endif  
                                     
                                                     </div>
@@ -469,6 +473,85 @@ nav > div a.nav-item.nav-link:focus
             getRecordList(1, $('.searchtext').val());
         }
     });
+
+    function Print(){
+
+        var form = $('<form>', {
+            method: 'POST',
+            action: "{{ route('payroll-register-print') }}",
+            target: '_blank'
+        });
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: '_token',
+            value: '{{ csrf_token() }}'
+        }));
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: 'PayrollPeriodID',
+            value: $("#SearchPayrollPeriodCode").val()
+        }));
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: 'FilterType',
+            value: $("#GenerateFilter").val()
+        }));
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: 'BranchID',
+            value: ($("#GeneratePayrollBranch").val() || []).join(',')
+        }));
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: 'SiteID',
+            value: ($("#GeneratePayrollSite").val() || []).join(',')
+        }));
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: 'DivisionID',
+            value: ($("#GeneratePayrollDivision").val() || []).join(',')
+        }));
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: 'DepartmentID',
+            value: ($("#GeneratePayrollDepartment").val() || []).join(',')
+        }));
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: 'SectionID',
+            value: ($("#GeneratePayrollSection").val() || []).join(',')
+        }));
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: 'JobTypeID',
+            value: ($("#GeneratePayrollJobType").val() || []).join(',')
+        }));
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: 'EmployeeID',
+            value: $("#GeneratePayrollEmployee").val()
+        }));
+
+        form.append($('<input>', {
+            type: 'hidden',
+            name: 'Status',
+            value: $("#Status").val()
+        }));
+
+        $('body').append(form);
+        form.submit();
+        form.remove();
+    }
 
     function getRecordList(vPageNo){
 

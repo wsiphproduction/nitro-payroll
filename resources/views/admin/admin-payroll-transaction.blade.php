@@ -1259,7 +1259,7 @@ nav > div a.nav-item.nav-link:focus
             isDeletingPayroll = true;
 
             if (Status != 'Pending') {
-                alert('You can only delete pending payroll records.');
+                alert('This record is already approved. Only unposted records can be deleted.');
                 return;
             }
 

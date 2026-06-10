@@ -536,35 +536,35 @@
     setTimeout(function (){     
        
        if(vFilterType=='All'){
-        window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+        window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Location'){
-        window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&BranchID='+ vBranchID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+        window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&BranchID='+ vBranchID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Site'){
-        window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&BranchSiteID='+ vBranchSiteID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+        window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&BranchSiteID='+ vBranchSiteID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Division'){
-         window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&DivisionID='+ vDivisionID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+         window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&DivisionID='+ vDivisionID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Department'){
-         window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&DepartmentID='+ vDepartmentID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+         window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&DepartmentID='+ vDepartmentID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Section'){
-       window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&SectionID='+ vSectionID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+       window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&SectionID='+ vSectionID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Job Type'){
-       window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&JobTypeID='+ vJobTypeID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+       window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&JobTypeID='+ vJobTypeID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
 
         if(vFilterType=='Employee'){
-       window.open('{{config('app.url')}}/admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&EmployeeID='+ vEmployeeID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
+       window.open('{{config('app.url')}}admin-employee-payslip-print-report?PayrollPeriodID=' +vPayrollPeriodID +'&FilterType='+ vFilterType +'&EmployeeID='+ vEmployeeID +'&PrintingBatchNo=' +vPageBatchNO, '_blank');
        }
            
         let toastMain = document.getElementsByClassName('toast-success')[0];

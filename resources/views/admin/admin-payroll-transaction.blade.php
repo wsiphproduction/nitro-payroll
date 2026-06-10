@@ -944,15 +944,23 @@ nav > div a.nav-item.nav-link:focus
                     <!-- End Tab  -->  
                                       
                 </div>
-                <div class="modal-footer">
-                    <button id="btnRegeneratePayroll" type="button" class="btn btn-primary ml-1" style="display:none;" onclick="RegenerateEmployeePayroll('Pending',1)">
-                      <i class="bx bx-check d-block d-sm-none"></i>
-                      <span class="d-none d-sm-block">Recompute Payroll</span>
-                   </button>
-                   <button type="button" class="btn btn-light-secondary" data-dismiss="modal" style="margin-left:10px;">
-                      <i class="bx bx-x d-block d-sm-none"></i>
-                       <span class="d-none d-sm-block">Close</span>
-                   </button>
+                <div class="modal-footer d-flex justify-content-between align-items-center">
+                    <div>
+                        <button type="button" class="btn btn-light-danger" style="margin-left:10px;" onclick="deleteUserPayrollModal()">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Delete</span>
+                        </button>
+                    </div>
+                    <div>
+                        <button id="btnRegeneratePayroll" type="button" class="btn btn-primary ml-1" style="display:none;" onclick="RegenerateEmployeePayroll('Pending',1)">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Recompute Payroll</span>
+                    </button>
+                    <button type="button" class="btn btn-light-secondary" data-dismiss="modal" style="margin-left:10px;">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Close</span>
+                    </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1019,6 +1027,45 @@ nav > div a.nav-item.nav-link:focus
                       <i class="bx bx-check d-block d-sm-none"></i>
                       <span class="d-none d-sm-block">Proceed</span>
                    </button>
+                   <button type="button" class="btn btn-light-secondary" data-dismiss="modal" style="margin-left:10px;">
+                      <i class="bx bx-x d-block d-sm-none"></i>
+                       <span class="d-none d-sm-block">Cancel</span>
+                   </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END MODAL -->
+
+    <!-- MODAL -->
+    <div id="delete-user-payroll-modal" class="modal fade text-left w-100" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true" style="z-index: 9999;">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: red;">
+                    <h5 class="modal-title white-color">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="background:#fff !important;color: red;">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <div id="style-2" class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <fieldset class="form-group">
+                                <span>This is permanent action. Are you sure you want to delete this record?</span>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnDeletePayrollProceed"
+                            type="button"
+                            class="btn btn-primary ml-1"
+                            onclick="deleteUserPayroll()"
+                            style="background: red !important;">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Delete</span>
+                    </button>
                    <button type="button" class="btn btn-light-secondary" data-dismiss="modal" style="margin-left:10px;">
                       <i class="bx bx-x d-block d-sm-none"></i>
                        <span class="d-none d-sm-block">Cancel</span>
@@ -1191,6 +1238,69 @@ nav > div a.nav-item.nav-link:focus
                 getRecordList(intCurrentPage);
             }
         });
+
+        let EmployeeID = null;
+        let Status = null;
+        let PayrollPeriodID = null;
+        let PayrollTransactionID = null;
+
+        function deleteUserPayrollModal(){
+            $('#delete-user-payroll-modal').modal();
+        }
+
+        let isDeletingPayroll = false;
+
+        function deleteUserPayroll(){
+
+            if(isDeletingPayroll){
+                return;
+            }
+
+            isDeletingPayroll = true;
+
+            if (Status != 'Pending') {
+                alert('You can only delete pending payroll records.');
+                return;
+            }
+
+            $('#btnDeletePayrollProceed')
+                .prop('disabled', true)
+                .html('<span class="spinner-border spinner-border-sm"></span> Deleting...');
+
+            $.ajax({
+                type: "post",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    EmployeeID,
+                    Status,
+                    PayrollPeriodID,
+                    PayrollTransactionID,
+                },
+                url: "{{ route('delete-payroll-transaction-employee-list-by-period') }}",
+                dataType: "json",
+
+                success: function(data){
+                    $('#delete-user-payroll-modal').modal('hide');
+                },
+
+                error: function(data){
+                    alert('Failed to delete payroll record.');
+                },
+
+                complete: function(){
+
+                    isDeletingPayroll = false;
+
+                    $('#btnDeletePayrollProceed')
+                        .prop('disabled', false)
+                        .html('<span class="d-none d-sm-block">Delete</span>');
+
+                    $("#view-payroll-transaction-employee-modal").modal('hide');
+
+                    getRecordList(1);
+                }
+            });
+        }
 
         function getRecordList(vPageNo){
 
@@ -1646,6 +1756,11 @@ nav > div a.nav-item.nav-link:focus
                     dataType: "json",
                     success: function(data){
                         if(data.Response =='Success' && data.PayrollTransactionEmployeeInfo != undefined){
+
+                            EmployeeID = data.PayrollTransactionEmployeeInfo.EmployeeID;
+                            Status = data.PayrollTransactionEmployeeInfo.Status;
+                            PayrollPeriodID = data.PayrollTransactionEmployeeInfo.PayrollPeriodID;
+                            PayrollTransactionID = data.PayrollTransactionEmployeeInfo.PayrollTransactionID;
                             
                             $("#EmpPayrollTransactionRowID").val(vRow);
 

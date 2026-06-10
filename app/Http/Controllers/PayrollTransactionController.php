@@ -694,24 +694,20 @@ public function showAdminPayrollTransaction(Request $request){
 
         DB::delete("
             DELETE FROM payroll_transaction_details_temp
-            WHERE payrolltransactionid = ?
-            AND employeeid = ?
-            AND payrollperiodid = ?
+            WHERE PayrollTransactionID = ?
+            AND EmployeeID = ?
         ", [
             $PayrollTransactionID,
-            $EmployeeID,
-            $PayrollPeriodID
+            $EmployeeID
         ]);
 
         DB::delete("
             DELETE FROM payroll_transaction_employee_temp
-            WHERE payrolltransactionid = ?
-            AND employeeid = ?
-            AND payrollperiodid = ?
+            WHERE PayrollTransactionID = ?
+            AND EmployeeID = ?
         ", [
             $PayrollTransactionID,
-            $EmployeeID,
-            $PayrollPeriodID
+            $EmployeeID
         ]);
 
         DB::commit();

@@ -2671,6 +2671,40 @@ public function getPayrollRegisterApprovedReport($param){
     $JobTypeID=$param["JobTypeID"];
     $EmployeeID=$param["EmployeeID"];
 
+    $OtherEarningsTypes = DB::table('payroll_employee_income_deduction_transaction as t')
+        ->join(
+            'payroll_income_deduction_type as typ',
+            'typ.ID',
+            '=',
+            't.IncomeDeductionTypeID'
+        )
+        ->where('t.IncomeDeductionTypeCode', 'like', 'OE%')
+        ->select(
+            't.IncomeDeductionTypeID',
+            'typ.Name',
+            'typ.Code'
+        )
+        ->distinct()
+        ->orderBy('typ.Name')
+        ->get();
+
+$dynamicColumns = [];
+
+foreach($OtherEarningsTypes as $row){
+
+    $alias = preg_replace('/[^A-Za-z0-9_]/', '_', $row->Name);
+
+    $dynamicColumns[] = "
+    (
+        SELECT ISNULL(SUM(d.IncomeDeductionAmount),0)
+        FROM payroll_employee_income_deduction_transaction d
+        WHERE d.EmployeeID = paytrnemp.EmployeeID
+        AND d.IncomeDeductionTypeID = {$row->IncomeDeductionTypeID}
+    ) AS [$alias]";
+}
+
+$dynamicColumns = implode(",", $dynamicColumns);
+
     $query = DB::table('payroll_transaction_employee as paytrnemp')
       ->join('payroll_transaction_income_deduction as paytrnincded', function($join){
           $join->on('paytrnincded.PayrollTransactionID', '=', 'paytrnemp.PayrollTransactionID');
@@ -2777,7 +2811,8 @@ public function getPayrollRegisterApprovedReport($param){
 
             COALESCE(paytrnemp.TotalEEInsurancePremiums,0) + COALESCE(paytrnemp.TotalOtherDeductions,0) + COALESCE(paytrnemp.TotalLoanDeductions,0) + COALESCE(paytrnemp.TotalDeductions,0) as TotalDeduction,
 
-            COALESCE(paytrnemp.NetPay,0) as NetPay,
+            COALESCE(paytrnemp.NetPay,0) as NetPay
+            " . (!empty($dynamicColumns) ? "," . $dynamicColumns : "") . ",
 
             paytrn.status as Status
             ");
@@ -2891,7 +2926,8 @@ public function getPayrollRegisterApprovedReport($param){
 
     return [
         'Records' => $list,
-        'Totals'  => $totals
+        'Totals'  => $totals,
+        'OtherEarningsTypes' => $OtherEarningsTypes
     ];
 
 }

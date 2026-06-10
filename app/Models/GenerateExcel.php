@@ -1362,7 +1362,7 @@ public function generatePayrollRegisterPendingListExcel($param){
                                 ELSE 0
                             END) AS OtherLoanDeductions
                             
-                    FROM payroll_transaction_details p
+                    FROM payroll_transaction_details_temp p
                     INNER JOIN payroll_employee_loan_transaction l
                         ON l.ID = p.ReferenceID
                     WHERE p.ReferenceType = 'Loan'

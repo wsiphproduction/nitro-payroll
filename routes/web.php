@@ -1110,6 +1110,11 @@ Route::post('get-payroll-transaction-employee-list-by-period',[
     'as'=> 'get-payroll-transaction-employee-list-by-period'
 ]);
 
+Route::post('delete-payroll-transaction-employee-list-by-period',[
+    'uses'=>'PayrollTransactionController@deletePayrollTransactionEmployeeListByPeriod',
+    'as'=> 'delete-payroll-transaction-employee-list-by-period'
+]);
+
 Route::post('get-payroll-transaction-details',[
     'uses'=>'PayrollTransactionController@getPayrollTransactionDetails',
     'as'=> 'get-payroll-transaction-details'

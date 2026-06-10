@@ -16,7 +16,7 @@ use Session;
 use Hash;
 use View;
 use Image;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Excel;
 use PDF;
 
@@ -674,6 +674,62 @@ public function showAdminPayrollTransaction(Request $request){
 
   }
 
+  public function deletePayrollTransactionEmployeeListByPeriod(Request $request)
+  {
+      $EmployeeID = $request->EmployeeID;
+      $Status = $request->Status;
+      $PayrollPeriodID = $request->PayrollPeriodID;
+      $PayrollTransactionID = $request->PayrollTransactionID;
+
+      try {
+
+        if ($Status != config('app.STATUS_PENDING')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Payroll record is already approved.'
+            ], 500);
+        }
+
+        DB::beginTransaction();
+
+        DB::delete("
+            DELETE FROM payroll_transaction_details_temp
+            WHERE payrolltransactionid = ?
+            AND employeeid = ?
+            AND payrollperiodid = ?
+        ", [
+            $PayrollTransactionID,
+            $EmployeeID,
+            $PayrollPeriodID
+        ]);
+
+        DB::delete("
+            DELETE FROM payroll_transaction_employee_temp
+            WHERE payrolltransactionid = ?
+            AND employeeid = ?
+            AND payrollperiodid = ?
+        ", [
+            $PayrollTransactionID,
+            $EmployeeID,
+            $PayrollPeriodID
+        ]);
+
+        DB::commit();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payroll record deleted successfully.'
+        ]);
+
+      } catch (\Exception $e) {
+        DB::rollBack();
+
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 500);
+      }
+  }
 }
 
 

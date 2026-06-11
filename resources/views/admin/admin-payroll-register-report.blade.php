@@ -329,7 +329,7 @@ nav > div a.nav-item.nav-link:focus
                                                         <th style="min-width: 110px;">RDD PAY</th>
                                                         <th style="min-width: 110px;">ND OT</th>
                                                         <th style="min-width: 130px;">OTHER TAXABLE EARNING </th> 
-                                                        <th style="min-width: 130px;">OTHER NON TAXABLE EARNING </th> 
+                                                        <th id="otherEarningsMarker" style="min-width: 130px;">OTHER NON TAXABLE EARNING </th> 
                                                         <th style="min-width: 110px;">GROSS PAY</th>
                                                         <th style="min-width: 60px;">SSS</th>
                                                         <th style="min-width: 80px;">PHIL HEALTH</th>
@@ -348,44 +348,44 @@ nav > div a.nav-item.nav-link:focus
                                                    </thead>
                                                   <tbody>
                                                 </tbody>
-<tfoot>
-        <tr>
-            <th></th>
-            <th colspan="3">TOTAL</th>
-            <th id="ftDays" title="Days"></th>
-            <th id="ftBasicPay" title="Basic Pay"></th>
-            <th id="ftECOLA" title="E-Cola"></th>
-            <th id="ftLate" title="Late"></th>
-            <th id="ftUndertime" title="Undertime"></th>
-            <th id="ftAbsent" title="Absent"></th>
-            <th id="ftSL" title="SL"></th>
-            <th id="ftVL" title="VL"></th>
-            <th id="ftOL" title="OL"></th>
-            <th id="ftNightDiff" title="Night Diff"></th>
-            <th id="ftOTPay" title="Overtime Pay"></th>
-            <th id="ftLH" title="Legal Holiday"></th>
-            <th id="ftSH" title="Special Holiday"></th>
-            <th id="ftRDDPay" title="RDD Pay"></th>
-            <th id="ftOTND" title="ND OT"></th>
-            <th id="ftOtherTaxable" title="Other Taxable"></th>
-            <th id="ftOtherNonTaxable" title="Other Non Taxable"></th>
-            <th id="ftGrossPay" title="Gross Pay"></th>
-            <th id="ftSSS" title="SSS"></th>
-            <th id="ftPHIC" title="Philhealth"></th>
-            <th id="ftHDMF" title="HDMF"></th>
-            <th id="ftHDMFMP2" title="HDMF MP2"></th>
-            <th id="ftTaxableIncome" title="Taxable Income"></th>
-            <th id="ftWTax" title="WTax"></th>
-            <th id="ftSSSSalaryLoan" title="SSS Salary Loan"></th>
-            <th id="ftSSSCalamityLoan" title="SSS Calamity Loan"></th>
-            <th id="ftHDMFLoan" title="HDMF Loan"></th>
-            <th id="ftHDMFCalamityLoan" title="HDMF Calamity Loan"></th>
-            <th id="ftOtherLoan" title="Other Loan"></th>
-            <th id="ftTotalDeduction" title="Total Deduction"></th>
-            <th id="ftNetPay" title="Net Pay"></th>
-            <th></th>
-        </tr>
-    </tfoot>
+                                                <tfoot>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th colspan="3">TOTAL</th>
+                                                            <th id="ftDays" title="Days"></th>
+                                                            <th id="ftBasicPay" title="Basic Pay"></th>
+                                                            <th id="ftECOLA" title="E-Cola"></th>
+                                                            <th id="ftLate" title="Late"></th>
+                                                            <th id="ftUndertime" title="Undertime"></th>
+                                                            <th id="ftAbsent" title="Absent"></th>
+                                                            <th id="ftSL" title="SL"></th>
+                                                            <th id="ftVL" title="VL"></th>
+                                                            <th id="ftOL" title="OL"></th>
+                                                            <th id="ftNightDiff" title="Night Diff"></th>
+                                                            <th id="ftOTPay" title="Overtime Pay"></th>
+                                                            <th id="ftLH" title="Legal Holiday"></th>
+                                                            <th id="ftSH" title="Special Holiday"></th>
+                                                            <th id="ftRDDPay" title="RDD Pay"></th>
+                                                            <th id="ftOTND" title="ND OT"></th>
+                                                            <th id="ftOtherTaxable" title="Other Taxable"></th>
+                                                            <th id="ftOtherNonTaxable" title="Other Non Taxable"></th>
+                                                            <th id="ftGrossPay" title="Gross Pay"></th>
+                                                            <th id="ftSSS" title="SSS"></th>
+                                                            <th id="ftPHIC" title="Philhealth"></th>
+                                                            <th id="ftHDMF" title="HDMF"></th>
+                                                            <th id="ftHDMFMP2" title="HDMF MP2"></th>
+                                                            <th id="ftTaxableIncome" title="Taxable Income"></th>
+                                                            <th id="ftWTax" title="WTax"></th>
+                                                            <th id="ftSSSSalaryLoan" title="SSS Salary Loan"></th>
+                                                            <th id="ftSSSCalamityLoan" title="SSS Calamity Loan"></th>
+                                                            <th id="ftHDMFLoan" title="HDMF Loan"></th>
+                                                            <th id="ftHDMFCalamityLoan" title="HDMF Calamity Loan"></th>
+                                                            <th id="ftOtherLoan" title="Other Loan"></th>
+                                                            <th id="ftTotalDeduction" title="Total Deduction"></th>
+                                                            <th id="ftNetPay" title="Net Pay"></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </tfoot>
                                             </table>
                                         </div>
 
@@ -553,6 +553,39 @@ nav > div a.nav-item.nav-link:focus
         form.remove();
     }
 
+    var OtherEarningsTypes = [];
+    var footerTotals = {};
+
+    function LoadDynamicHeaders(){
+
+        $(".dynamicOEHeader").remove();
+        $(".dynamicOEFooter").remove();
+
+        var headerHtml = '';
+        var footerHtml = '';
+
+        $.each(OtherEarningsTypes,function(i,row){
+
+            headerHtml +=
+                '<th class="dynamicOEHeader" style="min-width:120px;">'
+                + row.Name.toUpperCase()
+                + '</th>';
+
+            footerHtml +=
+                '<th title="'+row.Name.toUpperCase()+'" class="dynamicOEFooter" id="ftOE_'
+                + row.IncomeDeductionTypeID
+                + '"></th>';
+
+        });
+
+        // HEADER
+        $(headerHtml).insertAfter("#otherEarningsMarker");
+
+        // FOOTER
+        $(footerHtml).insertAfter("#ftOtherNonTaxable");
+    }
+
+
     function getRecordList(vPageNo){
 
         $("#tblList").DataTable().clear().draw();
@@ -596,6 +629,34 @@ nav > div a.nav-item.nav-link:focus
                         $("#paging_button_id"+vPageNo).css("background", "#0069d9");
                         $("#paging_button_id"+vPageNo).css("color", "#fff");
                      }   
+
+                        OtherEarningsTypes = data.OtherEarningsTypes || [];
+
+                        // destroy old datatable
+                        if ($.fn.DataTable.isDataTable('#tblList')) {
+                            $('#tblList').DataTable().destroy();
+                        }
+
+                        $("#tblList tbody").empty();
+
+                        LoadDynamicHeaders();
+
+                        // rebuild datatable
+                        $('#tblList').DataTable({
+                            columnDefs: [{
+                                targets: [0],
+                                visible: false,
+                                searchable: false
+                            }],
+                            paging: false,
+                            lengthChange: false,
+                            searching: false,
+                            ordering: true,
+                            info: false,
+                            autoWidth: false,
+                            order: [[2, "asc"]]
+                        });
+
                         LoadRecordList(data.PayrollRegisterReport);
 
                         $("#ftBasicPay").html(
@@ -661,6 +722,16 @@ nav > div a.nav-item.nav-link:focus
                         $("#ftOtherNonTaxable").html(
                             FormatDecimal(data.Totals.OtherNonTaxableEarnings,2)
                         );
+
+                        $.each(OtherEarningsTypes,function(i,row){
+
+                            var field = row.Name.replace(/[^A-Za-z0-9_]/g,'_');
+
+                            $("#ftOE_" + row.IncomeDeductionTypeID).html(
+                                FormatDecimal(data.Totals[field] || 0,2)
+                            );
+
+                        });
 
                         $("#ftGrossPay").html(
                             FormatDecimal(data.Totals.GrossPay,2)
@@ -779,7 +850,21 @@ nav > div a.nav-item.nav-link:focus
    function LoadRecordRow(vData){
 
             var tblList = $("#tblList").DataTable();
-                                                        
+                       
+            var dynamicOEColumns = [];
+
+            $.each(OtherEarningsTypes,function(i,row){
+
+                var field = row.Name.replace(/[^A-Za-z0-9_]/g,'_');
+
+                dynamicOEColumns.push(
+                    "<span class='font-normal'>" +
+                    FormatDecimal(vData[field] || 0,2) +
+                    "</span>"
+                );
+
+            });
+            
             tdID = vData.EmployeeID;
    
             tdEmployeeNo = "<span class='font-normal'>" + vData.EmployeeNo + "</span>";
@@ -915,6 +1000,7 @@ nav > div a.nav-item.nav-link:focus
                 tdOvertimeND,
                 tdOtherTaxableEarnings,
                 tdOtherNonTaxableEarnings,
+                ...dynamicOEColumns,
                 tdGrossPay,
                 tdSSS,
                 tdPHIC,

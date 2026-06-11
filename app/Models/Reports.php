@@ -2688,22 +2688,20 @@ public function getPayrollRegisterApprovedReport($param){
         ->orderBy('typ.Name')
         ->get();
 
-$dynamicColumns = [];
+    $dynamicColumns = [];
 
-foreach($OtherEarningsTypes as $row){
+    foreach($OtherEarningsTypes as $row){
 
-    $alias = preg_replace('/[^A-Za-z0-9_]/', '_', $row->Name);
+        $alias = preg_replace('/[^A-Za-z0-9_]/', '_', $row->Name);
 
-    $dynamicColumns[] = "
-    (
-        SELECT ISNULL(SUM(d.IncomeDeductionAmount),0)
-        FROM payroll_employee_income_deduction_transaction d
-        WHERE d.EmployeeID = paytrnemp.EmployeeID
-        AND d.IncomeDeductionTypeID = {$row->IncomeDeductionTypeID}
-    ) AS [$alias]";
-}
+        $incomeColumn = "Income".$row->IncomeDeductionTypeID;
 
-$dynamicColumns = implode(",", $dynamicColumns);
+        $dynamicColumns[] = "
+            COALESCE(paytrnincded.{$incomeColumn},0) AS [$alias]
+        ";
+    }
+
+    $dynamicColumns = implode(",", $dynamicColumns);
 
     $query = DB::table('payroll_transaction_employee as paytrnemp')
       ->join('payroll_transaction_income_deduction as paytrnincded', function($join){
@@ -2838,6 +2836,20 @@ $dynamicColumns = implode(",", $dynamicColumns);
 
        $query->where("paytrn.status",'Approved');  
            
+      $dynamicTotalColumns = [];
+
+      foreach($OtherEarningsTypes as $row){
+
+          $alias = preg_replace('/[^A-Za-z0-9_]/', '_', $row->Name);
+
+          $incomeColumn = "Income".$row->IncomeDeductionTypeID;
+
+          $dynamicTotalColumns[] = "
+              SUM(COALESCE(paytrnincded.{$incomeColumn},0)) AS [$alias]
+          ";
+      }
+
+
     $totalsQuery = clone $query;
 
     if($Limit > 0){
@@ -2895,6 +2907,11 @@ $dynamicColumns = implode(",", $dynamicColumns);
                 - COALESCE(paytrnemp.LateUnderTime,0)
             ) as GrossPay,
 
+            SUM(COALESCE(paytrnemp.SSSEEContribution,0) + COALESCE(paytrnemp.SSSWISPEE,0)) as SSS,
+            SUM(COALESCE(paytrnemp.PHICEEContribution,0)) as PHIC,
+            SUM(COALESCE(paytrnemp.HDMFEEContribution,0)) as HDMF,
+            SUM(COALESCE(paytrnemp.HDMFMP2,0)) as HDMFMP2,
+
             SUM(
                 COALESCE(paytrnemp.BasicSalary,0)
                 + COALESCE(paytrnemp.NightDifferential,0)
@@ -2923,6 +2940,15 @@ $dynamicColumns = implode(",", $dynamicColumns);
             SUM(COALESCE(paytrnemp.NetPay,0)) as NetPay
         ")
         ->first();
+
+    foreach($OtherEarningsTypes as $row){
+
+        $alias = preg_replace('/[^A-Za-z0-9_]/', '_', $row->Name);
+
+        $totals->$alias = $list->sum(function($r) use ($alias){
+            return (float) ($r->$alias ?? 0);
+        });
+    }
 
     return [
         'Records' => $list,
@@ -3017,6 +3043,38 @@ public function getPayrollRegisterPendingReport($param){
     $SectionID=$param["SectionID"];
     $JobTypeID=$param["JobTypeID"];
     $EmployeeID=$param["EmployeeID"];
+
+    $OtherEarningsTypes = DB::table('payroll_employee_income_deduction_transaction as t')
+        ->join(
+            'payroll_income_deduction_type as typ',
+            'typ.ID',
+            '=',
+            't.IncomeDeductionTypeID'
+        )
+        ->where('t.IncomeDeductionTypeCode', 'like', 'OE%')
+        ->select(
+            't.IncomeDeductionTypeID',
+            'typ.Name',
+            'typ.Code'
+        )
+        ->distinct()
+        ->orderBy('typ.Name')
+        ->get();
+
+    $dynamicColumns = [];
+
+    foreach($OtherEarningsTypes as $row){
+
+        $alias = preg_replace('/[^A-Za-z0-9_]/', '_', $row->Name);
+
+        $incomeColumn = "Income".$row->IncomeDeductionTypeID;
+
+        $dynamicColumns[] = "
+            COALESCE(paytrnincded.{$incomeColumn},0) AS [$alias]
+        ";
+    }
+
+    $dynamicColumns = implode(",", $dynamicColumns);
 
     $query = DB::table('payroll_transaction_employee_temp as paytrnemp')
       ->join('payroll_transaction_income_deduction_temp as paytrnincded', function($join){
@@ -3144,6 +3202,19 @@ public function getPayrollRegisterPendingReport($param){
 
        $query->where("paytrn.status",'Pending');  
            
+    $dynamicTotalColumns = [];
+
+    foreach($OtherEarningsTypes as $row){
+
+        $alias = preg_replace('/[^A-Za-z0-9_]/', '_', $row->Name);
+
+        $incomeColumn = "Income".$row->IncomeDeductionTypeID;
+
+        $dynamicTotalColumns[] = "
+            SUM(COALESCE(paytrnincded.{$incomeColumn},0)) AS [$alias]
+        ";
+    }
+           
     $totalsQuery = clone $query;
 
     if($Limit > 0){
@@ -3200,6 +3271,11 @@ public function getPayrollRegisterPendingReport($param){
                 - COALESCE(paytrnemp.LateUnderTime,0)
             ) as GrossPay,
 
+            SUM(COALESCE(paytrnemp.SSSEEContribution,0) + COALESCE(paytrnemp.SSSWISPEE,0)) as SSS,
+            SUM(COALESCE(paytrnemp.PHICEEContribution,0)) as PHIC,
+            SUM(COALESCE(paytrnemp.HDMFEEContribution,0)) as HDMF,
+            SUM(COALESCE(paytrnemp.HDMFMP2,0)) as HDMFMP2,
+
             SUM(
                 COALESCE(paytrnemp.BasicSalary,0)
                 + COALESCE(paytrnemp.NightDifferential,0)
@@ -3229,9 +3305,19 @@ public function getPayrollRegisterPendingReport($param){
         ")
         ->first();
 
+    foreach($OtherEarningsTypes as $row){
+
+        $alias = preg_replace('/[^A-Za-z0-9_]/', '_', $row->Name);
+
+        $totals->$alias = $list->sum(function($r) use ($alias){
+            return (float) ($r->$alias ?? 0);
+        });
+    }
+
     return [
         'Records' => $list,
-        'Totals'  => $totals
+        'Totals'  => $totals,
+        'OtherEarningsTypes' => $OtherEarningsTypes
     ];
 
 }

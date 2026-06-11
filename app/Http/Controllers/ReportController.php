@@ -2164,6 +2164,7 @@ public function getPayrollRegisterReportList(Request $request){
    if($data["Status"]=='Approved'){
 
       $result = $Reports->getPayrollRegisterApprovedReport($data);      
+      $RetVal['OtherEarningsTypes'] = $result['OtherEarningsTypes'];
       $RetVal["PayrollRegisterReport"] = $result['Records'];
       $RetVal["Totals"] = $result['Totals'];
 
@@ -2174,7 +2175,8 @@ public function getPayrollRegisterReportList(Request $request){
 
    }else{
 
-      $result = $Reports->getPayrollRegisterPendingReport($data);      
+      $result = $Reports->getPayrollRegisterPendingReport($data);
+      $RetVal['OtherEarningsTypes'] = $result['OtherEarningsTypes'];
       $RetVal["PayrollRegisterReport"] = $result['Records'];
       $RetVal["Totals"] = $result['Totals'];
 

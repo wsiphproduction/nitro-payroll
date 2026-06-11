@@ -306,7 +306,7 @@
                                 <br>
                                 <span style="font-size:12px;">DEPT : {{$EmployeePayrollDetails->Department}} ({{$EmployeePayrollDetails->Section}})</span>
                             </td>
-                            <td style='width:50%;'>
+                            <td style='width:50%; white-space: nowrap'>
                                 <span style="font-size:12px;">  PAY DATE: {{$PayrollPeriodStartDate}} - {{$PayrollPeriodEndDate}} </span>
                             </td>
                         </tr>

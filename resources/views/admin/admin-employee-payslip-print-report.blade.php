@@ -364,10 +364,6 @@
                                         <td style="font-size:12px; text-align: right;">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td style="font-size:12px;">ABSENT/LATE/UT</td>
-                                        <td style="font-size:12px; text-align: right;">{{ (($dblTotalAbsentHours + $dblTotalLateHours + $dblTotalUndertime) > 0 ? number_format(($dblTotalAbsentHours + $dblTotalLateHours + $dblTotalUndertime),2) : "-") }} </td>
-                                    </tr>
-                                    <tr>
                                         <td style="font-size:12px;">OVERTIME</td>
                                         <td style="font-size:12px; text-align: right;">{{ ($dblTotalOvertime > 0 ? number_format($dblTotalOvertime,2) : "-") }}</td>
                                     </tr>
@@ -436,8 +432,8 @@
                                         <td style="font-size:12px; text-align: right;">{{ ($dblTotalHDMFEEContribution > 0 ? number_format($dblTotalHDMFEEContribution,2) : "-") }}</td>
                                     </tr>
                                     <tr>
-                                        <td style="font-size:12px;">&nbsp;</td>
-                                        <td style="font-size:12px; text-align: right;">&nbsp;</td>
+                                        <td style="font-size:12px;">ABSENT/LATE/UT</td>
+                                        <td style="font-size:12px; text-align: right;">{{ (($dblTotalAbsentHours + $dblTotalLateHours + $dblTotalUndertime) > 0 ? number_format(($dblTotalAbsentHours + $dblTotalLateHours + $dblTotalUndertime),2) : "-") }} </td>
                                     </tr>
                                     <tr>
                                         <td style="font-size:12px;">&nbsp;</td>

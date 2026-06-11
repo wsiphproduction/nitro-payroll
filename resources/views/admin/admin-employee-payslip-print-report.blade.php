@@ -300,11 +300,11 @@
                 <td style="width: 70%; text-align: left;">
                     <table class="table" style='width:100%;'>
                         <tr>
-                            <td style='width:50%;'>
+                            <td style='width:50%;white-space: nowrap'>
                                 <span style="font-size:12px;">EMP CODE: {{$EmployeePayrollDetails->EmployeeNo}} </span> 
                                 <span style="font-size:12px;">{{$EmployeePayrollDetails->FullName}} </span>
                                 <br>
-                                <span style="font-size:12px;">DEPT : {{$EmployeePayrollDetails->Department}} </span>
+                                <span style="font-size:12px;">DEPT : {{$EmployeePayrollDetails->Department}} ({{$EmployeePayrollDetails->Section}})</span>
                             </td>
                             <td style='width:50%;'>
                                 <span style="font-size:12px;">  PAY DATE: {{$PayrollPeriodStartDate}} - {{$PayrollPeriodEndDate}} </span>
@@ -313,12 +313,12 @@
                     </table>                    
                 </td>
                 <td style='width:0%;'></td>
-                <td style="width: 30%; text-align: left; padding-left:10px; ">
+                <td style="width: 30%; text-align: left; padding-left:10px; white-space: nowrap;">
                     <div>
                         <span style="font-size:12px;"> EMP CODE: {{$EmployeePayrollDetails->EmployeeNo}} </span> 
                     </div>
                     <div>
-                        <span style="font-size:12px;"> DEPT : {{$EmployeePayrollDetails->Department}} </span> <br>
+                        <span style="font-size:12px;"> DEPT : {{$EmployeePayrollDetails->Department}} ({{$EmployeePayrollDetails->Section}})</span> <br>
                     </div>
                 </td>
             </tr>

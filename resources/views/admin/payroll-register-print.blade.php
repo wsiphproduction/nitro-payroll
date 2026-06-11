@@ -114,6 +114,18 @@ $grand = [
 
 $subtotal = $grand;
 
+foreach($OtherEarningsTypes as $oe){
+
+    $alias = preg_replace(
+        '/[^A-Za-z0-9]/',
+        '_',
+        strtoupper($oe->Name)
+    );
+
+    $grand[$alias] = 0;
+    $subtotal[$alias] = 0;
+}
+
 @endphp
 
 <table>
@@ -144,6 +156,23 @@ $subtotal = $grand;
             <td class="num">{{ number_format($subtotal['OTND'],2) }}</td>
             <td class="num">{{ number_format($subtotal['OtherTaxableEarnings'],2) }}</td>
             <td class="num">{{ number_format($subtotal['OtherNonTaxableEarnings'],2) }}</td>
+
+            @foreach($OtherEarningsTypes as $oe)
+
+                @php
+                    $alias = preg_replace(
+                        '/[^A-Za-z0-9]/',
+                        '_',
+                        strtoupper($oe->Name)
+                    );
+                @endphp
+
+                <td class="num">
+                    {{ number_format($subtotal[$alias] ?? 0,2) }}
+                </td>
+
+            @endforeach
+
             <td class="num">{{ number_format($subtotal['GrossPay'],2) }}</td>
             <td class="num">{{ number_format($subtotal['SSS'],2) }}</td>
             <td class="num">{{ number_format($subtotal['PHIC'],2) }}</td>
@@ -172,7 +201,7 @@ $subtotal = $grand;
         @endphp
 
         <tr class="team-header">
-            <td colspan="34">
+            <td colspan="{{ 34 + count($OtherEarningsTypes) }}">
                 TEAM LEADER : {{ $currentTeamLeader }}
             </td>
         </tr>
@@ -198,6 +227,19 @@ $subtotal = $grand;
             <th>OTND</th>
             <th>OTH TAX</th>
             <th>OTH NON TAX</th>
+            @foreach($OtherEarningsTypes as $oe)
+
+                @php
+                    $alias = preg_replace(
+                        '/[^A-Za-z0-9]/',
+                        '_',
+                        strtoupper($oe->Name)
+                    );
+                @endphp
+
+                <th>{{ strtoupper($oe->Name) }}</th>
+
+            @endforeach
             <th>GROSS</th>
             <th>SSS</th>
             <th>PHIC</th>
@@ -237,6 +279,23 @@ $subtotal = $grand;
         <td class="num">{{ number_format($row->OTND,2) }}</td>
         <td class="num">{{ number_format($row->OtherTaxableEarnings,2) }}</td>
         <td class="num">{{ number_format($row->OtherNonTaxableEarnings,2) }}</td>
+
+        @foreach($OtherEarningsTypes as $oe)
+
+            @php
+                $alias = preg_replace(
+                    '/[^A-Za-z0-9]/',
+                    '_',
+                    strtoupper($oe->Name)
+                );
+            @endphp
+
+            <td class="num">
+                {{ number_format($row->$alias ?? 0,2) }}
+            </td>
+
+        @endforeach
+
         <td class="num">{{ number_format($row->GrossPay,2) }}</td>
         <td class="num">{{ number_format($row->SSS,2) }}</td>
         <td class="num">{{ number_format($row->PHIC,2) }}</td>
@@ -291,6 +350,22 @@ $subtotal = $grand;
 
     <td class="num">{{ number_format($grand['OtherTaxableEarnings'],2) }}</td>
     <td class="num">{{ number_format($grand['OtherNonTaxableEarnings'],2) }}</td>
+
+    @foreach($OtherEarningsTypes as $oe)
+
+        @php
+            $alias = preg_replace(
+                '/[^A-Za-z0-9]/',
+                '_',
+                strtoupper($oe->Name)
+            );
+        @endphp
+
+        <td class="num">
+            {{ number_format($grand[$alias] ?? 0,2) }}
+        </td>
+
+    @endforeach
 
     <td class="num">{{ number_format($grand['GrossPay'],2) }}</td>
 

@@ -1169,6 +1169,28 @@ public function generatePayrollRegisterApprovedListExcel($param){
     $JobTypeID=$param["JobTypeID"];
     $EmployeeID=$param["EmployeeID"];
 
+    $OtherEarningsTypes = DB::table('payroll_income_deduction_type')
+        ->where('Code', 'like', 'OE%')
+        ->orderBy('Code')
+        ->get();
+
+    $dynamicColumns = '';
+
+    foreach($OtherEarningsTypes as $oe){
+
+        $column = 'Income'.$oe->ID;
+
+        $alias = preg_replace(
+            '/[^A-Za-z0-9]/',
+            '_',
+            strtoupper($oe->Name)
+        );
+
+        $dynamicColumns .= ",
+            COALESCE(paytrnincded.$column,0) AS [$alias]
+        ";
+    }
+
     $query = DB::table('payroll_transaction_employee as paytrnemp')
       ->join('payroll_transaction_income_deduction as paytrnincded', function($join){
           $join->on('paytrnincded.PayrollTransactionID', '=', 'paytrnemp.PayrollTransactionID');
@@ -1274,7 +1296,9 @@ public function generatePayrollRegisterApprovedListExcel($param){
 
             COALESCE(paytrnemp.TotalEEInsurancePremiums,0) + COALESCE(paytrnemp.TotalOtherDeductions,0) + COALESCE(paytrnemp.TotalLoanDeductions,0) + COALESCE(paytrnemp.TotalDeductions,0) as TotalDeduction,
 
-            COALESCE(paytrnemp.NetPay,0) as NetPay,
+            COALESCE(paytrnemp.NetPay,0) as NetPay
+
+            {$dynamicColumns},
 
             'Posted' as Status
             ");
@@ -1324,6 +1348,28 @@ public function generatePayrollRegisterPendingListExcel($param){
     $SectionID=$param["SectionID"];
     $JobTypeID=$param["JobTypeID"];
     $EmployeeID=$param["EmployeeID"];
+
+    $OtherEarningsTypes = DB::table('payroll_income_deduction_type')
+        ->where('Code', 'like', 'OE%')
+        ->orderBy('Code')
+        ->get();
+
+    $dynamicColumns = '';
+
+    foreach($OtherEarningsTypes as $oe){
+
+        $column = 'Income'.$oe->ID;
+
+        $alias = preg_replace(
+            '/[^A-Za-z0-9]/',
+            '_',
+            strtoupper($oe->Name)
+        );
+
+        $dynamicColumns .= ",
+            COALESCE(paytrnincded.$column,0) AS [$alias]
+        ";
+    }
 
      $query = DB::table('payroll_transaction_employee_temp as paytrnemp')
       ->join('payroll_transaction_income_deduction_temp as paytrnincded', function($join){
@@ -1429,7 +1475,9 @@ public function generatePayrollRegisterPendingListExcel($param){
 
             COALESCE(paytrnemp.TotalEEInsurancePremiums,0) + COALESCE(paytrnemp.TotalOtherDeductions,0) + COALESCE(paytrnemp.TotalLoanDeductions,0) + COALESCE(paytrnemp.TotalDeductions,0) as TotalDeduction,
 
-            COALESCE(paytrnemp.NetPay,0) as NetPay,
+            COALESCE(paytrnemp.NetPay,0) as NetPay
+
+            {$dynamicColumns},
 
             'Un-Posted' as Status
             ");

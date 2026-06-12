@@ -339,17 +339,13 @@
                 <td style="width: 70%; text-align: left;">
                     <table class="table" style='width:100%;'>
                         <tr>
-                            <td style="width: 35%; font-size:12px; border: 2px solid black; padding-left: 10px; padding-right: 10px;">
+                            <td style="width: 50%; font-size:12px; border: 2px solid black; padding-left: 10px; padding-right: 10px;">
                                 <span style="float:left;">ACTUAL DAYS</span> 
                                 <span style="float:right; text-align: right;">{{ ($dblTotalBasicSalaryQty > 0 ? number_format($dblTotalBasicSalaryQty/8,2) : "-") }}</span> 
                             </td>
-                            <td style="width: 35%; font-size:12px; border: 2px solid black; padding-left: 10px; padding-right: 10px;">
+                            <td style="width: 50%; font-size:12px; border: 2px solid black; padding-left: 10px; padding-right: 10px;">
                                 <span style="float:left;">ABSENCES/LATE/UT (HRS)</span> 
                                 <span style="float:right; text-align: right;">{{ (($dblTotalAbsentHoursQty + $dblTotalLateHoursQty + $dblTotalUndertimeQty) > 0 ? number_format(($dblTotalAbsentHoursQty + $dblTotalLateHoursQty + $dblTotalUndertimeQty),2) : "-") }}</span> 
-                            </td>
-                            <td style="width: 30%; font-size:12px; border: 2px solid black; padding-left: 10px; padding-right: 10px;">
-                                <span style="float:left;"></span> 
-                                <span style="float:right; text-align: right;"></span> 
                             </td>
                         </tr>
                     </table>
@@ -361,7 +357,7 @@
                 <td style="width: 70%; text-align: left;">
                     <table class="table" style='width:100%;'>
                         <tr>
-                            <td style="width: 35%; text-align: left; padding-left: 10px; padding-right: 10px; border: 1px solid black;">
+                            <td style="width: 50%; text-align: left; padding-left: 10px; padding-right: 10px; border: 1px solid black;">
                                 <br>
                                 <table class="table" style='width:100%;'>
                                     <tr>
@@ -425,7 +421,7 @@
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 35%; text-align: left; padding-left: 10px; padding-right: 10px; border: 1px solid black;">
+                            <td style="width: 50%; text-align: left; padding-left: 10px; padding-right: 10px; border: 1px solid black;">
                                 <span style="font-size:12px; font-weight:bold;">DEDUCTIONS</span>
                                 <table class="table" style='width:100%;'>
                                     <tr>
@@ -506,49 +502,13 @@
                                         <td style="font-size:12px; font-weight: bold;">DEDUCTIONS</td>
                                         <td style="font-size:12px; font-weight: bold; text-align: right;">{{ ($dblTotalDeduction > 0 ? number_format($dblTotalDeduction,2) : "-") }}</td>
                                     </tr>
-                                </table>
-                            </td>
-                            <td style="width: 30%; text-align: left; padding-left: 10px; padding-right: 10px; border: 1px solid black; position: relative;">
-                                {{-- @if($dblTotalOvertimeQty > 0)
-                                    <span style="font-size:12px; font-weight:bold;"></span>
-                                @else
-                                    <span style="font-size:12px; font-weight:bold;">&nbsp;&nbsp;&nbsp;</span>
-                                @endif --}}
-                                <table class="table" style='width:95%;position: absolute; bottom: 0;'>
-
-                                    {{-- @php($AvailableRow = 21)
-                                    @foreach ($EmployeePayslipDetails as $key => $list)
-                                        @if($list->ReferenceType=='Overtime' && $list->Total > 0)
-                                            <tr>
-                                                <td style="font-size:12px;">{{ $list->Reference }}</td>
-                                                <td style="font-size:12px; text-align: right;"> {{ number_format($list->Total,2) }}  </td>
-                                            </tr>
-                                            @php($AvailableRow = $AvailableRow - 1)
-                                        @endif
-                                    @endforeach
                                     <tr>
-                                        <td style="font-size:12px;">&nbsp;</td>
-                                        <td style="font-size:12px; text-align: right;">&nbsp;</td>
-                                    </tr>
-                                    @php($AvailableRow = $AvailableRow - 1)
-                                    <tr>
-                                        <td style="font-size:12px; font-weight: bold;"></td>
-                                        <td style="font-size:12px; font-weight: bold; text-align: right;"></td>
-                                    </tr>
-                                    @php($AvailableRow = $AvailableRow - 1)
-
-                                    @for($x = $AvailableRow; $x > 0; $x--)
-                                    <tr>
-                                        <td style="font-size:12px;">&nbsp;</td>
-                                        <td style="font-size:12px; text-align: right;">&nbsp;</td>
-                                    </tr>
-                                    @endfor --}}
-                                    <tr>
-                                        <td style="font-size:12px; font-weight: bold;">NET PAY</td>
-                                        <td style="font-size:12px; font-weight: bold; text-align: right;"> {{number_format($EmployeePayrollDetails->NetPay,2)}} </td>
+                                        <td style="font-size:20px; font-weight: bold;">NET PAY</td>
+                                        <td style="font-size:20px; font-weight: bold; text-align: right;"> {{number_format($EmployeePayrollDetails->NetPay,2)}} </td>
                                     </tr>
                                 </table>
                             </td>
+                            
                         </tr>
                     </table>
                 </td>

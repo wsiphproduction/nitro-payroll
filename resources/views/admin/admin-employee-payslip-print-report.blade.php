@@ -301,9 +301,10 @@
                     <table class="table" style='width:100%;'>
                         <tr>
                             <td style='width:50%;white-space: nowrap'>
-                                <span style="font-size:12px;">EMP CODE: {{$EmployeePayrollDetails->EmployeeNo}} </span> 
+                                <span style="font-size:12px;">EMP CODE: {{$EmployeePayrollDetails->EmployeeNo}} </span> <br>
                                 <span style="font-size:12px;">{{$EmployeePayrollDetails->FullName}} </span>
                                 <br>
+                                <span style="font-size:12px;">POSITION: {{$EmployeePayrollDetails->JobTitle}} ({{ $EmployeePayrollDetails->SalaryType == '1' ? 'DAILY RATE' : 'MONTHLY RATE' }})</span> <br>
                                 <span style="font-size:12px;">DEPT : {{$EmployeePayrollDetails->Department}} ({{$EmployeePayrollDetails->Section}})</span>
                             </td>
                             <td style='width:50%; white-space: nowrap'>
@@ -315,7 +316,8 @@
                 <td style='width:0%;'></td>
                 <td style="width: 30%; text-align: left; padding-left:10px; white-space: nowrap;">
                     <div>
-                        <span style="font-size:12px;"> EMP CODE: {{$EmployeePayrollDetails->EmployeeNo}} </span> 
+                        <span style="font-size:12px;"> EMP CODE: {{$EmployeePayrollDetails->EmployeeNo}} </span> <br>
+                        <span style="font-size:12px;">POSITION: {{$EmployeePayrollDetails->JobTitle}} ({{ $EmployeePayrollDetails->SalaryType == '1' ? 'DAILY RATE' : 'MONTHLY RATE' }})</span>
                     </div>
                     <div>
                         <span style="font-size:12px;"> DEPT : {{$EmployeePayrollDetails->Department}} ({{$EmployeePayrollDetails->Section}})</span> <br>
@@ -327,7 +329,7 @@
                     <table class="table" style='width:100%;'>
                         <tr>
                             <td style="width: 35%; font-size:12px; border: 2px solid black; padding-left: 10px; padding-right: 10px;">
-                                <span style="float:left;">REGULAR DAYS</span> 
+                                <span style="float:left;">ACTUAL DAYS</span> 
                                 <span style="float:right; text-align: right;">{{ ($dblTotalBasicSalaryQty > 0 ? number_format($dblTotalBasicSalaryQty/8,2) : "-") }}</span> 
                             </td>
                             <td style="width: 35%; font-size:12px; border: 2px solid black; padding-left: 10px; padding-right: 10px;">
@@ -335,8 +337,8 @@
                                 <span style="float:right; text-align: right;">{{ (($dblTotalAbsentHoursQty + $dblTotalLateHoursQty + $dblTotalUndertimeQty) > 0 ? number_format(($dblTotalAbsentHoursQty + $dblTotalLateHoursQty + $dblTotalUndertimeQty),2) : "-") }}</span> 
                             </td>
                             <td style="width: 30%; font-size:12px; border: 2px solid black; padding-left: 10px; padding-right: 10px;">
-                                <span style="float:left;">VL/SL/OL</span> 
-                                <span style="float:right; text-align: right;">{{ ($dblTotalLeaveQty > 0 ? number_format($dblTotalLeaveQty,2) : "-") }}</span> 
+                                <span style="float:left;"></span> 
+                                <span style="float:right; text-align: right;"></span> 
                             </td>
                         </tr>
                     </table>
@@ -356,7 +358,7 @@
                                         <td style="font-size:12px; text-align: right;">{{ ($dblTotalBasicSalary > 0 ? number_format($dblTotalBasicSalary,2) : "-") }}
                                     </tr>
                                     <tr>
-                                        <td style="font-size:12px;">VL/SL/OL</td>
+                                        <td style="font-size:12px;">VL/SL</td>
                                         <td style="font-size:12px; text-align: right;">{{ ($dblTotalLeave > 0 ? number_format($dblTotalLeave,2) : "-") }}</td>
                                     </tr>
                                     <tr>
@@ -511,8 +513,8 @@
                                     </tr>
                                     @php($AvailableRow = $AvailableRow - 1)
                                     <tr>
-                                        <td style="font-size:12px; font-weight: bold;">RATE</td>
-                                        <td style="font-size:12px; font-weight: bold; text-align: right;">{{ ($EmployeePayrollDetails->MonthlyRate > 0 ? number_format($EmployeePayrollDetails->MonthlyRate,2) : "-")  }}</td>
+                                        <td style="font-size:12px; font-weight: bold;"></td>
+                                        <td style="font-size:12px; font-weight: bold; text-align: right;"></td>
                                     </tr>
                                     @php($AvailableRow = $AvailableRow - 1)
 

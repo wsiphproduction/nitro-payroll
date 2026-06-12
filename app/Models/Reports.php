@@ -2938,17 +2938,13 @@ public function getPayrollRegisterApprovedReport($param){
             ) as TotalDeduction,
 
             SUM(COALESCE(paytrnemp.NetPay,0)) as NetPay
+
+            " . (!empty($dynamicTotalColumns)
+                ? "," . implode(",", $dynamicTotalColumns)
+                : "") . "
+
         ")
         ->first();
-
-    foreach($OtherEarningsTypes as $row){
-
-        $alias = preg_replace('/[^A-Za-z0-9_]/', '_', $row->Name);
-
-        $totals->$alias = $list->sum(function($r) use ($alias){
-            return (float) ($r->$alias ?? 0);
-        });
-    }
 
     return [
         'Records' => $list,
@@ -3302,17 +3298,12 @@ public function getPayrollRegisterPendingReport($param){
             ) as TotalDeduction,
 
             SUM(COALESCE(paytrnemp.NetPay,0)) as NetPay
+
+            " . (!empty($dynamicTotalColumns)
+                ? "," . implode(",", $dynamicTotalColumns)
+                : "") . "
         ")
         ->first();
-
-    foreach($OtherEarningsTypes as $row){
-
-        $alias = preg_replace('/[^A-Za-z0-9_]/', '_', $row->Name);
-
-        $totals->$alias = $list->sum(function($r) use ($alias){
-            return (float) ($r->$alias ?? 0);
-        });
-    }
 
     return [
         'Records' => $list,

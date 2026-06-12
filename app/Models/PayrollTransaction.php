@@ -832,6 +832,7 @@ class PayrollTransaction extends Model
         $info = DB::table('payroll_transaction_employee_temp as paytrnemp')
               ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
               ->join('users as usr', 'usr.id', '=', 'paytrnemp.EmployeeID')
+                ->join('payroll_employee_rates as rate', 'rate.EmployeeID', '=', 'paytrnemp.EmployeeID')
               ->leftjoin('payroll_branch as brn', 'brn.ID', '=', 'paytrnemp.BranchID')
               ->leftjoin('payroll_department as dept', 'dept.ID', '=', 'usr.department_id')
               ->leftjoin('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
@@ -875,6 +876,7 @@ class PayrollTransaction extends Model
 
                   COALESCE(usr.salary_type,0) as SalaryType,
                   COALESCE(paytrnemp.MonthlyRate,0) as MonthlyRate,
+                COALESCE(rate.DailyRate,0) as DailyRate,
                   COALESCE(paytrnemp.HourlyRate,0) as HourlyRate,
                   COALESCE(paytrnemp.BasicSalary,0) as BasicSalary,
                   COALESCE(paytrnemp.NightDifferential,0) as NightDifferential,
@@ -897,6 +899,7 @@ class PayrollTransaction extends Model
         $info = DB::table('payroll_transaction_employee as paytrnemp')
               ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
               ->join('users as usr', 'usr.id', '=', 'paytrnemp.EmployeeID')
+                ->join('payroll_employee_rates as rate', 'rate.EmployeeID', '=', 'paytrnemp.EmployeeID')
               ->leftjoin('payroll_branch as brn', 'brn.ID', '=', 'paytrnemp.BranchID')
               ->leftjoin('payroll_department as dept', 'dept.ID', '=', 'usr.department_id')
               ->leftjoin('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
@@ -940,6 +943,7 @@ class PayrollTransaction extends Model
          
                   COALESCE(usr.salary_type,0) as SalaryType,
                   COALESCE(paytrnemp.MonthlyRate,0) as MonthlyRate,
+                COALESCE(rate.DailyRate,0) as DailyRate,
                   COALESCE(paytrnemp.HourlyRate,0) as HourlyRate,
                   COALESCE(paytrnemp.BasicSalary,0) as BasicSalary,
                   COALESCE(paytrnemp.NightDifferential,0) as NightDifferential,

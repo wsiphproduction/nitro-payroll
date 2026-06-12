@@ -314,7 +314,7 @@
                                 <span style="font-size:12px;">{{$EmployeePayrollDetails->FullName}} </span>
                                 <br>
                                 <span style="font-size:12px;">POSITION: {{$EmployeePayrollDetails->JobTitle}}</span> <br>
-                                <span style="font-size:12px;">{{ $EmployeePayrollDetails->SalaryType == '1' ? 'DAILY RATE' : 'MONTHLY RATE' }} : {{ ($EmployeePayrollDetails->MonthlyRate > 0 ? number_format($EmployeePayrollDetails->MonthlyRate,2) : "-")  }}</span><br>
+                                <span style="font-size:12px;">{{ $EmployeePayrollDetails->SalaryType == '1' ? 'DAILY RATE' : 'MONTHLY RATE' }} : {{ $EmployeePayrollDetails->SalaryType == '1' ? $EmployeePayrollDetails->DailyRate : number_format($EmployeePayrollDetails->MonthlyRate, 2) }}</span><br>
                                 <span style="font-size:12px;">DEPT : {{$EmployeePayrollDetails->Department}} ({{$EmployeePayrollDetails->Section}})</span>
                             </td>
                             <td style='width:50%; white-space: nowrap'>
@@ -328,7 +328,7 @@
                     <div>
                         <span style="font-size:12px;"> EMP CODE: {{$EmployeePayrollDetails->EmployeeNo}} </span> <br>
                         <span style="font-size:12px;">POSITION: {{$EmployeePayrollDetails->JobTitle}} ({{ $EmployeePayrollDetails->SalaryType == '1' ? 'DAILY RATE' : 'MONTHLY RATE' }})</span><br>
-                        <span style="font-size:12px;">{{ $EmployeePayrollDetails->SalaryType == '1' ? 'DAILY RATE' : 'MONTHLY RATE' }} : {{ ($EmployeePayrollDetails->MonthlyRate > 0 ? number_format($EmployeePayrollDetails->MonthlyRate,2) : "-")  }}</span>
+                        <span style="font-size:12px;">{{ $EmployeePayrollDetails->SalaryType == '1' ? 'DAILY RATE' : 'MONTHLY RATE' }} : {{ $EmployeePayrollDetails->SalaryType == '1' ? $EmployeePayrollDetails->DailyRate : number_format($EmployeePayrollDetails->MonthlyRate, 2) }}</span>
                     </div>
                     <div>
                         <span style="font-size:12px;"> DEPT : {{$EmployeePayrollDetails->Department}} ({{$EmployeePayrollDetails->Section}})</span> <br>
@@ -465,7 +465,7 @@
                                         <td style="font-size:12px; text-align: right;">&nbsp;</td>
                                     </tr>
 
-                                    @php($AvailableRow = 14)
+                                    @php($AvailableRow = 11)
                                     @foreach ($EmployeePayslipDetails as $key => $list)
                                         @if($list->ReferenceType=='Advance' && $list->Total > 0)
                                             <tr>

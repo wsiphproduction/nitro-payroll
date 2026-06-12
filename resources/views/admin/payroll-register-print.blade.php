@@ -323,6 +323,63 @@ foreach($OtherEarningsTypes as $oe){
 
 @endforeach
 
+@if($currentTeamLeader !== null)
+
+<tr class="subtotal">
+    <td colspan="3">SUBTOTAL</td>
+
+    <td class="num">{{ number_format($subtotal['Days'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['BasicPay'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['ECOLA'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['LateAmount'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['UndertimeAmount'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['AbsentAmount'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['SL'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['VL'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['OL'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['NightDiff'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['OTPay'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['LH'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['SH'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['RDDPay'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['OTND'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['OtherTaxableEarnings'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['OtherNonTaxableEarnings'],2) }}</td>
+
+    @foreach($OtherEarningsTypes as $oe)
+
+        @php
+            $alias = preg_replace(
+                '/[^A-Za-z0-9]/',
+                '_',
+                strtoupper($oe->Name)
+            );
+        @endphp
+
+        <td class="num">
+            {{ number_format($subtotal[$alias] ?? 0,2) }}
+        </td>
+
+    @endforeach
+
+    <td class="num">{{ number_format($subtotal['GrossPay'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['SSS'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['PHIC'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['HDMF'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['HDMFMP2'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['TaxableIncome'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['WTax'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['SSSSalaryLoan'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['SSSCalamityLoan'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['HDMFLoan'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['HDMFCalamityLoan'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['OtherLoanDeductions'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['TotalDeduction'],2) }}</td>
+    <td class="num">{{ number_format($subtotal['NetPay'],2) }}</td>
+</tr>
+
+@endif
+
 <tr>
     <td colspan="34" style="border:none;height:25px;"></td>
 </tr>

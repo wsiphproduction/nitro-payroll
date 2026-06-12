@@ -20,6 +20,20 @@
 
     <style type="text/css">
   
+@media print {
+    .payslip {
+        height: 48vh;
+        page-break-inside: avoid;
+        overflow: hidden;
+    }
+}
+
+@media print {
+    .page-break {
+        page-break-after: always;
+    }
+}
+
   .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
     padding: 0px;
     }
@@ -34,12 +48,7 @@
     table {  
       margin-bottom: 0px !important;  
     }
-    @media screen {
-        .page-break { height:10px; background:url(page-break.gif) 0 center repeat-x; border-top:1px dotted #999; margin-bottom:13px; }
-    }
-    @media print {
-        .page-break { height:0; page-break-before:always; margin:0; border-top:none; }
-    }
+
 
     </style>
 </head>
@@ -281,7 +290,7 @@
     <!-- End of Employee DTR Information-->
 
 
-    <div class="col-md-12" style="min-height: 475px;">
+    <div class="col-md-12 payslip">
         <table class="table" style='width:100%;'>
             <tr style="vertical-align: top;">
                 <td style="width: 70%; text-align: left;">
@@ -304,7 +313,8 @@
                                 <span style="font-size:12px;">EMP CODE: {{$EmployeePayrollDetails->EmployeeNo}} </span> <br>
                                 <span style="font-size:12px;">{{$EmployeePayrollDetails->FullName}} </span>
                                 <br>
-                                <span style="font-size:12px;">POSITION: {{$EmployeePayrollDetails->JobTitle}} ({{ $EmployeePayrollDetails->SalaryType == '1' ? 'DAILY RATE' : 'MONTHLY RATE' }})</span> <br>
+                                <span style="font-size:12px;">POSITION: {{$EmployeePayrollDetails->JobTitle}}</span> <br>
+                                <span style="font-size:12px;">{{ $EmployeePayrollDetails->SalaryType == '1' ? 'DAILY RATE' : 'MONTHLY RATE' }} : {{ ($EmployeePayrollDetails->MonthlyRate > 0 ? number_format($EmployeePayrollDetails->MonthlyRate,2) : "-")  }}</span><br>
                                 <span style="font-size:12px;">DEPT : {{$EmployeePayrollDetails->Department}} ({{$EmployeePayrollDetails->Section}})</span>
                             </td>
                             <td style='width:50%; white-space: nowrap'>
@@ -317,7 +327,8 @@
                 <td style="width: 30%; text-align: left; padding-left:10px; white-space: nowrap;">
                     <div>
                         <span style="font-size:12px;"> EMP CODE: {{$EmployeePayrollDetails->EmployeeNo}} </span> <br>
-                        <span style="font-size:12px;">POSITION: {{$EmployeePayrollDetails->JobTitle}} ({{ $EmployeePayrollDetails->SalaryType == '1' ? 'DAILY RATE' : 'MONTHLY RATE' }})</span>
+                        <span style="font-size:12px;">POSITION: {{$EmployeePayrollDetails->JobTitle}} ({{ $EmployeePayrollDetails->SalaryType == '1' ? 'DAILY RATE' : 'MONTHLY RATE' }})</span><br>
+                        <span style="font-size:12px;">{{ $EmployeePayrollDetails->SalaryType == '1' ? 'DAILY RATE' : 'MONTHLY RATE' }} : {{ ($EmployeePayrollDetails->MonthlyRate > 0 ? number_format($EmployeePayrollDetails->MonthlyRate,2) : "-")  }}</span>
                     </div>
                     <div>
                         <span style="font-size:12px;"> DEPT : {{$EmployeePayrollDetails->Department}} ({{$EmployeePayrollDetails->Section}})</span> <br>
@@ -434,8 +445,16 @@
                                         <td style="font-size:12px; text-align: right;">{{ ($dblTotalHDMFEEContribution > 0 ? number_format($dblTotalHDMFEEContribution,2) : "-") }}</td>
                                     </tr>
                                     <tr>
-                                        <td style="font-size:12px;">ABSENT/LATE/UT</td>
-                                        <td style="font-size:12px; text-align: right;">{{ (($dblTotalAbsentHours + $dblTotalLateHours + $dblTotalUndertime) > 0 ? number_format(($dblTotalAbsentHours + $dblTotalLateHours + $dblTotalUndertime),2) : "-") }} </td>
+                                        <td style="font-size:12px;">ABSENT</td>
+                                        <td style="font-size:12px; text-align: right;">{{ (($dblTotalAbsentHours) > 0 ? number_format(($dblTotalAbsentHours),2) : "-") }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size:12px;">LATE</td>
+                                        <td style="font-size:12px; text-align: right;">{{ (($dblTotalLateHours) > 0 ? number_format(($dblTotalLateHours),2) : "-") }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size:12px;">UT</td>
+                                        <td style="font-size:12px; text-align: right;">{{ (($dblTotalUndertime) > 0 ? number_format(($dblTotalUndertime),2) : "-") }} </td>
                                     </tr>
                                     <tr>
                                         <td style="font-size:12px;">&nbsp;</td>
@@ -491,14 +510,14 @@
                             </td>
                             <td style="width: 30%; text-align: left; padding-left: 10px; padding-right: 10px; border: 1px solid black;">
                                 @if($dblTotalOvertimeQty > 0)
-                                    <span style="font-size:12px; font-weight:bold;">OT DETAILS (HOURS)</span>
+                                    <span style="font-size:12px; font-weight:bold;"></span>
                                 @else
                                     <span style="font-size:12px; font-weight:bold;">&nbsp;&nbsp;&nbsp;</span>
                                 @endif
                                 <table class="table" style='width:100%;'>
 
                                     @php($AvailableRow = 21)
-                                    @foreach ($EmployeePayslipDetails as $key => $list)
+                                    {{-- @foreach ($EmployeePayslipDetails as $key => $list)
                                         @if($list->ReferenceType=='Overtime' && $list->Total > 0)
                                             <tr>
                                                 <td style="font-size:12px;">{{ $list->Reference }}</td>
@@ -506,7 +525,7 @@
                                             </tr>
                                             @php($AvailableRow = $AvailableRow - 1)
                                         @endif
-                                    @endforeach
+                                    @endforeach --}}
                                     <tr>
                                         <td style="font-size:12px;">&nbsp;</td>
                                         <td style="font-size:12px; text-align: right;">&nbsp;</td>
@@ -546,7 +565,9 @@
         </table>
 
       </div>
-      <hr>
+    @if(($loop->iteration % 2) == 0)
+        <div class="page-break"></div>
+    @endif
     @endforeach  
    
 </section>

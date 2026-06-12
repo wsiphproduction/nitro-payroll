@@ -22,7 +22,7 @@
   
 @media print {
     .payslip {
-        height: 48vh;
+        height: 32vh;
         page-break-inside: avoid;
         overflow: hidden;
     }
@@ -52,7 +52,9 @@
 
     </style>
 </head>
-<body onload="window.print();">
+<body 
+{{-- onload="window.print();" --}}
+>
 
 <!-- Get Company Information-->
 @php($PayrollSettingID=0) 
@@ -409,15 +411,58 @@
                                         @endif
                                     @endforeach
 
-                                    @for($x = $AvailableRow; $x > 0; $x--)
+                                    {{-- @for($x = 6; $x > 0; $x--)
                                     <tr>
                                         <td style="font-size:12px;">&nbsp;</td>
                                         <td style="font-size:12px; text-align: right;">&nbsp;</td>
                                     </tr>
-                                    @endfor
+                                    @endfor --}}
+                                    
+                                    <?php
+
+                                    $IncomeRows = 0;
+                                    $DeductionRows = 0;
+
+                                    foreach($EmployeePayslipDetails as $item){
+                                        if($item->ReferenceType == 'Income' && $item->Total > 0){
+                                            $IncomeRows++;
+                                        }
+
+                                        if(
+                                            in_array($item->ReferenceType, ['Advance','Loan','Deduction'])
+                                            && $item->Total > 0
+                                        ){
+                                            $DeductionRows++;
+                                        }
+                                    }
+
+                                    $IncomeRows += 6;
+                                    $DeductionRows += 9;
+
+                                    $BlankRows = ($DeductionRows + 2) - $IncomeRows;
+
+                                    ?>
+
+                                    @for($i = 0; $i < $BlankRows; $i++)
                                     <tr>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    @endfor
+
+                                    <tr style="
+                                            position: relative;
+                                            top: -12px;
+                                        ">
                                         <td style="font-size:12px; font-weight: bold;">EARNINGS</td>
-                                        <td style="font-size:12px; font-weight: bold; text-align: right;">{{ ($dblTotalEarning > 0 ? number_format($dblTotalEarning,2) : "-") }}</td>
+                                        <td style="font-size:12px; font-weight: bold;text-align:right;">
+                                            {{ number_format($dblTotalEarning,2) }}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
                                     </tr>
                                 </table>
                             </td>
@@ -492,15 +537,29 @@
                                         @endif
                                     @endforeach
 
-                                    @for($x = $AvailableRow; $x > 0; $x--)
+                                    {{-- @for($x = 3; $x > 0; $x--)
                                     <tr>
                                         <td style="font-size:12px;">&nbsp;</td>
                                         <td style="font-size:12px; text-align: right;">&nbsp;</td>
                                     </tr>
-                                    @endfor
+                                    @endfor --}}
+                                    
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+
+
                                     <tr>
                                         <td style="font-size:12px; font-weight: bold;">DEDUCTIONS</td>
-                                        <td style="font-size:12px; font-weight: bold; text-align: right;">{{ ($dblTotalDeduction > 0 ? number_format($dblTotalDeduction,2) : "-") }}</td>
+                                        <td style="font-size:12px; font-weight: bold; text-align: right;">
+                                            {{ ($dblTotalDeduction > 0 ? number_format($dblTotalDeduction,2) : "-") }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td style="font-size:20px; font-weight: bold;">NET PAY</td>
@@ -525,7 +584,7 @@
         </table>
 
       </div>
-    @if(($loop->iteration % 2) == 0)
+    @if(($loop->iteration % 3) == 0)
         <div class="page-break"></div>
     @endif
     @endforeach  

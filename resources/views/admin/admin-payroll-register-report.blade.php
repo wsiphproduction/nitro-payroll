@@ -1103,43 +1103,54 @@ nav > div a.nav-item.nav-link:focus
           createXLSLFormatObj.push(xlsReportHeader);
                 
          // Excel Headers
-          var xlsHeader = [
-                "{{ strtoupper('Employee No.') }}",
-                "{{ strtoupper('Employee Name') }}",
-                "{{ strtoupper('Team Leader') }}",
-                "{{ strtoupper('No. of Days') }}",
-                "{{ strtoupper('Basic Pay') }}", 
-                "{{ strtoupper('ECOLA') }}",
-                "{{ strtoupper('Late') }}", 
-                "{{ strtoupper('UnderTime') }}", 
-                "{{ strtoupper('Absent') }}",
-                "{{ strtoupper('SL') }}", 
-                "{{ strtoupper('VL') }}",
-                "{{ strtoupper('OL') }}", 
-                "{{ strtoupper('Night Differential') }}",
-                "{{ strtoupper('Overtime Pay') }}",
-                "{{ strtoupper('Legal Holiday') }}",
-                "{{ strtoupper('Special Holiday') }}",
-                "{{ strtoupper('RDD Pay') }}",
-                "{{ strtoupper('ND OT') }}",
-                "{{ strtoupper('Other Taxable Earnings') }}",
-                "{{ strtoupper('Other Non Taxable Earnings') }}",
-                "{{ strtoupper('Gross Pay') }}", 
-                "{{ strtoupper('SSS Contribution') }}",
-                "{{ strtoupper('PHIC Contribution') }}", 
-                "{{ strtoupper('HDMF Contribution') }}", 
-                "{{ strtoupper('HDMF MP2') }}", 
-                "{{ strtoupper('Taxable Income') }}", 
-                "{{ strtoupper('Withholding Tax') }}",
-                "{{ strtoupper('SSS SALARY LOAN') }}",
-                "{{ strtoupper('SSS CALAMITY LOAN') }}",
-                "{{ strtoupper('HDMF LOAN') }}",
-                "{{ strtoupper('HDMF CALAMITY LOAN') }}",
-                "{{ strtoupper('OTHER LOAN') }}", 
-                "{{ strtoupper('Total Deductions') }}", 
-                "{{ strtoupper('Net Pay') }}", 
-                "{{ strtoupper('Status') }}"                         
-            ];
+        var xlsHeader = [
+            "EMPLOYEE NO.",
+            "EMPLOYEE NAME",
+            "TEAM LEADER",
+            "NO. OF DAYS",
+            "BASIC PAY",
+            "ECOLA",
+            "LATE",
+            "UNDERTIME",
+            "ABSENT",
+            "SL",
+            "VL",
+            "OL",
+            "NIGHT DIFFERENTIAL",
+            "OVERTIME PAY",
+            "LEGAL HOLIDAY",
+            "SPECIAL HOLIDAY",
+            "RDD PAY",
+            "ND OT",
+            "OTHER TAXABLE EARNINGS",
+            "OTHER NON TAXABLE EARNINGS"
+        ];
+
+        $.each(OtherEarningsTypes,function(i,row){
+
+            xlsHeader.push(
+                row.Name.toUpperCase()
+            );
+
+        });
+
+        xlsHeader.push(
+            "GROSS PAY",
+            "SSS CONTRIBUTION",
+            "PHIC CONTRIBUTION",
+            "HDMF CONTRIBUTION",
+            "HDMF MP2",
+            "TAXABLE INCOME",
+            "WITHHOLDING TAX",
+            "SSS SALARY LOAN",
+            "SSS CALAMITY LOAN",
+            "HDMF LOAN",
+            "HDMF CALAMITY LOAN",
+            "OTHER LOAN",
+            "TOTAL DEDUCTIONS",
+            "NET PAY",
+            "STATUS"
+        );
           
             xlsRows=resultquery;
           
@@ -1196,8 +1207,17 @@ nav > div a.nav-item.nav-link:focus
 
         var currentTeamLeader = null;
 
+        var dynamicGrandTotals = {};
+        var dynamicTeamTotals = {};
 
-        var currentTeamLeader = null;
+        $.each(OtherEarningsTypes,function(i,row){
+
+            var field = row.Name.replace(/[^A-Za-z0-9_]/g,'_');
+
+            dynamicGrandTotals[field] = 0;
+            dynamicTeamTotals[field] = 0;
+
+        });
 
         $.each(xlsRows, function(index, v) {
 
@@ -1219,7 +1239,7 @@ nav > div a.nav-item.nav-link:focus
                             SSS: tSSS, PHIC: tPHIC, HDMF: tHDMF, HDMFMP2: tHDMFMP2,
                             Taxable: tTaxable, WTax: tWTax,
                             SSSSalaryLoan: tSSSSalaryLoan, SSSCalamityLoan: tSSSCalamityLoan, HDMFLoan: tHDMFLoan, HDMFCalamityLoan: tHDMFCalamityLoan, OtherDed: tOtherDed,
-                            TotalDed: tTotalDed, NetPay: tNetPay
+                            TotalDed: tTotalDed, NetPay: tNetPay, ...dynamicTeamTotals
                         })
                     );
                     createXLSLFormatObj.push([]);
@@ -1240,18 +1260,69 @@ nav > div a.nav-item.nav-link:focus
                 // createXLSLFormatObj.push(new Array(xlsHeader.length).fill("—"));
 
                 currentTeamLeader = v.TeamLeader;
+
+                $.each(OtherEarningsTypes,function(i,row){
+
+                    var field = row.Name.replace(/[^A-Za-z0-9_]/g,'_');
+
+                    dynamicTeamTotals[field] = 0;
+
+                });
             }
 
             // EMPLOYEE ROW
-            createXLSLFormatObj.push([
-                v.EmployeeNo, v.EmployeeName, v.TeamLeader, v.Days, v.BasicPay, v.ECOLA, v.LateAmount,
-                v.UndertimeAmount, v.AbsentAmount, v.SL, v.VL, v.OL,
-                v.NightDiff, v.OTPay, v.LH, v.SH, v.RDDPay, v.OTND,
-                v.OtherTaxableEarnings, v.OtherNonTaxableEarnings,
-                v.GrossPay, v.SSS, v.PHIC, v.HDMF, v.HDMFMP2,
-                v.TaxableIncome, v.WTax, v.SSSSalaryLoan, v.SSSCalamityLoan, v.HDMFLoan, v.HDMFCalamityLoan,
-                v.OtherDeduction, v.TotalDeduction, v.NetPay, v.Status
-            ]);
+            var excelRow = [
+                v.EmployeeNo,
+                v.EmployeeName,
+                v.TeamLeader,
+                v.Days,
+                v.BasicPay,
+                v.ECOLA,
+                v.LateAmount,
+                v.UndertimeAmount,
+                v.AbsentAmount,
+                v.SL,
+                v.VL,
+                v.OL,
+                v.NightDiff,
+                v.OTPay,
+                v.LH,
+                v.SH,
+                v.RDDPay,
+                v.OTND,
+                v.OtherTaxableEarnings,
+                v.OtherNonTaxableEarnings
+            ];
+
+            $.each(OtherEarningsTypes,function(i,row){
+
+                var field = row.Name.replace(/[^A-Za-z0-9_]/g,'_');
+
+                excelRow.push(
+                    v[field] || 0
+                );
+
+            });
+
+            excelRow.push(
+                v.GrossPay,
+                v.SSS,
+                v.PHIC,
+                v.HDMF,
+                v.HDMFMP2,
+                v.TaxableIncome,
+                v.WTax,
+                v.SSSSalaryLoan,
+                v.SSSCalamityLoan,
+                v.HDMFLoan,
+                v.HDMFCalamityLoan,
+                v.OtherLoanDeductions,
+                v.TotalDeduction,
+                v.NetPay,
+                v.Status
+            );
+
+            createXLSLFormatObj.push(excelRow);
 
             // ACCUMULATE TOTALS
             tDays += parseFloat(v.Days, 2);
@@ -1285,6 +1356,18 @@ nav > div a.nav-item.nav-link:focus
             tSSSCalamityLoan += parseFloat(v.SSSCalamityLoan, 2); gSSSCalamityLoan += parseFloat(v.SSSCalamityLoan, 2);
             tHDMFLoan += parseFloat(v.HDMFLoan, 2); gHDMFLoan += parseFloat(v.HDMFLoan, 2);
             tHDMFCalamityLoan += parseFloat(v.HDMFCalamityLoan, 2); gHDMFCalamityLoan += parseFloat(v.HDMFCalamityLoan, 2);
+
+            $.each(OtherEarningsTypes,function(i,row){
+
+                var field = row.Name.replace(/[^A-Za-z0-9_]/g,'_');
+
+                var value = parseFloat(v[field] || 0);
+
+                dynamicTeamTotals[field] += value;
+                dynamicGrandTotals[field] += value;
+
+            });
+
         });
 
 
@@ -1302,7 +1385,8 @@ nav > div a.nav-item.nav-link:focus
                 SSS: tSSS, PHIC: tPHIC, HDMF: tHDMF, HDMFMP2: tHDMFMP2,
                 Taxable: tTaxable, WTax: tWTax,
                 SSSSalaryLoan: tSSSSalaryLoan, SSSCalamityLoan: tSSSCalamityLoan, HDMFLoan: tHDMFLoan, HDMFCalamityLoan: tHDMFCalamityLoan, OtherDed: tOtherDed,
-                TotalDed: tTotalDed, NetPay: tNetPay
+                TotalDed: tTotalDed, NetPay: tNetPay, 
+                ...dynamicTeamTotals
             })
         );
 
@@ -1323,7 +1407,8 @@ nav > div a.nav-item.nav-link:focus
                 SSS: gSSS, PHIC: gPHIC, HDMF: gHDMF, HDMFMP2: gHDMFMP2,
                 Taxable: gTaxable, WTax: gWTax,
                 SSSSalaryLoan: gSSSSalaryLoan, SSSCalamityLoan: gSSSCalamityLoan, HDMFLoan: gHDMFLoan, HDMFCalamityLoan: gHDMFCalamityLoan, OtherDed: gOtherDed,
-                TotalDed: gTotalDed, NetPay: gNetPay
+                TotalDed: gTotalDed, NetPay: gNetPay,
+                ...dynamicGrandTotals
             })
         );
             
@@ -1368,8 +1453,11 @@ nav > div a.nav-item.nav-link:focus
     }
 
     function pushSubtotalRow(label, totals) {
-        return [
-            label, "", "",
+
+        var row = [
+            label,
+            "",
+            "",
             totals.Days,
             totals.BasicPay,
             totals.ECOLA,
@@ -1386,7 +1474,20 @@ nav > div a.nav-item.nav-link:focus
             totals.RDDPay,
             totals.OTND,
             totals.OtherTaxable,
-            totals.OtherNonTaxable,
+            totals.OtherNonTaxable
+        ];
+
+        $.each(OtherEarningsTypes,function(i,item){
+
+            var field = item.Name.replace(/[^A-Za-z0-9_]/g,'_');
+
+            row.push(
+                totals[field] || 0
+            );
+
+        });
+
+        row.push(
             totals.GrossPay,
             totals.SSS,
             totals.PHIC,
@@ -1402,7 +1503,9 @@ nav > div a.nav-item.nav-link:focus
             totals.TotalDed,
             totals.NetPay,
             ""
-        ];
+        );
+
+        return row;
     }
 
     $("#GenerateFilter").change(function(){

@@ -508,16 +508,16 @@
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 30%; text-align: left; padding-left: 10px; padding-right: 10px; border: 1px solid black;">
-                                @if($dblTotalOvertimeQty > 0)
+                            <td style="width: 30%; text-align: left; padding-left: 10px; padding-right: 10px; border: 1px solid black; position: relative;">
+                                {{-- @if($dblTotalOvertimeQty > 0)
                                     <span style="font-size:12px; font-weight:bold;"></span>
                                 @else
                                     <span style="font-size:12px; font-weight:bold;">&nbsp;&nbsp;&nbsp;</span>
-                                @endif
-                                <table class="table" style='width:100%;'>
+                                @endif --}}
+                                <table class="table" style='width:95%;position: absolute; bottom: 0;'>
 
-                                    @php($AvailableRow = 21)
-                                    {{-- @foreach ($EmployeePayslipDetails as $key => $list)
+                                    {{-- @php($AvailableRow = 21)
+                                    @foreach ($EmployeePayslipDetails as $key => $list)
                                         @if($list->ReferenceType=='Overtime' && $list->Total > 0)
                                             <tr>
                                                 <td style="font-size:12px;">{{ $list->Reference }}</td>
@@ -525,7 +525,7 @@
                                             </tr>
                                             @php($AvailableRow = $AvailableRow - 1)
                                         @endif
-                                    @endforeach --}}
+                                    @endforeach
                                     <tr>
                                         <td style="font-size:12px;">&nbsp;</td>
                                         <td style="font-size:12px; text-align: right;">&nbsp;</td>
@@ -542,7 +542,7 @@
                                         <td style="font-size:12px;">&nbsp;</td>
                                         <td style="font-size:12px; text-align: right;">&nbsp;</td>
                                     </tr>
-                                    @endfor
+                                    @endfor --}}
                                     <tr>
                                         <td style="font-size:12px; font-weight: bold;">NET PAY</td>
                                         <td style="font-size:12px; font-weight: bold; text-align: right;"> {{number_format($EmployeePayrollDetails->NetPay,2)}} </td>

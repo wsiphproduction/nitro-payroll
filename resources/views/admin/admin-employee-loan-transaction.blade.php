@@ -1368,7 +1368,7 @@ table.alt-background tr.selected td {
 
                             "<a class='dropdown-item' href='javascript:void(0);' onclick='EditRecord(" + vData.ID + ",1,false)' style='border-bottom: 1px solid lightgray;color: black;'>"+
                                 "<i class='bx bx-edit-alt mr-1'></i> " +
-                                "Edit Employee Loan" +
+                                "Edit/View Employee Loan" +
                             "</a>";
 
                         }else{
@@ -1903,7 +1903,17 @@ table.alt-background tr.selected td {
                          $("#divTotalBalance").show();
 
                          $("#bntViewPaymentHistory").show();
-                         
+
+                         setTimeout(function(){
+                            $("#btnSaveRecord").hide();
+                            $("#btnCancelRecord").hide();
+                            $("#btnCancelRecord").addClass('d-none');
+                         }, 500);
+                       }
+                       
+                       if (data.EmployeeLoanTransactionInfo.TotalPayment == 0) {
+                            $("#btnSaveRecord").show();
+                            $("#btnCancelRecord").show();
                        }
 
                         buttonOneClick("btnSaveRecord", "<i class='bx bx-save mr-1' style='font-size: 21px;'></i> Save", false);

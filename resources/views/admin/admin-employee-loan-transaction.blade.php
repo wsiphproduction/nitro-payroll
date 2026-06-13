@@ -1908,7 +1908,7 @@ table.alt-background tr.selected td {
                             $("#btnSaveRecord").hide();
                             $("#btnCancelRecord").hide();
                             $("#btnCancelRecord").addClass('d-none');
-                         }, 500);
+                         }, 200);
                        }
                        
                        if (data.EmployeeLoanTransactionInfo.TotalPayment == 0) {

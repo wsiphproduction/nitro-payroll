@@ -310,79 +310,79 @@ nav > div a.nav-item.nav-link:focus
                                             <table id="tblList" class="table zero-configuration complex-headers border alt-background">
                                                 <thead>
                                                      <th></th>                                 
-                                                        <th style="min-width: 110px;">EMPLOYEE ID</th>                                              
-                                                        <th style="min-width: 120px;">EMPLOYEE NAME</th>                                              
-                                                        <th style="min-width: 120px;">TEAM LEADER</th>    
-                                                        <th style="min-width: 60px;">NO OF DAYS</th>                                        
-                                                        <th style="min-width: 110px;">BASIC PAY</th>
+                                                        <th style="min-width: 110px;" class="fixed-column">EMPLOYEE ID</th>                                              
+                                                        <th style="min-width: 120px;" class="fixed-column">EMPLOYEE NAME</th>                                              
+                                                        <th style="min-width: 120px;" class="fixed-column">TEAM LEADER</th>    
+                                                        <th style="min-width: 60px;" class="fixed-column">NO OF DAYS</th>                                        
+                                                        <th style="min-width: 110px;" class="fixed-column">BASIC PAY</th>
                                                         <th style="min-width: 110px;">E-COLA</th>
-                                                        <th style="min-width: 60px;">LATE</th>
-                                                        <th style="min-width: 110px;">UNDER TIME</th>
-                                                        <th style="min-width: 110px;">ABSENT</th>
-                                                        <th style="min-width: 60px;">SL </th>
-                                                        <th style="min-width: 60px;">VL</th>
+                                                        <th style="min-width: 60px;" class="fixed-column">LATE</th>
+                                                        <th style="min-width: 110px;" class="fixed-column">UNDER TIME</th>
+                                                        <th style="min-width: 110px;" class="fixed-column">ABSENT</th>
+                                                        <th style="min-width: 60px;" class="fixed-column">SL </th>
+                                                        <th style="min-width: 60px;" class="fixed-column">VL</th>
                                                         <th style="min-width: 60px;">OL</th>
-                                                        <th style="min-width: 80px;">NIGHT DIFF</th>
-                                                        <th style="min-width: 110px;">OVERTIME PAY</th>
+                                                        <th style="min-width: 80px;" class="fixed-column">NIGHT DIFF</th>
+                                                        <th style="min-width: 110px;" class="fixed-column">OVERTIME PAY</th>
                                                         <th style="min-width: 110px;">LEGAL HOLIDAY</th>
                                                         <th style="min-width: 110px;">SPECIAL HOLIDAY</th>
                                                         <th style="min-width: 110px;">RDD PAY</th>
                                                         <th style="min-width: 110px;">ND OT</th>
                                                         <th style="min-width: 130px;">OTHER TAXABLE EARNING </th> 
                                                         <th id="otherEarningsMarker" style="min-width: 130px;">OTHER NON TAXABLE EARNING </th> 
-                                                        <th style="min-width: 110px;">GROSS PAY</th>
+                                                        <th style="min-width: 110px;" class="fixed-column">GROSS PAY</th>
                                                         <th style="min-width: 60px;">SSS</th>
                                                         <th style="min-width: 80px;">PHIL HEALTH</th>
                                                         <th style="min-width: 80px;">PAG IBIG</th>
                                                         <th style="min-width: 80px;">PAG IBIG MP2</th>                                                        
-                                                        <th style="min-width: 110px;">TAXABLE INCOME</th>
-                                                        <th style="min-width: 60px;">WTAX</th>
+                                                        <th style="min-width: 110px;" class="fixed-column">TAXABLE INCOME</th>
+                                                        <th style="min-width: 60px;" class="fixed-column">WTAX</th>
                                                         <th style="min-width: 110px;">SSS SALARY LOAN</th>
                                                         <th style="min-width: 110px;">SSS CALAMITY LOAN</th>
                                                         <th style="min-width: 110px;">HDMF LOAN</th>
                                                         <th style="min-width: 110px;">HDMF CALAMITY LOAN</th>
                                                         <th style="min-width: 110px;">OTHER LOAN</th>
                                                         <th style="min-width: 110px;">TOTAL DEDUCTION</th>
-                                                        <th style="min-width: 80px;">TOTAL NETPAY</th>
-                                                        <th style="min-width: 60px;">STATUS</th>
+                                                        <th style="min-width: 80px;" class="fixed-column">TOTAL NETPAY</th>
+                                                        <th style="min-width: 60px;" class="fixed-column">STATUS</th>
                                                    </thead>
                                                   <tbody>
                                                 </tbody>
                                                 <tfoot>
                                                         <tr>
                                                             <th></th>
-                                                            <th colspan="3">TOTAL</th>
-                                                            <th id="ftDays" title="Days"></th>
-                                                            <th id="ftBasicPay" title="Basic Pay"></th>
+                                                            <th colspan="3" class="fixed-column">TOTAL</th>
+                                                            <th id="ftDays" title="Days" class="fixed-column"></th>
+                                                            <th id="ftBasicPay" title="Basic Pay" class="fixed-column"></th>
                                                             <th id="ftECOLA" title="E-Cola"></th>
-                                                            <th id="ftLate" title="Late"></th>
-                                                            <th id="ftUndertime" title="Undertime"></th>
-                                                            <th id="ftAbsent" title="Absent"></th>
-                                                            <th id="ftSL" title="SL"></th>
-                                                            <th id="ftVL" title="VL"></th>
+                                                            <th id="ftLate" title="Late" class="fixed-column"></th>
+                                                            <th id="ftUndertime" title="Undertime" class="fixed-column"></th>
+                                                            <th id="ftAbsent" title="Absent" class="fixed-column"></th>
+                                                            <th id="ftSL" title="SL" class="fixed-column"></th>
+                                                            <th id="ftVL" title="VL" class="fixed-column"></th>
                                                             <th id="ftOL" title="OL"></th>
-                                                            <th id="ftNightDiff" title="Night Diff"></th>
-                                                            <th id="ftOTPay" title="Overtime Pay"></th>
+                                                            <th id="ftNightDiff" title="Night Diff" class="fixed-column"></th>
+                                                            <th id="ftOTPay" title="Overtime Pay" class="fixed-column"></th>
                                                             <th id="ftLH" title="Legal Holiday"></th>
                                                             <th id="ftSH" title="Special Holiday"></th>
                                                             <th id="ftRDDPay" title="RDD Pay"></th>
                                                             <th id="ftOTND" title="ND OT"></th>
                                                             <th id="ftOtherTaxable" title="Other Taxable"></th>
                                                             <th id="ftOtherNonTaxable" title="Other Non Taxable"></th>
-                                                            <th id="ftGrossPay" title="Gross Pay"></th>
+                                                            <th id="ftGrossPay" title="Gross Pay" class="fixed-column"></th>
                                                             <th id="ftSSS" title="SSS"></th>
                                                             <th id="ftPHIC" title="Philhealth"></th>
                                                             <th id="ftHDMF" title="HDMF"></th>
                                                             <th id="ftHDMFMP2" title="HDMF MP2"></th>
-                                                            <th id="ftTaxableIncome" title="Taxable Income"></th>
-                                                            <th id="ftWTax" title="WTax"></th>
+                                                            <th id="ftTaxableIncome" title="Taxable Income" class="fixed-column"></th>
+                                                            <th id="ftWTax" title="WTax" class="fixed-column"></th>
                                                             <th id="ftSSSSalaryLoan" title="SSS Salary Loan"></th>
                                                             <th id="ftSSSCalamityLoan" title="SSS Calamity Loan"></th>
                                                             <th id="ftHDMFLoan" title="HDMF Loan"></th>
                                                             <th id="ftHDMFCalamityLoan" title="HDMF Calamity Loan"></th>
                                                             <th id="ftOtherLoan" title="Other Loan"></th>
                                                             <th id="ftTotalDeduction" title="Total Deduction"></th>
-                                                            <th id="ftNetPay" title="Net Pay"></th>
+                                                            <th id="ftNetPay" title="Net Pay" class="fixed-column"></th>
                                                             <th></th>
                                                         </tr>
                                                     </tfoot>
@@ -788,6 +788,12 @@ nav > div a.nav-item.nav-link:focus
                         $("#ftNetPay").html(
                             FormatDecimal(data.Totals.NetPay,2)
                         );
+
+                        var table = $('#tblList').DataTable();
+                        table.columns().visible(true);
+
+
+                        HideZeroColumns();
                     }else{
                         showHasErrorMessage('','No record(s) found base on search criteria.');
                     }                    
@@ -1069,6 +1075,38 @@ nav > div a.nav-item.nav-link:focus
       });
        
      }
+
+    function HideZeroColumns() {
+
+        var table = $('#tblList').DataTable();
+
+        table.columns().every(function(index){
+
+            var header = $(table.column(index).header());
+
+            // always keep fixed columns
+            if(header.hasClass('fixed-column')){
+                return;
+            }
+
+            var footer = $(table.column(index).footer());
+
+            if(!footer.length){
+                return;
+            }
+
+            var total = parseFloat(
+                footer.text().replace(/,/g,'') || 0
+            );
+
+            if(isNaN(total) || total === 0){
+                table.column(index).visible(false);
+            }
+
+        });
+
+    }
+
 
     function ShowGeneratedExcel(){
         

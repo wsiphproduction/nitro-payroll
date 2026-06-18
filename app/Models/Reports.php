@@ -3160,6 +3160,11 @@ public function getPayrollRegisterPendingReport($param){
 
             (COALESCE(paytrnemp.BasicSalary,0) + COALESCE(paytrnemp.NightDifferential,0) + COALESCE(paytrnemp.Overtime,0) + COALESCE(paytrnemp.Leave,0) + COALESCE(paytrnemp.TotalOtherTaxableIncome,0) + COALESCE(paytrnemp.TotalNonTaxableIncome,0) - COALESCE(paytrnemp.LateUnderTime,0)) as GrossPay,
 
+            COALESCE(paytrnemp.SSSEEContribution,0) + COALESCE(paytrnemp.SSSWISPEE,0) as SSS,
+            COALESCE(paytrnemp.PHICEEContribution,0) as PHIC,
+            COALESCE(paytrnemp.HDMFEEContribution,0) as HDMF,
+            COALESCE(paytrnemp.HDMFMP2,0) as HDMFMP2,
+
             COALESCE(paytrnemp.BasicSalary,0) + COALESCE(paytrnemp.NightDifferential,0) +  COALESCE(paytrnemp.Overtime,0) + COALESCE(paytrnemp.Leave,0) + COALESCE(paytrnemp.TotalOtherTaxableIncome,0) - COALESCE(paytrnemp.LateUnderTime,0) - COALESCE(paytrnemp.TotalEEInsurancePremiums,0) as TaxableIncome,
             
             COALESCE(paytrnemp.WithholdingTax,0) as WTax,

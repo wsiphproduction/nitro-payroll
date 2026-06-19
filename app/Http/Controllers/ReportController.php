@@ -2504,6 +2504,260 @@ public function getEmployeeDTRReportList(Request $request){
     return response()->json($RetVal);
 }
 
+//EMPLOYEE METROBANK REPORT
+public function showAdminEmployeeMetrobankReport(Request $request){
+
+  if(!$this->IsAdminLoggedIn()){
+    return Redirect::route('admin-logout');
+  }
+
+  $data['Page'] = 'Employee Metrobank Report';
+  $data = $this->SetAdminInitialData($data);
+
+  $param["SearchText"] = "";  
+  $param["Status"] = "";
+  $param["PageNo"] = 0;
+  $param["Limit"] = 0;
+
+  $PayrollPeriod = new PayrollPeriod();
+  $data["PayrollPeriodList"] = $PayrollPeriod->getPayrollPeriodList($param);
+
+  $Branch = new Branch();
+  $data["BranchList"] = $Branch->getBranchList($param);
+
+  $BranchSite = new BranchSite();
+  $data["BranchSite"] = $BranchSite->getBranchSiteList($param);
+
+  $Division = new Division();
+  $data["DivisionList"] = $Division->getDivisionList($param);
+
+  $Department = new Department();
+  $data["DepartmentList"] = $Department->getDepartmentList($param);
+
+  $Section = new Section();
+  $data["SectionList"] = $Section->getSectionList($param);
+
+  $JobType = new JobType();
+  $data["JobTypeList"] = $JobType->getJobTypeList($param);
+
+  $Employee = new Employee();
+  $data["EmployeeList"] = $Employee->getEmployeeList($param);
+
+  //Get Income List
+  $param["SearchText"] = ""; 
+  $param["Status"] = "Metrobank";
+  $param["PageNo"] = 0;
+  $param["Limit"] =  0;
+  $IncomeDeductionType = new IncomeDeductionType();
+  $data["IncomeDeductionTypeList"] = $IncomeDeductionType->getIncomeDeductionTypeList($param);
+
+  return View::make('admin/admin-employee-metrobank-report')->with($data);
+
+}
+
+public function getPayrollTransactionEmployeeMetrobankListByFilter(Request $request){
+    
+    $Reports = new Reports();
+    $ResponseMessage = "";
+
+     $data["PayrollPeriodID"] = request("PayrollPeriodID");  
+    $data["SearchText"] = request("SearchText");  
+    $data["PageNo"] = request("PageNo");
+    $data["Limit"] = request("Limit");
+
+    $RetVal['Response'] = "Success";
+    $RetVal['ResponseMessage'] = "";
+
+    $data["FilterType"] =  request("FilterType");
+    $data["BranchID"] =  request("BranchID");
+    $data["SiteID"] =  request("SiteID");
+    $data["DivisionID"] =  request("DivisionID");
+    $data["DepartmentID"] =  request("DepartmentID");
+    $data["SectionID"] =  request("SectionID");
+    $data["JobTypeID"] =  request("JobTypeID");
+    $data["EmployeeID"] =  request("EmployeeID");
+    $data["Status"] =  request("Status");
+
+    if($data["FilterType"] == "Location"){
+      $data["SiteID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["SectionID"] = [];
+      $data["JobTypeID"] = [];
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Site"){
+      $data["BranchID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["SectionID"] = [];
+      $data["JobTypeID"] = [];
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Division"){
+      $data["BranchID"] =  [];
+      $data["SiteID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["SectionID"] = [];
+      $data["JobTypeID"] = [];
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Department"){
+      $data["BranchID"] =  [];
+      $data["SiteID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["SectionID"] = [];
+      $data["JobTypeID"] = [];
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Section"){
+      $data["BranchID"] =  [];
+      $data["SiteID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["JobTypeID"] = [];
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Job Type"){
+      $data["BranchID"] =  [];
+      $data["SiteID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["SectionID"] = [];
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Employee"){
+      $data["BranchID"] =  [];
+      $data["SiteID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["SectionID"] = [];
+    }else{
+      $data["BranchID"] =  [];
+      $data["SiteID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["SectionID"] = [];
+      $data["JobTypeID"] = [];
+      $data["EmployeeID"] =  0;
+    }
+
+    $result = $Reports->getEmployeeMetrobankReport($data);
+
+    $RetVal["PayrollTransactionEmployeeMetrobankList"] = $result['records'];
+    $RetVal["TotalRecord"] = $result['total'];
+
+   return response()->json($RetVal);
+
+}
+
+public function showAdminEmployeeMetrobankPrintReport(Request $request){
+
+  if(!$this->IsAdminLoggedIn()){
+    return Redirect::route('admin-logout');
+  }
+
+  $data['Page'] = 'Employee Other Earning Non Taxable Print Report';
+  $data = $this->SetAdminInitialData($data);
+
+  $data["PayrollPeriodID"] = request("PayrollPeriodID");  
+  $data["SearchText"] = request("SearchText");  
+  $data["PageNo"] = request("PageNo");
+
+  $data["FilterType"] =  request("FilterType");
+  $data["BranchID"] =  request("BranchID");
+  $data["DivisionID"] =  request("DivisionID");
+  $data["DepartmentID"] =  request("DepartmentID");
+  $data["SectionID"] =  request("SectionID");
+  $data["JobTypeID"] =  request("JobTypeID");
+  $data["EmployeeID"] =  request("EmployeeID");
+  $data["Status"] =  request("Status");
+
+  if($data["FilterType"] == "Location"){
+    $data["SiteID"] =  [];
+    $data["DivisionID"] =  [];
+    $data["DepartmentID"] = [];
+    $data["SectionID"] = [];
+    $data["JobTypeID"] = [];
+    $data["EmployeeID"] =  0;
+  }else if($data["FilterType"] == "Site"){
+    $data["BranchID"] =  [];
+    $data["DivisionID"] =  [];
+    $data["DepartmentID"] = [];
+    $data["SectionID"] = [];
+    $data["JobTypeID"] = [];
+    $data["EmployeeID"] =  0;
+  }else if($data["FilterType"] == "Division"){
+    $data["BranchID"] =  [];
+    $data["SiteID"] =  [];
+    $data["DepartmentID"] = [];
+    $data["SectionID"] = [];
+    $data["JobTypeID"] = [];
+    $data["EmployeeID"] =  0;
+  }else if($data["FilterType"] == "Department"){
+    $data["BranchID"] =  [];
+    $data["SiteID"] =  [];
+    $data["DivisionID"] =  [];
+    $data["SectionID"] = [];
+    $data["JobTypeID"] = [];
+    $data["EmployeeID"] =  0;
+  }else if($data["FilterType"] == "Section"){
+    $data["BranchID"] =  [];
+    $data["SiteID"] =  [];
+    $data["DivisionID"] =  [];
+    $data["DepartmentID"] = [];
+    $data["JobTypeID"] = [];
+    $data["EmployeeID"] =  0;
+  }else if($data["FilterType"] == "Job Type"){
+    $data["BranchID"] =  [];
+    $data["SiteID"] =  [];
+    $data["DivisionID"] =  [];
+    $data["DepartmentID"] = [];
+    $data["SectionID"] = [];
+    $data["EmployeeID"] =  0;
+  }else if($data["FilterType"] == "Employee"){
+    $data["BranchID"] =  [];
+    $data["SiteID"] =  [];
+    $data["DivisionID"] =  [];
+    $data["DepartmentID"] = [];
+    $data["SectionID"] = [];
+  }else{
+    $data["BranchID"] =  [];
+    $data["SiteID"] =  [];
+    $data["DivisionID"] =  [];
+    $data["DepartmentID"] = [];
+    $data["SectionID"] = [];
+    $data["JobTypeID"] = [];
+    $data["EmployeeID"] =  0;
+  }
+
+  $data['PrintingBatchNo']=request("PrintingBatchNo");  
+
+  $PayrollSetting = new PayrollSetting();
+  $data['CompanyInfo']=$PayrollSetting->getPayrollSettingInfo(config('app.DEFAULT_SYSTEM_SETTING'));
+
+  $Reports = new Reports();
+  $data['Reports']=$Reports; 
+
+  $PayrollTransaction = new PayrollTransaction();
+  $data['PayrollTransaction']=$PayrollTransaction; 
+
+  $EmployeeDTR = new EmployeeDTR();
+  $data['EmployeeDTR']=$EmployeeDTR; 
+
+  $data['SearchText']='';  
+  $data['Limit']=0;  
+  $data['PageNo']=$data['PrintingBatchNo'];
+  
+  $EmployeeOtherEarningNonTaxableList = $Reports->getPayrollTransactionOtherEarningNonTaxable($data);
+  if(count($EmployeeOtherEarningNonTaxableList)>0){
+    foreach ($EmployeeOtherEarningNonTaxableList as $item) {
+      $data['PayrollTransactionID']= $item->PayrollTransactionID;
+    }
+  }
+
+ $data["EmployeeOtherEarningNonTaxableList"] = $EmployeeOtherEarningNonTaxableList;
+ $data["PayrollTransactionInfo"]=$PayrollTransaction->getPayrollTransactionInfo($data['PayrollTransactionID']);
+
+  return View::make('admin/admin-employee-income-non-taxable-print-report')->with($data);
+
+}
+
+
 }
 
 

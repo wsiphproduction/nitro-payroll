@@ -4911,4 +4911,124 @@ public function getEmployeeDTRReportCount($param){
 
     }
 
+public function getEmployeeMetrobankReport($param){
+
+    $PayrollPeriodID = $param['PayrollPeriodID'];
+    $Status = $param['Status'];
+    $SearchText = $param['SearchText'];
+    $Limit = $param['Limit'];
+    $PageNo = $param['PageNo'];
+
+    $FilterType = $param["FilterType"];
+    $BranchID=$param["BranchID"];
+    $BranchSiteID=$param["SiteID"];
+    $DivisionID=$param["DivisionID"];
+    $DepartmentID=$param["DepartmentID"];
+    $SectionID=$param["SectionID"];
+    $JobTypeID=$param["JobTypeID"];
+    $EmployeeID=$param["EmployeeID"];
+
+    $strFields = $this->getOEFields("Non-Taxable Income");
+
+    $query = DB::table('payroll_transaction_employee_temp as paytrnemp')
+          ->join('payroll_transaction_income_deduction_temp as paytrnincded', function($join){
+              $join->on('paytrnincded.PayrollTransactionID', '=', 'paytrnemp.PayrollTransactionID');
+              $join->on('paytrnincded.EmployeeID','=', 'paytrnemp.EmployeeID');
+          })
+          ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
+          ->join('users as usr', 'usr.id', '=', 'paytrnemp.EmployeeID')
+          ->join('payroll_branch as brn', 'brn.ID', '=', 'paytrnemp.BranchID')
+          ->join('payroll_branch_site as brnchsite', 'brnchsite.ID', '=', 'usr.company_branch_site_id')
+          ->join('payroll_department as dept', 'dept.ID', '=', 'usr.department_id')
+          ->join('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
+          ->leftjoin('payroll_section as sec', 'sec.id', '=', 'usr.section_id')  
+          ->leftjoin('payroll_job_type as job', 'job.ID', '=', 'usr.job_title_id')
+
+          ->selectraw("
+     
+              COALESCE(paytrnemp.ID,0) as ID,
+
+              COALESCE(paytrnemp.PayrollTransactionID,0) as PayrollTransactionID,
+              COALESCE(paytrn.TransNo,'') as TransNo,
+              FORMAT(paytrn.TransDateTime, 'MM/dd/yyyy hh:mm:dd t') as TransDateTime,
+              COALESCE(paytrn.Status,'') as Status,
+     
+              COALESCE(paytrn.PayrollPeriodID,0) as PayrollPeriodID,
+
+              COALESCE(paytrnemp.EmployeeID,0) as EmployeeID,
+              COALESCE(usr.shortid,'') as EmployeeNo,
+              COALESCE(usr.first_name,'') as FirstName,
+              COALESCE(usr.middle_name,'') as MiddleName,
+              COALESCE(usr.last_name,'') as LastName,
+              CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' , COALESCE(usr.middle_name,'')) as FullName,
+              COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
+              iif(COALESCE(usr.status,1) = 1, 'Active', 'Inactive') as EmployeeStatus,
+              COALESCE(usr.contact_number,'') as ContactNumber,
+              COALESCE(usr.email,'') as EmailAddress,
+
+              COALESCE(paytrnemp.BranchID,0) as BranchID,
+              COALESCE(brn.BranchName,'') as BranchName,
+
+              COALESCE(dept.DivisionID,0) as DivisionID,
+              COALESCE(div.Division,'') as Division,
+
+              COALESCE(usr.department_id,0) as DepartmentID,
+              COALESCE(dept.Department,'') as Department,
+
+              COALESCE(sec.ID,0) as SectionID,
+              COALESCE(sec.Section,'') as Section,
+
+              COALESCE(usr.job_title_id,0) as JobTitleID,
+              COALESCE(job.JobTitle,'') as JobTitle,
+     
+              COALESCE(usr.salary_type,0) as SalaryType,
+              COALESCE(paytrnemp.NetPay,0) as NetPay,
+
+              ".$strFields."
+
+              'Un-Posted' as Status
+
+          ");
+
+           $query->where('paytrn.PayrollPeriodID',$PayrollPeriodID);
+
+          if($FilterType!='' && $FilterType=='Location' && !empty($BranchID)){
+             $query->whereIn('paytrnemp.BranchID',$BranchID);
+           }else if($FilterType!='' && $FilterType=='Site' && !empty($BranchSiteID)){
+              $query->whereIn('usr.company_branch_site_id',$BranchSiteID);
+           }else if($FilterType!='' && $FilterType=='Division' && !empty($DivisionID)){
+             $query->whereIn('dept.DivisionID',$DivisionID);
+           }else if($FilterType!='' && $FilterType=='Department' && !empty($DepartmentID)){
+             $query->whereIn('usr.department_id',$DepartmentID);
+           }else if($FilterType!='' && $FilterType=='Section' && !empty($SectionID)){
+              $query->whereIn('sec.ID',$SectionID);
+           }else if($FilterType!='' && $FilterType=='Job Type' && !empty($JobTypeID)){
+             $query->whereIn('usr.job_title_id',$JobTypeID);
+           }else if($FilterType!='' && $FilterType=='Employee' && $EmployeeID>0){
+             $query->where('paytrnemp.EmployeeID',$EmployeeID);
+           }
+
+        $query->orderBy("usr.last_name","ASC");
+        $query->orderBy("usr.first_name","ASC");
+        $query->orderBy("usr.middle_name","ASC");
+
+        // get total before pagination
+        $totalRecords = (clone $query)->count();
+
+        // pagination
+        if ($PageNo > 0 && $Limit > 0) {
+            $query->offset(($PageNo - 1) * $Limit)
+                  ->limit($Limit);
+        }
+
+        $records = $query->get();
+        $list = $query->get();
+
+      return [
+          'records' => $records,
+          'total' => $totalRecords
+      ];
+
+    }
+
 }

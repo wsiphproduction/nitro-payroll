@@ -1026,6 +1026,92 @@ public function getExcelWithHoldingTaxList(Request $request){
 
   }
 
+  public function getExcelEmployeeMetrobankList(Request $request){
+
+    $GenerateExcel = new GenerateExcel();
+
+    $Platform=request("Platform");    
+
+    $data["PayrollPeriodID"]=request("PayrollPeriodID"); 
+    $data["Status"] =  request("Status");  
+
+    $data["FilterType"] =  request("FilterType");
+    $data["BranchID"] =  request("BranchID");
+    $data["SiteID"] =  request("SiteID");
+    $data["DivisionID"] =  request("DivisionID");
+    $data["DepartmentID"] =  request("DepartmentID");
+    $data["SectionID"] =  request("SectionID");
+    $data["JobTypeID"] =  request("JobTypeID");
+    $data["EmployeeID"] =  request("EmployeeID");    
+
+    if($data["FilterType"] == "Location"){
+      $data["SiteID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["SectionID"] = [];
+      $data["JobTypeID"] = [];
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Site"){
+      $data["BranchID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["SectionID"] = [];
+      $data["JobTypeID"] = [];
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Division"){
+      $data["BranchID"] =  [];
+      $data["SiteID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["SectionID"] = [];
+      $data["JobTypeID"] = [];
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Department"){
+      $data["BranchID"] =  [];
+      $data["SiteID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["SectionID"] = [];
+      $data["JobTypeID"] = [];
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Section"){
+      $data["BranchID"] =  [];
+      $data["SiteID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["JobTypeID"] = [];
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Job Type"){
+      $data["BranchID"] =  [];
+      $data["SiteID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["SectionID"] = [];
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Employee"){
+      $data["BranchID"] =  [];
+      $data["SiteID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["SectionID"] = [];
+    }else{
+      $data["BranchID"] =  [];
+      $data["SiteID"] =  [];
+      $data["DivisionID"] =  [];
+      $data["DepartmentID"] = [];
+      $data["SectionID"] = [];
+      $data["JobTypeID"] = [];
+      $data["EmployeeID"] =  0;
+    }
+
+    $EmployeeOtherEarningNonTaxableExcelList=$GenerateExcel->generateEmployeeMetrobankListExcel($data); 
+
+    $RetVal['Response'] = "Success";
+    $RetVal['ResponseMessage'] = "";
+    $RetVal["EmployeeOtherEarningNonTaxableExcelList"] = $EmployeeOtherEarningNonTaxableExcelList;
+
+    return response()->json($RetVal);
+
+  }
+
 }
 
 

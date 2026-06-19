@@ -991,6 +991,27 @@ Route::get('admin-employee-income-non-taxable-print-report',[
     'as'=> 'admin-employee-income-non-taxable-print-report'
 ]);
 
+//EMPLOYEE METROBANK REPORT
+Route::get('admin-metrobank-report',[
+    'uses'=>'ReportController@showAdminEmployeeMetrobankReport',
+    'as'=> 'admin-employee-metrobank-report'
+]);
+
+Route::post('get-admin-employee-metrobank-report-list-by-filter',[
+    'uses'=>'ReportController@getPayrollTransactionEmployeeMetrobankListByFilter',
+    'as'=> 'get-admin-employee-metrobank-report-list-by-filter'
+]);
+
+Route::get('admin-employee-metrobank-report-print-report',[
+    'uses'=>'ReportController@showAdminEmployeeMetrobankPrintReport',
+    'as'=> 'admin-employee-metrobank-report-print-report'
+]);
+
+Route::post('get-excel-employee-metrobank-list',[
+    'uses'=>'GenerateExcelController@getExcelEmployeeMetrobankList',
+    'as'=> 'get-excel-employee-metrobank-list'
+]);
+
 // EMPLOYEE DTR REPORT
 Route::get('admin-employee-dtr-summary-report',[
     'uses'=>'ReportController@showAdminEmployeeDTRSummaryReport',

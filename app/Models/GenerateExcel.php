@@ -3222,4 +3222,85 @@ public function getLoanFields(){
 
     }
 
+  public function generateEmployeeMetrobankListExcel($param){
+
+    $PayrollPeriodID = $param['PayrollPeriodID'];
+
+    $FilterType = $param["FilterType"];
+    $BranchID=$param["BranchID"];
+    $BranchSiteID=$param["SiteID"];
+    $DivisionID=$param["DivisionID"];
+    $DepartmentID=$param["DepartmentID"];
+    $SectionID=$param["SectionID"];
+    $JobTypeID=$param["JobTypeID"];
+    $EmployeeID=$param["EmployeeID"];
+
+    $strFields = $this->getOEFields("Non-Taxable Income");
+
+    $query = DB::table('payroll_transaction_employee_temp as paytrnemp')
+          ->join('payroll_transaction_income_deduction_temp as paytrnincded', function($join){
+              $join->on('paytrnincded.PayrollTransactionID', '=', 'paytrnemp.PayrollTransactionID');
+              $join->on('paytrnincded.EmployeeID','=', 'paytrnemp.EmployeeID');
+          })
+          ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
+          ->join('users as usr', 'usr.id', '=', 'paytrnemp.EmployeeID')
+          ->join('payroll_branch as brn', 'brn.ID', '=', 'paytrnemp.BranchID')
+          ->join('payroll_branch_site as brnchsite', 'brnchsite.ID', '=', 'usr.company_branch_site_id')
+          ->join('payroll_department as dept', 'dept.ID', '=', 'usr.department_id')
+          ->join('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
+          ->leftjoin('payroll_section as sec', 'sec.id', '=', 'usr.section_id')  
+          ->leftjoin('payroll_job_type as job', 'job.ID', '=', 'usr.job_title_id')
+
+          ->selectraw("
+     
+              COALESCE(paytrnemp.ID,0) as ID,
+
+              COALESCE(paytrnemp.PayrollTransactionID,0) as PayrollTransactionID,
+              COALESCE(paytrn.TransNo,'') as TransNo,
+              FORMAT(paytrn.TransDateTime, 'MM/dd/yyyy hh:mm:dd t') as TransDateTime,
+              COALESCE(paytrn.Status,'') as Status,
+     
+              COALESCE(paytrn.PayrollPeriodID,0) as PayrollPeriodID,
+
+              COALESCE(paytrnemp.EmployeeID,0) as EmployeeID,
+              COALESCE(usr.shortid,'') as EmployeeNo,
+              COALESCE(usr.first_name,'') as FirstName,
+              COALESCE(usr.middle_name,'') as MiddleName,
+              COALESCE(usr.last_name,'') as LastName,
+              CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' , COALESCE(usr.middle_name,'')) as FullName,
+              COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
+              COALESCE(paytrnemp.NetPay,0) as NetPay,
+
+              'Un-Posted' as Status
+
+          ");
+
+           $query->where('paytrn.PayrollPeriodID',$PayrollPeriodID);
+
+          if($FilterType!='' && $FilterType=='Location' && !empty($BranchID)){
+             $query->whereIn('paytrnemp.BranchID',$BranchID);
+           }else if($FilterType!='' && $FilterType=='Site' && !empty($BranchSiteID)){
+              $query->whereIn('usr.company_branch_site_id',$BranchSiteID);
+           }else if($FilterType!='' && $FilterType=='Division' && !empty($DivisionID)){
+             $query->whereIn('dept.DivisionID',$DivisionID);
+           }else if($FilterType!='' && $FilterType=='Department' && !empty($DepartmentID)){
+             $query->whereIn('usr.department_id',$DepartmentID);
+           }else if($FilterType!='' && $FilterType=='Section' && !empty($SectionID)){
+              $query->whereIn('sec.ID',$SectionID);
+           }else if($FilterType!='' && $FilterType=='Job Type' && !empty($JobTypeID)){
+             $query->whereIn('usr.job_title_id',$JobTypeID);
+           }else if($FilterType!='' && $FilterType=='Employee' && $EmployeeID>0){
+             $query->where('paytrnemp.EmployeeID',$EmployeeID);
+           }
+
+        $query->orderBy("usr.last_name","ASC");
+        $query->orderBy("usr.first_name","ASC");
+        $query->orderBy("usr.middle_name","ASC");
+
+        $list = $query->get();
+
+        return $list;
+
+  }
+
 }

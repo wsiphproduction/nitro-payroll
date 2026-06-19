@@ -1493,9 +1493,16 @@ public function generatePayrollRegisterPendingListExcel($param){
          $query->whereIn('dept.DivisionID',$DivisionID);
        }else if($FilterType!='' && $FilterType=='Department' && !empty($DepartmentID)){
          $query->whereIn('emp.department_id',$DepartmentID);
-       }else if($FilterType!='' && $FilterType=='Section' && !empty($SectionID)){
-          $query->whereIn('sec.ID',$SectionID);
-       }else if($FilterType!='' && $FilterType=='Job Type' && !empty($JobTypeID)){
+
+        }else if($FilterType!='' && $FilterType=='Section' && !empty($SectionID)){
+            if(is_array($SectionID)){
+                $query->whereIn('sec.ID',$SectionID);
+            }else{
+                $query->where('sec.ID',$SectionID);
+            }
+        }
+       
+       else if($FilterType!='' && $FilterType=='Job Type' && !empty($JobTypeID)){
          $query->whereIn('emp.job_title_id',$JobTypeID);
        }else if($FilterType!='' && $FilterType=='Employee' && $EmployeeID>0){
          $query->where('paytrnemp.EmployeeID',$EmployeeID);

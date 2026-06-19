@@ -189,7 +189,11 @@ foreach($grand as $field => $total){
             <td class="num">{{ number_format($subtotal['AbsentAmount'],2) }}</td>
             <td class="num">{{ number_format($subtotal['SL'],2) }}</td>
             <td class="num">{{ number_format($subtotal['VL'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['OL'],2) }}</td>
+
+            @if(in_array('OL',$visibleColumns))
+                <td class="num">{{ number_format($grand['OL'],2) }}</td>
+            @endif
+
             <td class="num">{{ number_format($subtotal['NightDiff'],2) }}</td>
             <td class="num">{{ number_format($subtotal['OTPay'],2) }}</td>
             

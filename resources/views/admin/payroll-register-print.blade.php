@@ -126,6 +126,44 @@ foreach($OtherEarningsTypes as $oe){
     $subtotal[$alias] = 0;
 }
 
+$fixedColumns = [
+    'Days',
+    'BasicPay',
+    'LateAmount',
+    'UndertimeAmount',
+    'AbsentAmount',
+    'SL',
+    'VL',
+    'NightDiff',
+    'OTPay',
+    'GrossPay',
+    'TaxableIncome',
+    'WTax',
+    'NetPay'
+];
+
+$visibleColumns = $fixedColumns;
+
+@endphp
+
+@php
+
+foreach($list as $row){
+
+    foreach($grand as $key => $value){
+        $grand[$key] += (float)($row->$key ?? 0);
+    }
+
+}
+
+foreach($grand as $field => $total){
+
+    if($total != 0 && !in_array($field,$visibleColumns)){
+        $visibleColumns[] = $field;
+    }
+
+}
+
 @endphp
 
 <table>
@@ -141,7 +179,11 @@ foreach($OtherEarningsTypes as $oe){
 
             <td class="num">{{ number_format($subtotal['Days'],2) }}</td>
             <td class="num">{{ number_format($subtotal['BasicPay'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['ECOLA'],2) }}</td>
+
+            @if(in_array('ECOLA',$visibleColumns))
+                <td class="num">{{ number_format($subtotal['ECOLA'],2) }}</td>
+            @endif
+
             <td class="num">{{ number_format($subtotal['LateAmount'],2) }}</td>
             <td class="num">{{ number_format($subtotal['UndertimeAmount'],2) }}</td>
             <td class="num">{{ number_format($subtotal['AbsentAmount'],2) }}</td>
@@ -150,12 +192,31 @@ foreach($OtherEarningsTypes as $oe){
             <td class="num">{{ number_format($subtotal['OL'],2) }}</td>
             <td class="num">{{ number_format($subtotal['NightDiff'],2) }}</td>
             <td class="num">{{ number_format($subtotal['OTPay'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['LH'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['SH'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['RDDPay'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['OTND'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['OtherTaxableEarnings'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['OtherNonTaxableEarnings'],2) }}</td>
+            
+            @if(in_array('LH',$visibleColumns))
+                <td class="num">{{ number_format($grand['LH'],2) }}</td>
+            @endif
+            
+            @if(in_array('SH',$visibleColumns))
+                <td class="num">{{ number_format($grand['SH'],2) }}</td>
+            @endif
+
+            @if(in_array('RDDPay',$visibleColumns))
+                <td class="num">{{ number_format($grand['RDDPay'],2) }}</td>
+            @endif
+
+            @if(in_array('OTND',$visibleColumns))
+                <td class="num">{{ number_format($grand['OTND'],2) }}</td>
+            @endif
+
+            @if(in_array('OtherTaxableEarnings',$visibleColumns))
+                <td class="num">{{ number_format($grand['OtherTaxableEarnings'],2) }}</td>
+            @endif
+
+            @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
+                <td class="num">{{ number_format($grand['OtherNonTaxableEarnings'],2) }}</td>
+            @endif
+
 
             @foreach($OtherEarningsTypes as $oe)
 
@@ -167,30 +228,64 @@ foreach($OtherEarningsTypes as $oe){
                     );
                 @endphp
 
-                <td class="num">
-                    {{ number_format($subtotal[$alias] ?? 0,2) }}
-                </td>
+                @if(in_array($alias,$visibleColumns))
+                    <td class="num">
+                        {{ number_format($subtotal[$alias] ?? 0,2) }}
+                    </td>
+                @endif
 
             @endforeach
 
             <td class="num">{{ number_format($subtotal['GrossPay'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['SSS'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['PHIC'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['HDMF'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['HDMFMP2'],2) }}</td>
+
+            @if(in_array('SSS',$visibleColumns))
+                <td class="num">{{ number_format($grand['SSS'],2) }}</td>
+            @endif
+
+            @if(in_array('PHIC',$visibleColumns))
+                <td class="num">{{ number_format($grand['PHIC'],2) }}</td>
+            @endif
+
+            @if(in_array('HDMF',$visibleColumns))
+                <td class="num">{{ number_format($grand['HDMF'],2) }}</td>
+            @endif
+
+            @if(in_array('HDMFMP2',$visibleColumns))
+                <td class="num">{{ number_format($grand['HDMFMP2'],2) }}</td>
+            @endif
+            
             <td class="num">{{ number_format($subtotal['TaxableIncome'],2) }}</td>
             <td class="num">{{ number_format($subtotal['WTax'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['SSSSalaryLoan'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['SSSCalamityLoan'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['HDMFLoan'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['HDMFCalamityLoan'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['OtherLoanDeductions'],2) }}</td>
-            <td class="num">{{ number_format($subtotal['TotalDeduction'],2) }}</td>
+
+            @if(in_array('SSSSalaryLoan',$visibleColumns))
+                <td class="num">{{ number_format($grand['SSSSalaryLoan'],2) }}</td>
+            @endif
+
+            @if(in_array('SSSCalamityLoan',$visibleColumns))
+                <td class="num">{{ number_format($grand['SSSCalamityLoan'],2) }}</td>
+            @endif
+
+            @if(in_array('HDMFLoan',$visibleColumns))
+                <td class="num">{{ number_format($grand['HDMFLoan'],2) }}</td>
+            @endif
+
+            @if(in_array('HDMFCalamityLoan',$visibleColumns))
+                <td class="num">{{ number_format($grand['HDMFCalamityLoan'],2) }}</td>
+            @endif
+
+            @if(in_array('OtherLoanDeductions',$visibleColumns))
+                <td class="num">{{ number_format($grand['OtherLoanDeductions'],2) }}</td>
+            @endif
+            
+            @if(in_array('TotalDeduction',$visibleColumns))
+                <td class="num">{{ number_format($grand['TotalDeduction'],2) }}</td>
+            @endif
+
             <td class="num">{{ number_format($subtotal['NetPay'],2) }}</td>
         </tr>
 
         <tr>
-            <td colspan="34" style="border:none;height:15px;"></td>
+            <td colspan="{{ count($visibleColumns) + 3 }}" style="border:none;height:15px;"></td>
         </tr>
 
         @endif
@@ -201,7 +296,7 @@ foreach($OtherEarningsTypes as $oe){
         @endphp
 
         <tr class="team-header">
-            <td colspan="{{ 34 + count($OtherEarningsTypes) }}">
+            <td colspan="{{ count($visibleColumns) + 3 }}">
                 TEAM LEADER : {{ $currentTeamLeader }}
             </td>
         </tr>
@@ -212,21 +307,46 @@ foreach($OtherEarningsTypes as $oe){
             <th>TEAM LEADER</th>
             <th>DAYS</th>
             <th>BASIC PAY</th>
-            <th>ECOLA</th>
+            @if(in_array('ECOLA',$visibleColumns))
+                <th>ECOLA</th>
+            @endif
             <th>LATE</th>
             <th>UT</th>
             <th>ABSENT</th>
             <th>SL</th>
             <th>VL</th>
-            <th>OL</th>
+
+            @if(in_array('OL',$visibleColumns))
+                <th>OL</th>
+            @endif
+
             <th>ND</th>
             <th>OT</th>
-            <th>LH</th>
-            <th>SH</th>
-            <th>RDD</th>
-            <th>OTND</th>
-            <th>OTH TAX</th>
-            <th>OTH NON TAX</th>
+
+            @if(in_array('LH',$visibleColumns))
+                <th>LH</th>
+            @endif
+
+            @if(in_array('SH',$visibleColumns))
+                <th>SH</th>
+            @endif
+
+            @if(in_array('RDDPay',$visibleColumns))
+                <th>RDD</th>
+            @endif
+
+            @if(in_array('OTND',$visibleColumns))
+                <th>OTND</th>
+            @endif
+
+            @if(in_array('OtherTaxableEarnings',$visibleColumns))
+                <th>OTH TAX</th>
+            @endif
+
+            @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
+                <th>OTH NON TAX</th>
+            @endif
+
             @foreach($OtherEarningsTypes as $oe)
 
                 @php
@@ -237,22 +357,56 @@ foreach($OtherEarningsTypes as $oe){
                     );
                 @endphp
 
-                <th>{{ strtoupper($oe->Name) }}</th>
+                @if(in_array($alias,$visibleColumns))
+                    <th>{{ strtoupper($oe->Name) }}</th>
+                @endif
 
             @endforeach
             <th>GROSS</th>
-            <th>SSS</th>
-            <th>PHIC</th>
-            <th>HDMF</th>
-            <th>MP2</th>
+
+            @if(in_array('SSS',$visibleColumns))
+                <th>SSS</th>
+            @endif
+
+            @if(in_array('PHIC',$visibleColumns))
+                <th>PHIC</th>
+            @endif
+
+            @if(in_array('HDMF',$visibleColumns))
+                <th>HDMF</th>
+            @endif
+
+            @if(in_array('HDMFMP2',$visibleColumns))
+                <th>MP2</th>
+            @endif
+            
             <th>TAXABLE</th>
             <th>WTAX</th>
-            <th>SSS SAL</th>
-            <th>SSS CAL</th>
-            <th>HDMF</th>
-            <th>HDMF CAL</th>
-            <th>OTH LOAN</th>
-            <th>TOTAL DED</th>
+
+            @if(in_array('SSSSalaryLoan',$visibleColumns))
+                <th>SSS SAL</th>
+            @endif
+
+            @if(in_array('SSSCalamityLoan',$visibleColumns))
+                <th>SSS CAL</th>
+            @endif
+
+            @if(in_array('HDMFLoan',$visibleColumns))
+                <th>HDMF</th>
+            @endif
+
+            @if(in_array('HDMFCalamityLoan',$visibleColumns))
+                <th>HDMF CAL</th>
+            @endif
+
+            @if(in_array('OtherLoanDeductions',$visibleColumns))
+                <th>OTH LOAN</th>
+            @endif
+
+            @if(in_array('TotalDeduction',$visibleColumns))
+                <th>TOTAL DED</th>
+            @endif
+
             <th>NET PAY</th>
         </tr>
 
@@ -264,21 +418,47 @@ foreach($OtherEarningsTypes as $oe){
         <td>{{ $row->TeamLeader }}</td>
         <td class="num">{{ number_format($row->Days,2) }}</td>
         <td class="num">{{ number_format($row->BasicPay,2) }}</td>
-        <td class="num">{{ number_format($row->ECOLA,2) }}</td>
+
+        @if(in_array('ECOLA',$visibleColumns))
+            <td class="num">{{ number_format($row->ECOLA,2) }}</td>
+        @endif
+
         <td class="num">{{ number_format($row->LateAmount,2) }}</td>
         <td class="num">{{ number_format($row->UndertimeAmount,2) }}</td>
         <td class="num">{{ number_format($row->AbsentAmount,2) }}</td>
         <td class="num">{{ number_format($row->SL,2) }}</td>
         <td class="num">{{ number_format($row->VL,2) }}</td>
-        <td class="num">{{ number_format($row->OL,2) }}</td>
+
+        @if(in_array('OL',$visibleColumns))
+            <td class="num">{{ number_format($row->OL,2) }}</td>
+        @endif
+
         <td class="num">{{ number_format($row->NightDiff,2) }}</td>
         <td class="num">{{ number_format($row->OTPay,2) }}</td>
-        <td class="num">{{ number_format($row->LH,2) }}</td>
-        <td class="num">{{ number_format($row->SH,2) }}</td>
-        <td class="num">{{ number_format($row->RDDPay,2) }}</td>
-        <td class="num">{{ number_format($row->OTND,2) }}</td>
-        <td class="num">{{ number_format($row->OtherTaxableEarnings,2) }}</td>
-        <td class="num">{{ number_format($row->OtherNonTaxableEarnings,2) }}</td>
+
+        @if(in_array('LH',$visibleColumns))
+            <td class="num">{{ number_format($row->LH,2) }}</td>
+        @endif
+
+        @if(in_array('SH',$visibleColumns))
+            <td class="num">{{ number_format($row->SH,2) }}</td>
+        @endif
+
+        @if(in_array('RDDPay',$visibleColumns))
+            <td class="num">{{ number_format($row->RDDPay,2) }}</td>
+        @endif
+
+        @if(in_array('OTND',$visibleColumns))
+            <td class="num">{{ number_format($row->OTND,2) }}</td>
+        @endif
+
+        @if(in_array('OtherTaxableEarnings',$visibleColumns))
+            <td class="num">{{ number_format($row->OtherTaxableEarnings,2) }}</td>
+        @endif
+
+        @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
+            <td class="num">{{ number_format($row->OtherNonTaxableEarnings,2) }}</td>
+        @endif
 
         @foreach($OtherEarningsTypes as $oe)
 
@@ -290,32 +470,64 @@ foreach($OtherEarningsTypes as $oe){
                 );
             @endphp
 
-            <td class="num">
-                {{ number_format($row->$alias ?? 0,2) }}
-            </td>
-
+            @if(in_array($alias,$visibleColumns))
+                <td class="num">
+                    {{ number_format($row->$alias ?? 0,2) }}
+                </td>
+            @endif
         @endforeach
 
         <td class="num">{{ number_format($row->GrossPay,2) }}</td>
-        <td class="num">{{ number_format($row->SSS,2) }}</td>
-        <td class="num">{{ number_format($row->PHIC,2) }}</td>
-        <td class="num">{{ number_format($row->HDMF,2) }}</td>
-        <td class="num">{{ number_format($row->HDMFMP2,2) }}</td>
+
+        @if(in_array('SSS',$visibleColumns))
+            <td class="num">{{ number_format($row->SSS,2) }}</td>
+        @endif
+
+        @if(in_array('PHIC',$visibleColumns))
+            <td class="num">{{ number_format($row->PHIC,2) }}</td>
+        @endif
+
+        @if(in_array('HDMF',$visibleColumns))
+            <td class="num">{{ number_format($row->HDMF,2) }}</td>
+        @endif
+
+        @if(in_array('HDMFMP2',$visibleColumns))
+            <td class="num">{{ number_format($row->HDMFMP2,2) }}</td>
+        @endif
+
         <td class="num">{{ number_format($row->TaxableIncome,2) }}</td>
         <td class="num">{{ number_format($row->WTax,2) }}</td>
-        <td class="num">{{ number_format($row->SSSSalaryLoan,2) }}</td>
-        <td class="num">{{ number_format($row->SSSCalamityLoan,2) }}</td>
-        <td class="num">{{ number_format($row->HDMFLoan,2) }}</td>
-        <td class="num">{{ number_format($row->HDMFCalamityLoan,2) }}</td>
-        <td class="num">{{ number_format($row->OtherLoanDeductions,2) }}</td>
-        <td class="num">{{ number_format($row->TotalDeduction,2) }}</td>
+
+        @if(in_array('SSSSalaryLoan',$visibleColumns))
+            <td class="num">{{ number_format($row->SSSSalaryLoan,2) }}</td>
+        @endif
+
+        @if(in_array('SSSCalamityLoan',$visibleColumns))
+            <td class="num">{{ number_format($row->SSSCalamityLoan,2) }}</td>
+        @endif
+
+        @if(in_array('HDMFLoan',$visibleColumns))
+            <td class="num">{{ number_format($row->HDMFLoan,2) }}</td>
+        @endif
+
+        @if(in_array('HDMFCalamityLoan',$visibleColumns))
+            <td class="num">{{ number_format($row->HDMFCalamityLoan,2) }}</td>
+        @endif
+
+        @if(in_array('OtherLoanDeductions',$visibleColumns))
+            <td class="num">{{ number_format($row->OtherLoanDeductions,2) }}</td>
+        @endif
+
+        @if(in_array('TotalDeduction',$visibleColumns))
+            <td class="num">{{ number_format($row->TotalDeduction,2) }}</td>
+        @endif
+
         <td class="num">{{ number_format($row->NetPay,2) }}</td>
     </tr>
 
     @php
 
-    foreach($grand as $key => $value){
-        $grand[$key] += (float)($row->$key ?? 0);
+    foreach($subtotal as $key => $value){
         $subtotal[$key] += (float)($row->$key ?? 0);
     }
 
@@ -330,21 +542,47 @@ foreach($OtherEarningsTypes as $oe){
 
     <td class="num">{{ number_format($subtotal['Days'],2) }}</td>
     <td class="num">{{ number_format($subtotal['BasicPay'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['ECOLA'],2) }}</td>
+
+    @if(in_array('ECOLA',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['ECOLA'],2) }}</td>
+    @endif
+
     <td class="num">{{ number_format($subtotal['LateAmount'],2) }}</td>
     <td class="num">{{ number_format($subtotal['UndertimeAmount'],2) }}</td>
     <td class="num">{{ number_format($subtotal['AbsentAmount'],2) }}</td>
     <td class="num">{{ number_format($subtotal['SL'],2) }}</td>
     <td class="num">{{ number_format($subtotal['VL'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['OL'],2) }}</td>
+
+    @if(in_array('OL',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['OL'],2) }}</td>
+    @endif
+
     <td class="num">{{ number_format($subtotal['NightDiff'],2) }}</td>
     <td class="num">{{ number_format($subtotal['OTPay'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['LH'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['SH'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['RDDPay'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['OTND'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['OtherTaxableEarnings'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['OtherNonTaxableEarnings'],2) }}</td>
+
+    @if(in_array('LH',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['LH'],2) }}</td>
+    @endif
+
+    @if(in_array('SH',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['SH'],2) }}</td>
+    @endif
+
+    @if(in_array('RDDPay',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['RDDPay'],2) }}</td>
+    @endif
+
+    @if(in_array('OTND',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['OTND'],2) }}</td>
+    @endif
+
+    @if(in_array('OtherTaxableEarnings',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['OtherTaxableEarnings'],2) }}</td>
+    @endif
+
+    @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['OtherNonTaxableEarnings'],2) }}</td>
+    @endif
 
     @foreach($OtherEarningsTypes as $oe)
 
@@ -356,32 +594,66 @@ foreach($OtherEarningsTypes as $oe){
             );
         @endphp
 
-        <td class="num">
-            {{ number_format($subtotal[$alias] ?? 0,2) }}
-        </td>
+        @if(in_array($alias,$visibleColumns))
+            <td class="num">
+                {{ number_format($subtotal[$alias] ?? 0,2) }}
+            </td>
+        @endif
 
     @endforeach
 
     <td class="num">{{ number_format($subtotal['GrossPay'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['SSS'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['PHIC'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['HDMF'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['HDMFMP2'],2) }}</td>
+
+    @if(in_array('SSS',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['SSS'],2) }}</td>
+    @endif
+
+    @if(in_array('PHIC',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['PHIC'],2) }}</td>
+    @endif
+
+    @if(in_array('HDMF',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['HDMF'],2) }}</td>
+    @endif
+
+    @if(in_array('HDMFMP2',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['HDMFMP2'],2) }}</td>
+    @endif
+
     <td class="num">{{ number_format($subtotal['TaxableIncome'],2) }}</td>
     <td class="num">{{ number_format($subtotal['WTax'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['SSSSalaryLoan'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['SSSCalamityLoan'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['HDMFLoan'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['HDMFCalamityLoan'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['OtherLoanDeductions'],2) }}</td>
-    <td class="num">{{ number_format($subtotal['TotalDeduction'],2) }}</td>
+
+    @if(in_array('SSSSalaryLoan',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['SSSSalaryLoan'],2) }}</td>
+    @endif
+
+    @if(in_array('SSSCalamityLoan',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['SSSCalamityLoan'],2) }}</td>
+    @endif
+
+    @if(in_array('HDMFLoan',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['HDMFLoan'],2) }}</td>
+    @endif
+
+    @if(in_array('HDMFCalamityLoan',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['HDMFCalamityLoan'],2) }}</td>
+    @endif
+
+    @if(in_array('OtherLoanDeductions',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['OtherLoanDeductions'],2) }}</td>
+    @endif
+
+    @if(in_array('TotalDeduction',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['TotalDeduction'],2) }}</td>
+    @endif
+
     <td class="num">{{ number_format($subtotal['NetPay'],2) }}</td>
 </tr>
 
 @endif
 
 <tr>
-    <td colspan="34" style="border:none;height:25px;"></td>
+    <td colspan="{{ count($visibleColumns) + 3 }}" style="border:none;height:25px;"></td>
 </tr>
 
 <tr class="grandtotal">
@@ -389,24 +661,48 @@ foreach($OtherEarningsTypes as $oe){
 
     <td class="num">{{ number_format($grand['Days'],2) }}</td>
     <td class="num">{{ number_format($grand['BasicPay'],2) }}</td>
-    <td class="num">{{ number_format($grand['ECOLA'],2) }}</td>
+
+    @if(in_array('ECOLA',$visibleColumns))
+        <td class="num">{{ number_format($grand['ECOLA'],2) }}</td>
+    @endif
+
     <td class="num">{{ number_format($grand['LateAmount'],2) }}</td>
     <td class="num">{{ number_format($grand['UndertimeAmount'],2) }}</td>
     <td class="num">{{ number_format($grand['AbsentAmount'],2) }}</td>
 
     <td class="num">{{ number_format($grand['SL'],2) }}</td>
     <td class="num">{{ number_format($grand['VL'],2) }}</td>
-    <td class="num">{{ number_format($grand['OL'],2) }}</td>
+
+    @if(in_array('OL',$visibleColumns))
+        <td class="num">{{ number_format($grand['OL'],2) }}</td>
+    @endif
 
     <td class="num">{{ number_format($grand['NightDiff'],2) }}</td>
     <td class="num">{{ number_format($grand['OTPay'],2) }}</td>
-    <td class="num">{{ number_format($grand['LH'],2) }}</td>
-    <td class="num">{{ number_format($grand['SH'],2) }}</td>
-    <td class="num">{{ number_format($grand['RDDPay'],2) }}</td>
-    <td class="num">{{ number_format($grand['OTND'],2) }}</td>
 
-    <td class="num">{{ number_format($grand['OtherTaxableEarnings'],2) }}</td>
-    <td class="num">{{ number_format($grand['OtherNonTaxableEarnings'],2) }}</td>
+    @if(in_array('LH',$visibleColumns))
+        <td class="num">{{ number_format($grand['LH'],2) }}</td>
+    @endif
+
+    @if(in_array('SH',$visibleColumns))
+        <td class="num">{{ number_format($grand['SH'],2) }}</td>
+    @endif
+
+    @if(in_array('RDDPay',$visibleColumns))
+        <td class="num">{{ number_format($grand['RDDPay'],2) }}</td>
+    @endif
+
+    @if(in_array('OTND',$visibleColumns))
+        <td class="num">{{ number_format($grand['OTND'],2) }}</td>
+    @endif
+
+    @if(in_array('OtherTaxableEarnings',$visibleColumns))
+        <td class="num">{{ number_format($grand['OtherTaxableEarnings'],2) }}</td>
+    @endif
+
+    @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
+        <td class="num">{{ number_format($grand['OtherNonTaxableEarnings'],2) }}</td>
+    @endif
 
     @foreach($OtherEarningsTypes as $oe)
 
@@ -418,29 +714,59 @@ foreach($OtherEarningsTypes as $oe){
             );
         @endphp
 
-        <td class="num">
-            {{ number_format($grand[$alias] ?? 0,2) }}
-        </td>
+        @if(in_array($alias,$visibleColumns))
+            <td class="num">
+                {{ number_format($grand[$alias] ?? 0,2) }}
+            </td>
+        @endif
 
     @endforeach
 
     <td class="num">{{ number_format($grand['GrossPay'],2) }}</td>
 
-    <td class="num">{{ number_format($grand['SSS'],2) }}</td>
-    <td class="num">{{ number_format($grand['PHIC'],2) }}</td>
-    <td class="num">{{ number_format($grand['HDMF'],2) }}</td>
-    <td class="num">{{ number_format($grand['HDMFMP2'],2) }}</td>
+    @if(in_array('SSS',$visibleColumns))
+        <td class="num">{{ number_format($grand['SSS'],2) }}</td>
+    @endif
+
+    @if(in_array('PHIC',$visibleColumns))
+        <td class="num">{{ number_format($grand['PHIC'],2) }}</td>
+    @endif
+
+    @if(in_array('HDMF',$visibleColumns))
+        <td class="num">{{ number_format($grand['HDMF'],2) }}</td>
+    @endif
+
+    @if(in_array('HDMFMP2',$visibleColumns))
+        <td class="num">{{ number_format($grand['HDMFMP2'],2) }}</td>
+    @endif
 
     <td class="num">{{ number_format($grand['TaxableIncome'],2) }}</td>
     <td class="num">{{ number_format($grand['WTax'],2) }}</td>
 
-    <td class="num">{{ number_format($grand['SSSSalaryLoan'],2) }}</td>
-    <td class="num">{{ number_format($grand['SSSCalamityLoan'],2) }}</td>
-    <td class="num">{{ number_format($grand['HDMFLoan'],2) }}</td>
-    <td class="num">{{ number_format($grand['HDMFCalamityLoan'],2) }}</td>
-    <td class="num">{{ number_format($grand['OtherLoanDeductions'],2) }}</td>
+    @if(in_array('SSSSalaryLoan',$visibleColumns))
+        <td class="num">{{ number_format($grand['SSSSalaryLoan'],2) }}</td>
+    @endif
 
-    <td class="num">{{ number_format($grand['TotalDeduction'],2) }}</td>
+    @if(in_array('SSSCalamityLoan',$visibleColumns))
+        <td class="num">{{ number_format($grand['SSSCalamityLoan'],2) }}</td>
+    @endif
+
+    @if(in_array('HDMFLoan',$visibleColumns))
+        <td class="num">{{ number_format($grand['HDMFLoan'],2) }}</td>
+    @endif
+
+    @if(in_array('HDMFCalamityLoan',$visibleColumns))
+        <td class="num">{{ number_format($grand['HDMFCalamityLoan'],2) }}</td>
+    @endif
+
+    @if(in_array('OtherLoanDeductions',$visibleColumns))
+        <td class="num">{{ number_format($grand['OtherLoanDeductions'],2) }}</td>
+    @endif
+
+    @if(in_array('TotalDeduction',$visibleColumns))
+        <td class="num">{{ number_format($grand['TotalDeduction'],2) }}</td>
+    @endif
+
     <td class="num">{{ number_format($grand['NetPay'],2) }}</td>
 </tr>
 

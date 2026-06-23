@@ -108,6 +108,7 @@ class SyncEmployeesJob implements ShouldQueue
                     $qryUpdate = "
                         UPDATE users SET
                             status = '".$d['status']."',
+                            bank = '".$d['bank']."',
                             department_id = '".$department_id."'
                         WHERE hris_ref_id = '".$d['id']."'
                     ";
@@ -142,7 +143,7 @@ class SyncEmployeesJob implements ShouldQueue
             ");
 
             while ($r = sqlsrv_fetch_array($q)) {
-                $upd = sqlsrv_query($conn_payroll, "update users set department_id='" . $r['department_idd'] . "', status='" . $r['status'] . "', bank='" . $r['bank'] . "', employee_number ='" . $r['employee_number'] . "',
+                $upd = sqlsrv_query($conn_payroll, "update users set department_id='" . $r['department_idd'] . "', status='" . $r['status'] . "', bank='" . $r['bank'] . "',
                 job_title_id='" . $r['position_idd'] . "',company_branch_id=3,section_id='" . $r['section_idd'] . "',
                 company_branch_site_id=2,hdmf_ee=200,hdmf_er=200,employee_number='" . $r['employee_number'] . "',salary_type='" . $r['saltype'] . "',shortid='" . $r['employee_number'] . "' where hris_ref_id='" . $r['uid'] . "'");
             }

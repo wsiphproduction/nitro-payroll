@@ -4928,16 +4928,7 @@ public function getEmployeeMetrobankReport($param){
     $JobTypeID=$param["JobTypeID"];
     $EmployeeID=$param["EmployeeID"];
 
-    $strFields = $this->getOEFields("Non-Taxable Income");
-
-    $query = DB::table('payroll_transaction_employee_temp as paytrnemp')
-          ->join('payroll_transaction_income_deduction_temp as paytrnincded', function($join){
-              $join->on('paytrnincded.PayrollTransactionID', '=', 'paytrnemp.PayrollTransactionID');
-              $join->on('paytrnincded.EmployeeID','=', 'paytrnemp.EmployeeID');
-          })
-          ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
-          ->join('users as usr', 'usr.id', '=', 'paytrnemp.EmployeeID')
-          ->join('payroll_branch as brn', 'brn.ID', '=', 'paytrnemp.BranchID')
+    $query = DB::table('users as usr')
           ->join('payroll_branch_site as brnchsite', 'brnchsite.ID', '=', 'usr.company_branch_site_id')
           ->join('payroll_department as dept', 'dept.ID', '=', 'usr.department_id')
           ->join('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
@@ -4946,16 +4937,7 @@ public function getEmployeeMetrobankReport($param){
 
           ->selectraw("
      
-              COALESCE(paytrnemp.ID,0) as ID,
-
-              COALESCE(paytrnemp.PayrollTransactionID,0) as PayrollTransactionID,
-              COALESCE(paytrn.TransNo,'') as TransNo,
-              FORMAT(paytrn.TransDateTime, 'MM/dd/yyyy hh:mm:dd t') as TransDateTime,
-              COALESCE(paytrn.Status,'') as Status,
-     
-              COALESCE(paytrn.PayrollPeriodID,0) as PayrollPeriodID,
-
-              COALESCE(paytrnemp.EmployeeID,0) as EmployeeID,
+              COALESCE(usr.id,0) as EmployeeID,
               COALESCE(usr.shortid,'') as EmployeeNo,
               COALESCE(usr.first_name,'') as FirstName,
               COALESCE(usr.middle_name,'') as MiddleName,
@@ -4965,9 +4947,7 @@ public function getEmployeeMetrobankReport($param){
               iif(COALESCE(usr.status,1) = 1, 'Active', 'Inactive') as EmployeeStatus,
               COALESCE(usr.contact_number,'') as ContactNumber,
               COALESCE(usr.email,'') as EmailAddress,
-
-              COALESCE(paytrnemp.BranchID,0) as BranchID,
-              COALESCE(brn.BranchName,'') as BranchName,
+              COALESCE(usr.bank,'--') as Bank,
 
               COALESCE(dept.DivisionID,0) as DivisionID,
               COALESCE(div.Division,'') as Division,
@@ -4981,20 +4961,10 @@ public function getEmployeeMetrobankReport($param){
               COALESCE(usr.job_title_id,0) as JobTitleID,
               COALESCE(job.JobTitle,'') as JobTitle,
      
-              COALESCE(usr.salary_type,0) as SalaryType,
-              COALESCE(paytrnemp.NetPay,0) as NetPay,
-
-              ".$strFields."
-
-              'Un-Posted' as Status
-
+              COALESCE(usr.salary_type,0) as SalaryType
           ");
 
-           $query->where('paytrn.PayrollPeriodID',$PayrollPeriodID);
-
-          if($FilterType!='' && $FilterType=='Location' && !empty($BranchID)){
-             $query->whereIn('paytrnemp.BranchID',$BranchID);
-           }else if($FilterType!='' && $FilterType=='Site' && !empty($BranchSiteID)){
+           if($FilterType!='' && $FilterType=='Site' && !empty($BranchSiteID)){
               $query->whereIn('usr.company_branch_site_id',$BranchSiteID);
            }else if($FilterType!='' && $FilterType=='Division' && !empty($DivisionID)){
              $query->whereIn('dept.DivisionID',$DivisionID);
@@ -5005,7 +4975,7 @@ public function getEmployeeMetrobankReport($param){
            }else if($FilterType!='' && $FilterType=='Job Type' && !empty($JobTypeID)){
              $query->whereIn('usr.job_title_id',$JobTypeID);
            }else if($FilterType!='' && $FilterType=='Employee' && $EmployeeID>0){
-             $query->where('paytrnemp.EmployeeID',$EmployeeID);
+             $query->where('usr.id',$EmployeeID);
            }
 
         $query->orderBy("usr.last_name","ASC");

@@ -1012,6 +1012,27 @@ Route::post('get-excel-employee-metrobank-list',[
     'as'=> 'get-excel-employee-metrobank-list'
 ]);
 
+//EMPLOYEE LOAN REPORT
+Route::get('admin-loan-report',[
+    'uses'=>'ReportController@showAdminEmployeeLoanReport',
+    'as'=> 'admin-loan-report'
+]);
+
+Route::post('get-admin-loan-report-list-by-filter',[
+    'uses'=>'ReportController@getPayrollTransactionEmployeeLoanListByFilter',
+    'as'=> 'get-admin-loan-report-list-by-filter'
+]);
+
+Route::get('admin-loan-report-print-report',[
+    'uses'=>'ReportController@showAdminEmployeeLoanPrintReport',
+    'as'=> 'admin-loan-report-print-report'
+]);
+
+Route::post('get-excel-loan-list',[
+    'uses'=>'GenerateExcelController@getExcelEmployeeLoanList',
+    'as'=> 'get-excel-loan-list'
+]);
+
 // EMPLOYEE DTR REPORT
 Route::get('admin-employee-dtr-summary-report',[
     'uses'=>'ReportController@showAdminEmployeeDTRSummaryReport',

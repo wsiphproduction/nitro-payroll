@@ -157,7 +157,7 @@ nav > div a.nav-item.nav-link:focus
                                             <i class="bx bx-home-alt"></i>
                                         </a>
                                     </li>
-                                    <li class="breadcrumb-item active"> Employee Metrobank Report
+                                    <li class="breadcrumb-item active"> Loan Report
                                     </li>
                                 </ol>
                             </div>
@@ -171,7 +171,7 @@ nav > div a.nav-item.nav-link:focus
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title"> Employee Metrobank Report </h4>
+                                    <h4 class="card-title"> Loan Report </h4>
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body card-dashboard">
@@ -182,7 +182,7 @@ nav > div a.nav-item.nav-link:focus
                                                     <div class="input-group">
                                                          <input id="PageBatchNo" type="hidden" value="1">
 
-                                                    {{-- <div class="col-md-2">
+                                                    <div class="col-md-2">
                                                         <label for="SearchPayrollPeriodCode">Payroll Period: </label>
                                                              <select id="SearchPayrollPeriodCode" class="form-control">
                                                               <!--   <option value="">Please Select</option> -->
@@ -190,20 +190,19 @@ nav > div a.nav-item.nav-link:focus
                                                                 <option value="{{ $prdrow->ID }}" {{ ($prdrow->ID == Session('ADMIN_PAYROLL_PERIOD_SCHED_ID') ? 'selected' : '' ) }}>{{ $prdrow->Code.' : '.$prdrow->StartDateFormat.' - '.$prdrow->EndDateFormat }}</option>
                                                                 @endforeach
                                                             </select>        
-                                                      </div>          --}}
+                                                      </div>         
    
                                                         <div class="col-md-2">
                                                             <fieldset class="form-group">
                                                                 <label for="GenerateFilter">Filter By: </label>
                                                                     <select id="GenerateFilter" class="form-control">
                                                                         <option value="">All</option>
-                                                                        <option value="Location">Location</option>
-                                                                        <option value="Site">Site</option>
-                                                                        <option value="Division">Division</option>
-                                                                        <option value="Department">Department</option>
-                                                                        <option value="Section">Team Leader</option>
-                                                                        <option value="Job Type">Job Type</option>
                                                                         <option value="Employee">Employee</option>
+                                                                        <option value="Loan Code">Loan Code</option>
+                                                                        <option value="Loan Type">Loan Type</option>
+                                                                        <option value="Frequency">Frequency</option>
+                                                                        <option value="Status">Status</option>
+                                                                        <option value="Site">Site</option>
                                                                     </select>
                                                             </fieldset>
                                                         </div>
@@ -294,7 +293,8 @@ nav > div a.nav-item.nav-link:focus
                                                         <th style="min-width: 110px;">EMPLOYEE ID</th>
                                                         <th style="min-width: 130px;">EMPLOYEE NAME</th>
                                                         <th style="min-width: 130px;">TEAM LEADER</th>
-                                                        <th style="min-width: 130px;">ACCOUNT NUMBER</th>
+                                                        <th style="min-width: 130px;">EMPLOYEE ACCOUNT NUMBER</th>
+                                                        <th style="min-width: 60px;">AMOUNT</th>
                                                    </thead>
                                                   <tbody>
                                                 </tbody>
@@ -498,19 +498,20 @@ nav > div a.nav-item.nav-link:focus
 
             var tblList = $("#tblList").DataTable();
                                                         
-            tdID = vData.EmployeeID;
+            tdID = vData.ID;
    
             tdEmployeeNo = "<span class='font-normal'>" + vData.EmployeeNo + "</span>";
             tdEmployeeName = "<span class='font-normal'>" + vData.FullName + "</span>";
             tdTeamLeader = "<span class='font-normal'>" + vData.TeamLeader + "</span>";
-            tdBank = "<span class='font-normal'>" + vData.Bank + "</span>";
+            tdNetPay = "<span class='font-normal'>" + vData.NetPay + "</span>";
 
             tblList.row.add([
                 tdID,
                 tdEmployeeNo,
                 tdEmployeeName,
                 tdTeamLeader,
-                tdBank
+                'xxxxx',
+                tdNetPay
             ]).draw();  
         }
 

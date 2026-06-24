@@ -108,7 +108,7 @@
                                                                         </select>
                                                                     </div> 
                                                                     <div id="divSection" class="div-percent" style="display:none;">
-                                                                        <select id="GeneratePayrollSection" class="form-control">
+                                                                        <select id="GeneratePayrollSection" class="form-control select2" multiple>
                                                                             <option value="">Please Select</option>
                                                                             @foreach($SectionList as $secrow)
                                                                             <option value="{{ $secrow->ID }}">{{ $secrow->Section }}</option>
@@ -721,6 +721,11 @@
         $("#spnTypeSearch").show();
         $("#divEmployee").show();
     }
+
+    $(document).ready(function() {
+        // select2
+        $('#GeneratePayrollSection').select2();
+    })
 
 });
 

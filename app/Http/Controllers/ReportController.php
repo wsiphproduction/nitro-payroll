@@ -14,7 +14,6 @@ use Illuminate\Support\Str;
 use Mail;
 use Session;
 use Hash;
-use View;
 use Image;
 use DB;
 use Excel;
@@ -41,6 +40,7 @@ use App\Models\OTRate;
 use App\Models\LeaveType;
 use App\Models\IncomeDeductionType;
 use App\Models\LoanType;
+use Illuminate\Support\Facades\View;
 
 class ReportController extends Controller {
  
@@ -1756,6 +1756,11 @@ public function showAdminEmployeePayslipPrintReport(Request $request){
   $data["DivisionID"] =  request("DivisionID");
   $data["DepartmentID"] =  request("DepartmentID");
   $data["SectionID"] =  request("SectionID");
+
+  if($data["SectionID"] != 0){
+    $data["SectionID"] = explode(",", $data["SectionID"]);
+  }
+
   $data["JobTypeID"] =  request("JobTypeID");
   $data["EmployeeID"] =  request("EmployeeID");
   $data["Status"] =  request("Status");
@@ -1845,6 +1850,8 @@ public function showAdminEmployeePayslipPrintReport(Request $request){
   
   $data["PayrollTransactionEmployeeList"]=$PayrollTransactionEmployeeList;
   $data["PayrollTransactionInfo"]=$PayrollTransaction->getPayrollTransactionInfo($data['PayrollTransactionID']);
+
+  // dd($data);
 
   return View::make('admin/admin-employee-payslip-print-report')->with($data);
 
@@ -2764,7 +2771,7 @@ public function showAdminEmployeeLoanReport(Request $request){
     return Redirect::route('admin-logout');
   }
 
-  $data['Page'] = 'Employee Loan Report';
+  $data['Page'] = 'Employee Loan';
   $data = $this->SetAdminInitialData($data);
 
   $param["SearchText"] = "";  
@@ -2772,37 +2779,11 @@ public function showAdminEmployeeLoanReport(Request $request){
   $param["PageNo"] = 0;
   $param["Limit"] = 0;
 
-  $PayrollPeriod = new PayrollPeriod();
-  $data["PayrollPeriodList"] = $PayrollPeriod->getPayrollPeriodList($param);
-
   $Branch = new Branch();
   $data["BranchList"] = $Branch->getBranchList($param);
 
   $BranchSite = new BranchSite();
   $data["BranchSite"] = $BranchSite->getBranchSiteList($param);
-
-  $Division = new Division();
-  $data["DivisionList"] = $Division->getDivisionList($param);
-
-  $Department = new Department();
-  $data["DepartmentList"] = $Department->getDepartmentList($param);
-
-  $Section = new Section();
-  $data["SectionList"] = $Section->getSectionList($param);
-
-  $JobType = new JobType();
-  $data["JobTypeList"] = $JobType->getJobTypeList($param);
-
-  $Employee = new Employee();
-  $data["EmployeeList"] = $Employee->getEmployeeList($param);
-
-  //Get Income List
-  $param["SearchText"] = ""; 
-  $param["Status"] = "Metrobank";
-  $param["PageNo"] = 0;
-  $param["Limit"] =  0;
-  $IncomeDeductionType = new IncomeDeductionType();
-  $data["IncomeDeductionTypeList"] = $IncomeDeductionType->getIncomeDeductionTypeList($param);
 
   return View::make('admin/admin-employee-loan2-report')->with($data);
 

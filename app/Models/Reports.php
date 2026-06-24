@@ -130,8 +130,8 @@ COALESCE(CONVERT(varchar, rate.DateTimeUploaded, 120),'') as RateUploaded,
              $pending->where('dept.DivisionID',$DivisionID);
            }else if($FilterType!='' && $FilterType=='Department' && $DepartmentID>0){
              $pending->where('usr.department_id',$DepartmentID);
-           }else if($FilterType!='' && $FilterType=='Section' && $SectionID>0){
-              $pending->where('sec.ID',$SectionID);
+           }else if($FilterType!='' && $FilterType=='Section' && count($SectionID)>0){
+              $pending->whereIn('sec.ID',$SectionID);
            }else if($FilterType!='' && $FilterType=='Job Type' && $JobTypeID>0){
              $pending->where('usr.job_title_id',$JobTypeID);
            }else if($FilterType!='' && $FilterType=='Employee' && $EmployeeID>0){
@@ -242,8 +242,8 @@ COALESCE(CONVERT(varchar, rate.DateTimeUploaded, 120),'') as RateUploaded,
              $approved->where('dept.DivisionID',$DivisionID);
            }else if($FilterType!='' && $FilterType=='Department'){
              $approved->where('usr.department_id',$DepartmentID);
-           }else if($FilterType!='' && $FilterType=='Section'){
-              $approved->where('sec.ID',$SectionID);
+           }else if($FilterType!='' && $FilterType=='Section' && count($SectionID)>0){
+              $approved->whereIn('sec.ID',$SectionID);
            }else if($FilterType!='' && $FilterType=='Job Type'){
              $approved->where('usr.job_title_id',$JobTypeID);
            }else if($FilterType!='' && $FilterType=='Employee'){
@@ -1626,8 +1626,8 @@ public function getEmployeePaySlipReport($param){
              $query->where('dept.DivisionID',$DivisionID);
            }else if($FilterType!='' && $FilterType=='Department' && $DepartmentID>0){
              $query->where('usr.department_id',$DepartmentID);
-           }else if($FilterType!='' && $FilterType=='Section' && $SectionID>0){
-              $query->where('sec.ID',$SectionID);
+           }else if($FilterType!='' && $FilterType=='Section' && count($SectionID)>0){
+              $query->whereIn('sec.ID',$SectionID);
            }else if($FilterType!='' && $FilterType=='Job Type' && $JobTypeID>0){
              $query->where('usr.job_title_id',$JobTypeID);
            }else if($FilterType!='' && $FilterType=='Employee' && $EmployeeID>0){
@@ -1693,8 +1693,8 @@ public function getEmployeePaySlipReportCount($param){
              $query->where('dept.DivisionID',$DivisionID);
            }else if($FilterType!='' && $FilterType=='Department' && $DepartmentID>0){
              $query->where('usr.department_id',$DepartmentID);
-           }else if($FilterType!='' && $FilterType=='Section' && $SectionID>0){
-              $query->where('sec.ID',$SectionID);
+           }else if($FilterType!='' && $FilterType=='Section' && count($SectionID) > 0){
+              $query->whereIn('sec.ID',$SectionID);
            }else if($FilterType!='' && $FilterType=='Job Type' && $JobTypeID>0){
              $query->where('usr.job_title_id',$JobTypeID);
            }else if($FilterType!='' && $FilterType=='Employee' && $EmployeeID>0){

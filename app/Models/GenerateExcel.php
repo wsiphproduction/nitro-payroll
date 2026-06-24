@@ -1247,7 +1247,12 @@ public function generatePayrollRegisterApprovedListExcel($param){
 
               COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
               COALESCE(dtr.RegularHours,0) as RegularHours,
-              ROUND(COALESCE(dtr.RegularHours,0) / 8, 2) as Days,
+              CASE
+                  WHEN ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
+                      - FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)) = 0.01
+                  THEN FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2))
+                  ELSE ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
+              END AS Days
 
              paytrnemp.BasicSalary as BasicPay,
 
@@ -1434,7 +1439,12 @@ public function generatePayrollRegisterPendingListExcel($param){
 
               COALESCE(sec.Section,'NO TEAM LEADER') as TeamLeader,
               COALESCE(dtr.RegularHours,0) as RegularHours,
-              ROUND(COALESCE(dtr.RegularHours,0) / 8, 2) as Days,
+              CASE
+                  WHEN ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
+                      - FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)) = 0.01
+                  THEN FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2))
+                  ELSE ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
+              END AS Days
 
              paytrnemp.BasicSalary as BasicPay,
 

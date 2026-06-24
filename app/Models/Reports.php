@@ -2765,7 +2765,12 @@ public function getPayrollRegisterApprovedReport($param){
 
               sec.Section as TeamLeader,
               COALESCE(dtr.RegularHours,0) as RegularHours,
-              ROUND(COALESCE(dtr.RegularHours,0) / 8, 2) as Days,
+              CASE
+                  WHEN ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
+                      - FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)) = 0.01
+                  THEN FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2))
+                  ELSE ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
+              END AS Days
 
               COALESCE(paytrnemp.BasicSalary,0) as BasicPay,
 
@@ -3132,7 +3137,12 @@ public function getPayrollRegisterPendingReport($param){
               CONCAT(COALESCE(emp.last_name,''), ', ', COALESCE(emp.first_name,''), ' ' , COALESCE(emp.middle_name,'')) as EmployeeName,
               sec.Section as TeamLeader,
               COALESCE(dtr.RegularHours,0) as RegularHours,
-              ROUND(COALESCE(dtr.RegularHours,0) / 8, 2) as Days,
+              CASE
+                  WHEN ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
+                      - FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)) = 0.01
+                  THEN FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2))
+                  ELSE ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
+              END AS Days
 
              COALESCE(paytrnemp.BasicSalary,0) as BasicPay,
 

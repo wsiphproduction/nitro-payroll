@@ -703,11 +703,11 @@ nav > div a.nav-item.nav-link:focus
                         );
 
                         $("#ftLH").html(
-                            FormatDecimal(data.Totals.LH,2)
+                            FormatDecimal(Math.round(data.Totals.LH * 10) / 10, 2)
                         );
 
                         $("#ftSH").html(
-                            FormatDecimal(data.Totals.SH,2)
+                            FormatDecimal(Math.round(data.Totals.SH * 10) / 10, 2)
                         );
 
                         $("#ftRDDPay").html(
@@ -908,8 +908,9 @@ nav > div a.nav-item.nav-link:focus
             tdNightDiff = "<span class='font-normal'>" + FormatDecimal(vData.NightDiff,2) + "</span>"; 
             tdOvertimePay = "<span class='font-normal'>" + FormatDecimal(vData.OTPay,2) + "</span>"; 
 
-            tdLH = "<span class='font-normal'>" + FormatDecimal(vData.LH,2) + "</span>"; 
-            tdSH = "<span class='font-normal'>" + FormatDecimal(vData.SH,2) + "</span>"; 
+
+            tdLH = "<span class='font-normal'>" + FormatDecimal(Math.round(vData.LH * 10) / 10, 2) + "</span>"; 
+            tdSH = "<span class='font-normal'>" + FormatDecimal(Math.round(vData.SH * 10) / 10, 2) + "</span>"; 
 
             tdRDDPay = "<span class='font-normal'>" + FormatDecimal(vData.RDDPay,2) + "</span>"; 
 
@@ -1423,8 +1424,8 @@ nav > div a.nav-item.nav-link:focus
                 OL: v.OL,
                 NightDiff: v.NightDiff,
                 OTPay: v.OTPay,
-                LH: v.LH,
-                SH: v.SH,
+                LH: FormatDecimal(Math.round(v.LH * 10) / 10, 2),
+                SH: FormatDecimal(Math.round(v.SH * 10) / 10, 2),
                 RDDPay: v.RDDPay,
                 OTND: v.OTND,
                 OtherTaxableEarnings: v.OtherTaxableEarnings,
@@ -1501,8 +1502,8 @@ nav > div a.nav-item.nav-link:focus
             tTotalDed += parseFloat(v.TotalDeduction, 2); gTotalDed += parseFloat(v.TotalDeduction, 2);
             tNetPay += parseFloat(v.NetPay, 2);           gNetPay += parseFloat(v.NetPay, 2);
             tRDDPay += parseFloat(v.RDDPay, 2);           gRDDPay += parseFloat(v.RDDPay, 2);
-            tLH += parseFloat(v.LH, 2);                   gLH += parseFloat(v.LH, 2);
-            tSH += parseFloat(v.SH, 2);                   gSH += parseFloat(v.SH, 2);
+            tLH += parseFloat(FormatDecimal(Math.round(v.LH * 10) / 10, 2), 2);                   gLH += parseFloat(FormatDecimal(Math.round(v.LH * 10) / 10, 2), 2);
+            tSH += parseFloat(FormatDecimal(Math.round(v.SH * 10) / 10, 2), 2);                   gSH += parseFloat(FormatDecimal(Math.round(v.SH * 10) / 10, 2), 2);
             tSSSSalaryLoan += parseFloat(v.SSSSalaryLoan, 2); gSSSSalaryLoan += parseFloat(v.SSSSalaryLoan, 2);
             tSSSCalamityLoan += parseFloat(v.SSSCalamityLoan, 2); gSSSCalamityLoan += parseFloat(v.SSSCalamityLoan, 2);
             tHDMFLoan += parseFloat(v.HDMFLoan, 2); gHDMFLoan += parseFloat(v.HDMFLoan, 2);
@@ -1620,8 +1621,8 @@ nav > div a.nav-item.nav-link:focus
             OL: totals.OL,
             NightDiff: totals.NightDiff,
             OTPay: totals.OTPay,
-            LH: totals.LH,
-            SH: totals.SH,
+            LH: FormatDecimal(Math.round(totals.LH * 10) / 10, 2),
+            SH: FormatDecimal(Math.round(totals.SH * 10) / 10, 2),
             RDDPay: totals.RDDPay,
             OTND: totals.OTND,
             OtherTaxableEarnings: totals.OtherTaxable,

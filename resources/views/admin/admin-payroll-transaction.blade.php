@@ -2152,7 +2152,7 @@ nav > div a.nav-item.nav-link:focus
                         if(data.Response =='Success' && data.PayrollTransactionInfo != undefined){
 
 
-                            if(vProcessNo < 17){
+                            if(vProcessNo < 21){
                                 RegenerateEmployeePayroll(vStatus,vProcessNo + 1);
                             }else{
                                 LoadRecordRow($("#EmpPayrollTransactionRowID").val(),data.PayrollTransactionEmployeeInfo);

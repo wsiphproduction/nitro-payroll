@@ -4938,7 +4938,9 @@ public function getEmployeeMetrobankReport($param){
     $JobTypeID=$param["JobTypeID"];
     $EmployeeID=$param["EmployeeID"];
 
-    $query = DB::table('users as usr')
+    $query = DB::table('payroll_transaction_employee as paytrnemp')
+          ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
+          ->join('users as usr', 'usr.id', '=', 'paytrnemp.EmployeeID')
           ->join('payroll_branch_site as brnchsite', 'brnchsite.ID', '=', 'usr.company_branch_site_id')
           ->join('payroll_department as dept', 'dept.ID', '=', 'usr.department_id')
           ->join('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
@@ -4958,6 +4960,7 @@ public function getEmployeeMetrobankReport($param){
               COALESCE(usr.contact_number,'') as ContactNumber,
               COALESCE(usr.email,'') as EmailAddress,
               COALESCE(usr.bank,'--') as Bank,
+              COALESCE(paytrn.PayrollPeriodID,0) as PayrollPeriodID,
 
               COALESCE(dept.DivisionID,0) as DivisionID,
               COALESCE(div.Division,'') as Division,
@@ -4971,8 +4974,11 @@ public function getEmployeeMetrobankReport($param){
               COALESCE(usr.job_title_id,0) as JobTitleID,
               COALESCE(job.JobTitle,'') as JobTitle,
      
-              COALESCE(usr.salary_type,0) as SalaryType
+              COALESCE(usr.salary_type,0) as SalaryType,
+              COALESCE(paytrnemp.NetPay,0) as NetPay
           ");
+
+          $query->where('paytrn.PayrollPeriodID',$PayrollPeriodID)->where('paytrn.Status','Approved');
 
            if($FilterType!='' && $FilterType=='Site' && !empty($BranchSiteID)){
               $query->whereIn('usr.company_branch_site_id',$BranchSiteID);
@@ -4991,6 +4997,21 @@ public function getEmployeeMetrobankReport($param){
         $query->orderBy("usr.last_name","ASC");
         $query->orderBy("usr.first_name","ASC");
         $query->orderBy("usr.middle_name","ASC");
+
+        if($SearchText != ''){
+            $arSearchText = explode(" ",$SearchText);
+            if(count($arSearchText) > 0){
+                for($x=0; $x< count($arSearchText); $x++) {
+                    $query->whereraw(
+                        "CONCAT_WS(' ',
+                          COALESCE(usr.shortid,''),
+                          COALESCE(usr.first_name,''),
+                          COALESCE(usr.middle_name,''),
+                          COALESCE(usr.last_name,'')
+                        ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
+                }
+            }
+        }
 
         // get total before pagination
         $totalRecords = (clone $query)->count();

@@ -182,7 +182,7 @@ nav > div a.nav-item.nav-link:focus
                                                     <div class="input-group">
                                                          <input id="PageBatchNo" type="hidden" value="1">
 
-                                                    {{-- <div class="col-md-2">
+                                                    <div class="col-md-2">
                                                         <label for="SearchPayrollPeriodCode">Payroll Period: </label>
                                                              <select id="SearchPayrollPeriodCode" class="form-control">
                                                               <!--   <option value="">Please Select</option> -->
@@ -190,7 +190,7 @@ nav > div a.nav-item.nav-link:focus
                                                                 <option value="{{ $prdrow->ID }}" {{ ($prdrow->ID == Session('ADMIN_PAYROLL_PERIOD_SCHED_ID') ? 'selected' : '' ) }}>{{ $prdrow->Code.' : '.$prdrow->StartDateFormat.' - '.$prdrow->EndDateFormat }}</option>
                                                                 @endforeach
                                                             </select>        
-                                                      </div>          --}}
+                                                      </div>         
    
                                                         <div class="col-md-2">
                                                             <fieldset class="form-group">
@@ -292,9 +292,11 @@ nav > div a.nav-item.nav-link:focus
                                                 <thead>
                                                         <th></th>
                                                         <th style="min-width: 110px;">EMPLOYEE ID</th>
-                                                        <th style="min-width: 130px;">EMPLOYEE NAME</th>
-                                                        <th style="min-width: 130px;">TEAM LEADER</th>
+                                                        <th style="min-width: 130px;">LAST NAME</th>
+                                                        <th style="min-width: 130px;">FIRST NAME</th>
+                                                        <th style="min-width: 130px;">MIDDLE NAME</th>
                                                         <th style="min-width: 130px;">ACCOUNT NUMBER</th>
+                                                        <th style="min-width: 130px;">AMOUNT</th>
                                                    </thead>
                                                   <tbody>
                                                 </tbody>
@@ -501,16 +503,20 @@ nav > div a.nav-item.nav-link:focus
             tdID = vData.EmployeeID;
    
             tdEmployeeNo = "<span class='font-normal'>" + vData.EmployeeNo + "</span>";
-            tdEmployeeName = "<span class='font-normal'>" + vData.FullName + "</span>";
-            tdTeamLeader = "<span class='font-normal'>" + vData.TeamLeader + "</span>";
+            tdLastName = "<span class='font-normal'>" + vData.LastName + "</span>";
+            tdFirstName = "<span class='font-normal'>" + vData.FirstName + "</span>";
+            tdMiddleName = "<span class='font-normal'>" + vData.MiddleName + "</span>";
+            tdNetPay = "<span class='font-normal'>" + vData.NetPay + "</span>";
             tdBank = "<span class='font-normal'>" + vData.Bank + "</span>";
 
             tblList.row.add([
                 tdID,
                 tdEmployeeNo,
-                tdEmployeeName,
-                tdTeamLeader,
-                tdBank
+                tdLastName,
+                tdFirstName,
+                tdMiddleName,
+                tdBank,
+                tdNetPay
             ]).draw();  
         }
 
@@ -659,8 +665,9 @@ nav > div a.nav-item.nav-link:focus
           // Excel Headers
           var xlsHeader = [
                             "{{ strtoupper('Employee No.') }}",
-                            "{{ strtoupper('Employee Name') }}",
-                            "{{ strtoupper('Team Leader') }}",
+                            "{{ strtoupper('Employee Last name') }}",
+                            "{{ strtoupper('Employee First name') }}",
+                            "{{ strtoupper('Employee Middle name') }}",
                             "{{ strtoupper('Account Number') }}",
                             "{{ strtoupper('Amount') }}",
                           ];
@@ -676,10 +683,11 @@ nav > div a.nav-item.nav-link:focus
                 $.each(value, function(ind, val) {
                 if(
                     ind == "EmployeeNo" ||
-                    ind == "FullName" ||
-                    ind == "TeamLeader" ||
-                    ind == "Status" ||
-                    ind == "NetPay"
+                    ind == "LastName" ||
+                    ind == "FirstName" ||
+                    ind == "MiddleName" ||
+                    ind == "NetPay" ||
+                    ind == "Bank"
                     ){
 
                     innerRowData.push(val);

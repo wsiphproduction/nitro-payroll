@@ -1252,7 +1252,7 @@ public function generatePayrollRegisterApprovedListExcel($param){
                       - FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)) = 0.01
                   THEN FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2))
                   ELSE ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
-              END AS Days
+              END AS Days,
 
              paytrnemp.BasicSalary as BasicPay,
 
@@ -1444,7 +1444,7 @@ public function generatePayrollRegisterPendingListExcel($param){
                       - FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)) = 0.01
                   THEN FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2))
                   ELSE ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
-              END AS Days
+              END AS Days,
 
              paytrnemp.BasicSalary as BasicPay,
 

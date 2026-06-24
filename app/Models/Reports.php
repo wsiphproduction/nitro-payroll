@@ -2770,7 +2770,7 @@ public function getPayrollRegisterApprovedReport($param){
                       - FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)) = 0.01
                   THEN FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2))
                   ELSE ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
-              END AS Days
+              END AS Days,
 
               COALESCE(paytrnemp.BasicSalary,0) as BasicPay,
 
@@ -3142,7 +3142,7 @@ public function getPayrollRegisterPendingReport($param){
                       - FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)) = 0.01
                   THEN FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2))
                   ELSE ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
-              END AS Days
+              END AS Days,
 
              COALESCE(paytrnemp.BasicSalary,0) as BasicPay,
 

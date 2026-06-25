@@ -19,7 +19,7 @@
 
 
     <style type="text/css">
-  
+
 @media print {
     .payslip {
         height: 32vh;
@@ -37,6 +37,18 @@
   .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
     padding: 0px;
     }
+
+    table{
+            table-layout:fixed;
+        }
+
+        tr{
+            height:18px;
+        }
+
+        td{
+            vertical-align:top;
+        }
 
     .table th, .table td{
       border-top: 0px;
@@ -293,23 +305,24 @@
 
 
     <div class="col-md-12 payslip">
-        <table class="table" style='width:100%;'>
+        <table class="table" style='width:816px;'>
             <tr style="vertical-align: top;">
-                <td style="width: 70%; text-align: left;">
+                <td style="width: 571.2px; text-align: left;">
                     <div class="col-md-12" style="padding: 0px; margin:0px;">
                         <span style="font-size:15px; font-weight:bold;">Nitro Pacific Rockworks, Inc. </span>
                     </div>
                 </td>
                 <td style='width:0%;'></td>
-                <td style="width: 30%; text-align: left; padding-left:10px; ">
+                <td style="width: 244.8px; text-align: left; padding-left:10px; ">
                     <div class="col-md-12" style="padding: 0px; margin:0px;">
                         <span style="font-size:15px; font-weight:bold;">Nitro Pacific Rockworks, Inc. </span>
                     </div>
                 </td>
             </tr>
             <tr style="vertical-align: top;">
-                <td style="width: 70%; text-align: left;">
-                    <table class="table" style='width:100%;'>
+                <td style="width: 571.2px; text-align: left;">
+                    <table class="table"
+       style="width:100%;table-layout:fixed;">
                         <tr>
                             <td style='width:50%;white-space: nowrap'>
                                 <span style="font-size:12px;">EMP CODE: {{$EmployeePayrollDetails->EmployeeNo}} </span> <br>
@@ -326,7 +339,7 @@
                     </table>                    
                 </td>
                 <td style='width:0%;'></td>
-                <td style="width: 30%; text-align: left; padding-left:10px; white-space: nowrap;">
+                <td style="width: 244.8px; text-align: left; padding-left:10px; white-space: nowrap;">
                     <div>
                         <span style="font-size:12px;"> EMP CODE: {{$EmployeePayrollDetails->EmployeeNo}} </span> <br>
                         <span style="font-size:12px;">POSITION: {{$EmployeePayrollDetails->JobTitle}} ({{ $EmployeePayrollDetails->SalaryType == '1' ? 'DAILY RATE' : 'MONTHLY RATE' }})</span><br>
@@ -338,8 +351,9 @@
                 </td>
             </tr>
             <tr>
-                <td style="width: 70%; text-align: left;">
-                    <table class="table" style='width:100%;'>
+                <td style="width: 571.2px; text-align: left;">
+                    <table class="table"
+       style="width:100%;table-layout:fixed;">
                         <tr>
                             <td style="width: 50%; font-size:12px; border: 2px solid black; padding-left: 10px; padding-right: 10px;">
                                 <span style="float:left;">ACTUAL DAYS</span> 
@@ -353,15 +367,17 @@
                     </table>
                 </td>
                 <td style='width:0%;'></td>
-                <td style="width: 30%;"><span style="font-size:12px;"><center>RECEIPT FOR PAY </center></span></td>
+                <td style="width: 244.8px;"><span style="font-size:12px;"><center>RECEIPT FOR PAY </center></span></td>
             </tr>
             <tr>
-                <td style="width: 70%; text-align: left;">
-                    <table class="table" style='width:100%;'>
+                <td style="width: 571.2px; text-align: left;">
+                    <table class="table"
+       style="width:100%;table-layout:fixed;">
                         <tr>
                             <td style="width: 50%; text-align: left; padding-left: 10px; padding-right: 10px; border: 1px solid black;">
                                 <br>
-                                <table class="table" style='width:100%;'>
+                                <table class="table"
+       style="width:100%;table-layout:fixed;">
                                     <tr>
                                         <td style="font-size:12px;">REGULAR</td>
                                         <td style="font-size:12px; text-align: right;">{{ ($dblTotalBasicSalary > 0 ? number_format($dblTotalBasicSalary,2) : "-") }}
@@ -451,8 +467,7 @@
                                     @endfor
 
                                     <tr style="
-                                            position: relative;
-                                            top: -12px;
+                              
                                         ">
                                         <td style="font-size:12px; font-weight: bold;">EARNINGS</td>
                                         <td style="font-size:12px; font-weight: bold;text-align:right;">
@@ -468,7 +483,8 @@
                             </td>
                             <td style="width: 50%; text-align: left; padding-left: 10px; padding-right: 10px; border: 1px solid black;">
                                 <span style="font-size:12px; font-weight:bold;">DEDUCTIONS</span>
-                                <table class="table" style='width:100%;'>
+                                <table class="table"
+       style="width:100%;table-layout:fixed;">
                                     <tr>
                                         <td style="font-size:12px;">WTAX</td>
                                         <td style="font-size:12px; text-align: right;">{{ ($dblTotalWTax > 0 ? number_format($dblTotalWTax,2) : "-") }}</td>
@@ -572,7 +588,7 @@
                     </table>
                 </td>
                 <td style='width:0%;'></td>
-                <td style="width: 30%; padding-left:10px; padding-right:10px; ">
+                <td style="width: 244.8px; padding-left:10px; padding-right:10px; ">
                     <span style="font-size:12px;">PAY DATE: {{$PayrollPeriodStartDate}} - {{$PayrollPeriodEndDate}} </span>
                     <br>
                     <span style="font-size:13px; margin-left: 5px;">I acknowlegde to have received the amount of <b>  {{number_format($EmployeePayrollDetails->NetPay,2)}} </b> and have no further claims for services rendered.</span>

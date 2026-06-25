@@ -108,23 +108,32 @@ class EmployeeLoan extends Model
 
     if($SearchText != ''){
 
-        $arSearchText = explode(" ",$SearchText);
-        if(count($arSearchText) > 0){
-            for($x=0; $x< count($arSearchText); $x++) {
-                $query->whereraw(
-                    "CONCAT_WS(' ',                        
-                        COALESCE(pelt.TransactionDate,''),
-                        COALESCE(emp.employee_number,''),
-                        COALESCE(emp.first_name,''),
-                        COALESCE(emp.last_name,''),
-                        COALESCE(emp.middle_name,''),
-                        COALESCE(plt.Code,''),
-                        COALESCE(plt.Name,''),
-                        COALESCE(pelt.VoucherNo,''),
-                        COALESCE(pelt.Remarks,''),
-                        COALESCE(pelt.Status,'')
-                    ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
+        if (strtolower($SearchText) == '1st half') {
+            $query->where("pelt.CutOffID", "=", 1);
+        } elseif (strtolower($SearchText) == '2nd half') {
+            $query->where("pelt.CutOffID", "=", 2);
+        } else {
+            $SearchText = $SearchText;
+
+            $arSearchText = explode(" ",$SearchText);
+            if(count($arSearchText) > 0){
+                for($x=0; $x< count($arSearchText); $x++) {
+                    $query->whereraw(
+                        "CONCAT_WS(' ',                        
+                            COALESCE(pelt.TransactionDate,''),
+                            COALESCE(emp.employee_number,''),
+                            COALESCE(emp.first_name,''),
+                            COALESCE(emp.last_name,''),
+                            COALESCE(emp.middle_name,''),
+                            COALESCE(plt.Code,''),
+                            COALESCE(plt.Name,''),
+                            COALESCE(pelt.VoucherNo,''),
+                            COALESCE(pelt.Remarks,''),
+                            COALESCE(pelt.Status,'')
+                        ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
+                }
             }
+
         }
     }
 

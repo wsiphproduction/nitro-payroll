@@ -429,15 +429,20 @@ table.alt-background tr.selected td {
                        </button>
                    
                      </div>
-                    <div class="row" style="float:right;">
-                       <button id="btnSaveRecord" type="button" class="btn btn-primary ml-1" onclick="SaveRecord()">
-                          <i class="bx bx-check d-block d-sm-none"></i>
-                          <span class="d-none d-sm-block"> <i class='bx bx-save mr-1' style="font-size: 21px;"></i> Save</span>
-                       </button>
-                       <button id="btnCancelRecord" type="button" class="btn btn-light-secondary" data-dismiss="modal" style="margin-left:10px;">
-                          <i class="bx bx-x d-block d-sm-none"></i>
-                           <span class="d-none d-sm-block">Cancel</span>
-                       </button>
+                     <div class="d-flex justify-content-between align-items-center mb-1">
+                        <div class="text-danger text-lg existing-loan-div invisible">
+                            This employee has an existing loan.
+                        </div>
+                        <div class="">
+                            <button id="btnSaveRecord" type="button" class="btn btn-primary ml-1" onclick="SaveRecord()">
+                                <i class="bx bx-check d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block"> <i class='bx bx-save mr-1' style="font-size: 21px;"></i> Save</span>
+                            </button>
+                            <button id="btnCancelRecord" type="button" class="btn btn-light-secondary" data-dismiss="modal" style="margin-left:10px;">
+                                <i class="bx bx-x d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block">Cancel</span>
+                            </button>
+                        </div>
                      </div>
                 </div>
           <!--       <div class="modal-footer">
@@ -3365,6 +3370,56 @@ $(document ).ready(function() {
         //Clear File Input
         fileInput.value = '';
     });
+
+    let employee_id = null;
+    let loan_type_id = null;
+
+    $("#EmployeeName").on("change", function() {
+        let employeeDiv = $(this).parent();
+        employee_id = employeeDiv.find("#EmployeeID").val();
+
+        if (employee_id) {
+            checkIfHasExistingLoan();
+        }
+    });
+
+    $("#LoanTypeName").on("change", function() {
+        let loanDiv = $(this).parent();
+        loan_type_id = loanDiv.find("#LoanTypeID").val();
+
+        if (loan_type_id) {
+            checkIfHasExistingLoan();
+        }
+    });
+
+    function checkIfHasExistingLoan() {
+        $('.existing-loan-div').addClass('invisible');
+        if (employee_id != null && loan_type_id != null) {
+            $.ajax({
+                type: "post",
+                url: "{{ route('do-check-if-has-existing-loan') }}",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    Platform: "{{ config('app.PLATFORM_ADMIN') }}",
+                    EmployeeId: employee_id,
+                    LoanTypeId: loan_type_id
+                },
+                dataType: "json",
+                success: function(data) {
+                    console.log(data)
+                    if (data.hasLoan) {
+                        $('.existing-loan-div').removeClass('invisible');
+                    }
+                },
+                error: function(data) {
+                    console.log(data.responseText);
+                },
+                beforeSend: function(vData) {
+                }
+            });
+        }
+    }
+
 </script>
 
 @endsection

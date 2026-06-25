@@ -16,7 +16,6 @@ use Session;
 use Hash;
 use View;
 use Image;
-use DB;
 use Excel;
 use PDF;
 
@@ -29,6 +28,7 @@ use App\Models\PayrollPeriod;
 use App\Models\Branch;
 use App\Models\BranchSite;
 use App\Models\PayrollSetting;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeLoanController extends Controller {
  
@@ -568,9 +568,19 @@ public function doRemoveDuplicateLoanTempTransaction(Request $request){
 
     return response()->json($RetVal);
   }
-  
 
+  public function doCheckIfHasExistingLoan(Request $request){
+    $EmployeeId = $request->EmployeeId;
+    $LoanTypeId = $request->LoanTypeId;
 
+    $loan = DB::table('payroll_employee_loan_transaction')->where('EmployeeID', $EmployeeId)->where('LoanTypeID', $LoanTypeId)->first();
+
+    if ($loan) {
+      return response()->json(['message' => 'This employee has an existing loan. Do you want to continue anyway?', 'loan' => $loan, 'hasLoan' => true]);
+    }
+
+    return response()->json(['message' => 'This employee does not have an existing loan.', 'hasLoan' => false]);
+  }
 }
 
 

@@ -550,6 +550,12 @@ Route::post('get-dtr-temp-transaction-upload-count',[
 ]);
 
 //EMPLOYEE LOAN TRANSACTION ===================================================
+Route::post('admin-employee-check-if-has-existing-loan',[
+    'uses'=>'EmployeeLoanController@doCheckIfHasExistingLoan',
+    'as'=> 'do-check-if-has-existing-loan'
+]);
+
+
 Route::get('admin-employee-loan-transaction',[
     'uses'=>'EmployeeLoanController@showAdminLoanTransaction',
     'as'=> 'admin-employee-loan-transaction'

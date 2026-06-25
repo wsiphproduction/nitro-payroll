@@ -517,6 +517,13 @@ body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation l
                             </a>
                         </li>
 
+                        <li>
+                            <a href="{{URL::route('admin-loan-report')}}" style="{{$Page=='Loan Report' ? 'background-color:#fff;' : 'background-color:#f2f4f3;'}}">
+                                 <i class="menu-livicon" data-icon="print-doc"></i>
+                                <span class="menu-item" data-i18n="Loan Report" style="{{$Page=='Loan Report' ? 'color:#f68c1f;font-size:14px;' : 'color:#8494a7;font-size:14px'}}"> Loan Report </span>
+                            </a>
+                        </li>
+
                         <a href="javascript:void(0);" style="color: #fff;"></a>
                     </ul>
                 </li>

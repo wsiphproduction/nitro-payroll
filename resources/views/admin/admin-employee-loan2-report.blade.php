@@ -167,19 +167,6 @@ table.alt-background tr.selected td {
                                                         <button id="btnSearch" type="button" class="btn btn-icon btn-outline-primary mr-1 mb-1 disabled_border" tooltip="Search Here.." tooltip-position="top">
                                                             <i class="bx bx-search"></i>
                                                         </button>
-                                                        
-                                                      @if(Session::get('IS_SUPER_ADMIN') || $Allow_Add_Create_Import_Upload==1)
-                                                        <button type="button" class="btn btn-icon btn-outline-primary mr-1 mb-1" onclick="NewRecord()" tooltip="Create New" tooltip-position="top">
-                                                            <i class="bx bx-plus"></i> New
-                                                        </button>
-                                                       @endif    
-
-                                                       @if(Session::get('IS_SUPER_ADMIN') || $Allow_Add_Create_Import_Upload==1)
-                                                         <button type="button" class="btn btn-icon btn-outline-primary mr-1 mb-1" onclick="UploadExcelRecord()" tooltip="Upload Loan Excel" tooltip-position="top">
-                                                           <i class="bx bx-upload"></i> Upload Loan Excel
-                                                        </button>
-
-                                                     @endif 
 
                                                     </div>
                                                 </fieldset>

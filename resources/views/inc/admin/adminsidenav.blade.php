@@ -395,7 +395,7 @@ body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation l
          @if($Page=='Employee Payslip Report' || $Page=='Payroll Journal Report' || $Page=='Payroll Register Report' || $Page=='SSS Contribution Report' ||
                 $Page=='HDMF Contribution Report' || $Page=='SSS Contribution Report' || $Page=='PHIC Contribution Report' || $Page=='Employee DTR Report'  ||
                 $Page=='Employee Loan Report' || $Page=='Employee Other Deduction Report' || $Page=='Raw Data Report' || $Page=='Employee Income Taxable Report' || 
-                $Page=='Employee Income Non Taxable Report' 
+                $Page=='Employee Income Non Taxable Report'  || $Page=='Employee Metrobank Report' || $Page == 'Loan Report'
                 )
               @php($HasSub='has-sub open')
           @endif

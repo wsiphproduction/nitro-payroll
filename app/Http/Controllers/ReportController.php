@@ -2771,7 +2771,7 @@ public function showAdminEmployeeLoanReport(Request $request){
     return Redirect::route('admin-logout');
   }
 
-  $data['Page'] = 'Employee Loan';
+  $data['Page'] = 'Loan Report';
   $data = $this->SetAdminInitialData($data);
 
   $param["SearchText"] = "";  

@@ -434,7 +434,7 @@ table.alt-background tr.selected td {
                             This employee has an existing loan.
                         </div>
                         <div class="">
-                            <button id="btnSaveRecord" type="button" class="btn btn-primary ml-1" onclick="SaveRecord()">
+                            <button id="btnSaveRecord" type="button" class="btn btn-primary ml-1" onclick="presave()">
                                 <i class="bx bx-check d-block d-sm-none"></i>
                                 <span class="d-none d-sm-block"> <i class='bx bx-save mr-1' style="font-size: 21px;"></i> Save</span>
                             </button>
@@ -2366,6 +2366,26 @@ table.alt-background tr.selected td {
         }
     }
 
+    let hasLoan = false;
+    let loanConfirmed = false;
+
+    function presave() {
+
+        if (hasLoan && !loanConfirmed) {
+            const userConfirmed = confirm(
+                "This employee has an existing loan. Do you want to continue anyway?"
+            );
+
+            if (!userConfirmed) {
+                return;
+            }
+
+            loanConfirmed = true;
+        }
+
+        SaveRecord();
+    }
+
     function SaveRecord(){
 
         vLoanTable=$("#LoanTable").val();
@@ -3375,6 +3395,7 @@ $(document ).ready(function() {
     let loan_type_id = null;
 
     $("#EmployeeName").on("change", function() {
+        loanConfirmed = false;
         let employeeDiv = $(this).parent();
         employee_id = employeeDiv.find("#EmployeeID").val();
 
@@ -3384,6 +3405,7 @@ $(document ).ready(function() {
     });
 
     $("#LoanTypeName").on("change", function() {
+        loanConfirmed = false;
         let loanDiv = $(this).parent();
         loan_type_id = loanDiv.find("#LoanTypeID").val();
 
@@ -3406,13 +3428,14 @@ $(document ).ready(function() {
                 },
                 dataType: "json",
                 success: function(data) {
-                    console.log(data)
+                    hasLoan = data.hasLoan;
                     if (data.hasLoan) {
                         $('.existing-loan-div').removeClass('invisible');
                     }
                 },
                 error: function(data) {
                     console.log(data.responseText);
+                    hasLoan = false;
                 },
                 beforeSend: function(vData) {
                 }

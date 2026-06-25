@@ -581,6 +581,56 @@ public function doRemoveDuplicateLoanTempTransaction(Request $request){
 
     return response()->json(['message' => 'This employee does not have an existing loan.', 'hasLoan' => false]);
   }
+
+public function doCheckIfHasExistingLoanExcel(Request $request)
+{
+    if (!$request->hasFile('ExcelFile')) {
+        return response()->json([
+            'success' => false,
+            'message' => 'No file uploaded.'
+        ]);
+    }
+
+    $rows = array_map('str_getcsv', file($request->file('ExcelFile')->getRealPath()));
+
+    $header = explode("\t", trim($rows[0][0]));
+
+    $employeeIndex = array_search('EmployeeNo', $header);
+    $loanTypeIndex = array_search('LoanTypeCode', $header);
+
+    $existingLoans = [];
+
+    for ($i = 1; $i < count($rows); $i++) {
+
+        $columns = explode("\t", $rows[$i][0]);
+
+        if (trim($columns[0]) == 'END') {
+            break;
+        }
+
+        $employeeNo = trim($columns[$employeeIndex]);
+        $loanTypeCode = trim($columns[$loanTypeIndex]);
+
+        $loan = DB::table('payroll_employee_loan_transaction')
+            ->where('EmployeeNumber', $employeeNo)
+            ->where('LoanTypeCode', $loanTypeCode)
+            ->first();
+
+        if ($loan) {
+            $existingLoans[] = [
+                'EmployeeNo' => $employeeNo,
+                'LoanTypeCode' => $loanTypeCode
+            ];
+        }
+    }
+
+    return response()->json([
+        'success' => true,
+        'hasLoan' => count($existingLoans) > 0,
+        'existingLoans' => $existingLoans
+    ]);
+}
+
 }
 
 

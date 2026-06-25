@@ -555,6 +555,10 @@ Route::post('admin-employee-check-if-has-existing-loan',[
     'as'=> 'do-check-if-has-existing-loan'
 ]);
 
+Route::post('admin-employee-check-if-has-existing-loan-excel',[
+    'uses'=>'EmployeeLoanController@doCheckIfHasExistingLoanExcel',
+    'as'=> 'do-check-if-has-existing-loan-excel'
+]);
 
 Route::get('admin-employee-loan-transaction',[
     'uses'=>'EmployeeLoanController@showAdminLoanTransaction',

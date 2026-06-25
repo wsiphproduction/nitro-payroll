@@ -481,9 +481,9 @@ table.alt-background tr.selected td {
                         <span class="d-none d-sm-block">Download Template Format</span>
                     </a>
                     
-                    <button id="btnUploadTSSCSV" type="button" class="btn btn-primary ml-1">
+                    <button id="btnUploadTSSCSV" type="button" class="btn btn-primary ml-1" readonly>
                         <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Upload CSV </span>
+                        <span class="d-none d-sm-block upload-csv-text">Upload CSV </span>
                     </button>
                
                 </div>
@@ -3199,6 +3199,9 @@ $(document ).ready(function() {
   <!--      //NEW STYLE CVS GET DATA AND CHUNK -->
   <script>
 
+    let loanValidationConfirmed = false;
+    let selectedFile = null;
+
     document.getElementById('btnUploadTSSCSV').addEventListener('click', function() {
 
         let  i = 1;
@@ -3443,6 +3446,63 @@ $(document ).ready(function() {
         }
     }
 
+    $("#ExcelFile").on("change", function () {
+        selectedFile = this.files[0];
+        loanValidationConfirmed = false;
+
+        if (!selectedFile) {
+            return;
+        }
+
+        $("#btnUploadTSSCSV").prop("disabled", true);
+        $("#btnUploadTSSCSV").find(".upload-csv-text").text("Validating...");
+
+        checkIfHasExistingLoanExcel(selectedFile);
+    });
+
+    function checkIfHasExistingLoanExcel(file) {
+
+        let formData = new FormData();
+
+        formData.append("_token", "{{ csrf_token() }}");
+        formData.append("Platform", "{{ config('app.PLATFORM_ADMIN') }}");
+        formData.append("ExcelFile", file);
+
+        $.ajax({
+            type: "POST",
+            url: "{{ route('do-check-if-has-existing-loan-excel') }}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: "json",
+
+            success: function(data) {
+
+                if (data.hasLoan) {
+
+                    let employees = data.existingLoans
+                        .map(x => x.EmployeeNo)
+                        .join(", ");
+
+                    let ok = confirm(
+                        "The following employees already have an existing loan:\n\n" +
+                        employees +
+                        "\n\nContinue uploading?"
+                    );
+
+                    if (ok) {
+                        loanValidationConfirmed = true;
+                    } else {
+                        $("#ExcelFile").val("");
+                        selectedFile = null;
+                    }
+                }
+
+                $("#btnUploadTSSCSV").prop("disabled", false);
+                $("#btnUploadTSSCSV").find(".upload-csv-text").text("Upload CSV");
+            }
+        });
+    }
 </script>
 
 @endsection

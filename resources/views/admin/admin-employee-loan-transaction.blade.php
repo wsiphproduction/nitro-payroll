@@ -481,7 +481,7 @@ table.alt-background tr.selected td {
                         <span class="d-none d-sm-block">Download Template Format</span>
                     </a>
                     
-                    <button id="btnUploadTSSCSV" type="button" class="btn btn-primary ml-1" readonly>
+                    <button id="btnUploadTSSCSV" type="button" class="btn btn-primary ml-1">
                         <i class="bx bx-check d-block d-sm-none"></i>
                         <span class="d-none d-sm-block upload-csv-text">Upload CSV </span>
                     </button>

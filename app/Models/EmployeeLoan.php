@@ -874,6 +874,9 @@ public function doSaveLoanTempTransactionPerBatch($data){
         $LoanAmnt = $LoanTempDataItems[$x]["LoanAmnt"];
         $TotalLoanAmnt = $LoanTempDataItems[$x]["TotalLoanAmnt"];
         $MonthsToPay = $LoanTempDataItems[$x]["MonthsToPay"];
+        if ($MonthsToPay == 'NaN') {
+            $MonthsToPay = 0;
+        }
 
         $DateStartPayment = $LoanTempDataItems[$x]["DateStartPayment"];
         $DateStartPayment=date('Y-m-d',strtotime($DateStartPayment)); 

@@ -135,6 +135,7 @@
 
         @php($dblTotalOvertime=0)
         @php($dblTotalOvertimeQty=0)
+        @php($dblTotalHoliday=0)
 
         @php($dblTotalLeave=0)
         @php($dblTotalLeaveQty=0)
@@ -190,9 +191,12 @@
               @php($dblTotalEarning = $dblTotalEarning + $list->Total)
             @endif
 
+           @if($list->ReferenceType=='Overtime' && ($list->Reference == 'LH' || $list->Reference == 'SH'))
+              @php($dblTotalHoliday = $dblTotalHoliday + $list->Total)
+            @endif
 
            @if($list->ReferenceType=='Overtime')
-              @php($dblTotalOvertime = $dblTotalOvertime + $list->Total)
+              @php($dblTotalOvertime = ($dblTotalOvertime + $list->Total) - $dblTotalHoliday)
               @php($dblTotalOvertimeQty= $dblTotalOvertimeQty + $list->Qty)
 
               @php($dblTotalEarning = $dblTotalEarning + $list->Total)
@@ -393,6 +397,10 @@
                                     <tr>
                                         <td style="font-size:12px;">OVERTIME</td>
                                         <td style="font-size:12px; text-align: right;">{{ ($dblTotalOvertime > 0 ? number_format($dblTotalOvertime,2) : "-") }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size:12px;">HOLIDAY</td>
+                                        <td style="font-size:12px; text-align: right;">{{ ($dblTotalHoliday > 0 ? number_format($dblTotalHoliday,2) : "-") }}</td>
                                     </tr>
                                     <tr>
                                         <td style="font-size:12px;">NIGHT DIFF</td>

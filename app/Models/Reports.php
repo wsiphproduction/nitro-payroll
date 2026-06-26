@@ -284,6 +284,268 @@ COALESCE(CONVERT(varchar, rate.DateTimeUploaded, 120),'') as RateUploaded,
 
   }
 
+ public function getPayrollTransactionEmployeeListByFilterAll($param){
+
+    $PayrollPeriodID = $param['PayrollPeriodID'];
+    $Status = $param['Status'];
+    $SearchText = $param['SearchText'];
+    $Limit = $param['Limit'];
+    $PageNo = $param['PageNo'];
+
+    $FilterType = $param["FilterType"];
+    $BranchID=$param["BranchID"];
+    $BranchSiteID=$param["BranchSiteID"];
+    $DivisionID=$param["DivisionID"];
+    $DepartmentID=$param["DepartmentID"];
+    $SectionID=$param["SectionID"];
+    $JobTypeID=$param["JobTypeID"];
+    $EmployeeID=$param["EmployeeID"];
+
+    $pending = DB::table('payroll_transaction_employee_temp as paytrnemp')
+          ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
+          ->join('users as usr', 'usr.id', '=', 'paytrnemp.EmployeeID')
+          ->leftjoin('payroll_branch as brn', 'brn.ID', '=', 'paytrnemp.BranchID')
+          ->leftjoin('payroll_branch_site as brnchsite', 'brnchsite.ID', '=', 'usr.company_branch_site_id')
+          ->leftjoin('payroll_department as dept', 'dept.ID', '=', 'usr.department_id')
+          ->leftjoin('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
+          ->leftjoin('payroll_section as sec', 'sec.id', '=', 'usr.section_id')  
+          ->leftjoin('payroll_job_type as job', 'job.ID', '=', 'usr.job_title_id')
+          ->leftJoin(DB::raw("
+              (
+                  SELECT r1.*
+                  FROM payroll_employee_rates r1
+                  INNER JOIN (
+                      SELECT EmployeeID,
+                            MAX(DateTimeUploaded) AS MaxDateTimeUploaded
+                      FROM payroll_employee_rates
+                      GROUP BY EmployeeID
+                  ) r2
+                      ON r1.EmployeeID = r2.EmployeeID
+                    AND r1.DateTimeUploaded = r2.MaxDateTimeUploaded
+              ) rate
+          "), function ($join) {
+              $join->on('rate.EmployeeID', '=', 'paytrnemp.EmployeeID');
+          })
+          ->selectraw("
+
+              COALESCE(paytrnemp.ID,0) as ID,
+
+              COALESCE(paytrnemp.PayrollTransactionID,0) as PayrollTransactionID,
+              COALESCE(paytrn.TransNo,'') as TransNo,
+              FORMAT(paytrn.TransDateTime, 'MM/dd/yyyy hh:mm:dd t') as TransDateTime,
+              COALESCE(paytrn.Status,'') as Status,
+
+              COALESCE(paytrn.PayrollPeriodID,0) as PayrollPeriodID,
+     
+              COALESCE(paytrnemp.EmployeeID,0) as EmployeeID,
+              COALESCE(usr.shortid,'') as EmployeeNo,
+              COALESCE(usr.first_name,'') as FirstName,
+              COALESCE(usr.middle_name,'') as MiddleName,
+              COALESCE(usr.last_name,'') as LastName,
+              CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' , COALESCE(usr.middle_name,'')) as FullName,
+
+              iif(COALESCE(usr.status,1) = 1, 'Active', 'Inactive') as EmployeeStatus,
+              COALESCE(usr.contact_number,'') as ContactNumber,
+              COALESCE(usr.email,'') as EmailAddress,
+
+              COALESCE(paytrnemp.BranchID,0) as BranchID,
+              COALESCE(brn.BranchName,'') as BranchName,
+
+              COALESCE(usr.company_branch_site_id,0) as SiteID,
+              COALESCE(brnchsite.SiteName,'') as SiteName,
+
+              COALESCE(dept.DivisionID,0) as DivisionID,
+              COALESCE(div.Division,'') as Division,
+
+              COALESCE(usr.department_id,0) as DepartmentID,
+              COALESCE(dept.Department,'') as Department,
+
+              COALESCE(sec.ID,0) as SectionID,
+              COALESCE(sec.Section,'') as Section,
+
+              COALESCE(usr.job_title_id,0) as JobTitleID,
+              COALESCE(job.JobTitle,'') as JobTitle,
+
+              COALESCE(usr.salary_type,0) as SalaryType,
+              COALESCE(paytrnemp.MonthlyRate,0) as MonthlyRate,
+COALESCE(rate.ID,0) as RateID,
+COALESCE(rate.DailyRate,0) as DailyRate,
+COALESCE(CONVERT(varchar, rate.DateTimeUploaded, 120),'') as RateUploaded,
+              COALESCE(paytrnemp.HourlyRate,0) as HourlyRate,
+              COALESCE(paytrnemp.BasicSalary,0) as BasicSalary,
+              COALESCE(paytrnemp.TotalOtherTaxableIncome,0) as TotalOtherTaxableIncome,
+              COALESCE(paytrnemp.TotalNonTaxableIncome,0) as TotalNonTaxableIncome,
+              COALESCE(paytrnemp.TotalEEInsurancePremiums,0) as TotalEEInsurancePremiums,
+              COALESCE(paytrnemp.TotalOtherDeductions,0) as TotalOtherDeductions,
+              COALESCE(paytrnemp.NetPay,0) as NetPay,
+              COALESCE(paytrnemp.MinTakeHomePay,0) as MinTakeHomePay
+          ");
+
+          $pending->where('paytrn.PayrollPeriodID',$PayrollPeriodID);
+
+           if($FilterType!='' && $FilterType=='Location' && $BranchID>0){
+             $pending->where('paytrnemp.BranchID',$BranchID);
+           }else if($FilterType!='' && $FilterType=='Site' && $BranchSiteID>0){
+             $pending->where('usr.company_branch_site_id',$BranchSiteID);
+           }else if($FilterType!='' && $FilterType=='Division' && $DivisionID>0){
+             $pending->where('dept.DivisionID',$DivisionID);
+           }else if($FilterType!='' && $FilterType=='Department' && $DepartmentID>0){
+             $pending->where('usr.department_id',$DepartmentID);
+           }else if($FilterType!='' && $FilterType=='Section' && count($SectionID)>0){
+              $pending->whereIn('sec.ID',$SectionID);
+           }else if($FilterType!='' && $FilterType=='Job Type' && $JobTypeID>0){
+             $pending->where('usr.job_title_id',$JobTypeID);
+           }else if($FilterType!='' && $FilterType=='Employee' && $EmployeeID>0){
+             $pending->where('paytrnemp.EmployeeID',$EmployeeID);
+           }
+            
+        if($SearchText != ''){
+            $arSearchText = explode(" ",$SearchText);
+            if(count($arSearchText) > 0){
+                for($x=0; $x< count($arSearchText); $x++) {
+                    $pending->whereraw(
+                        "CONCAT_WS(' ',
+                          COALESCE(usr.shortid,''),
+                          COALESCE(usr.first_name,''),
+                          COALESCE(usr.middle_name,''),
+                          COALESCE(usr.last_name,'')
+                        ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
+                }
+            }
+        }
+
+    $approved = DB::table('payroll_transaction_employee as paytrnemp')
+          ->join('payroll_transaction as paytrn', 'paytrn.ID', '=', 'paytrnemp.PayrollTransactionID')
+          ->join('users as usr', 'usr.id', '=', 'paytrnemp.EmployeeID')
+          ->leftJoin(DB::raw("
+              (
+                  SELECT r1.*
+                  FROM payroll_employee_rates r1
+                  INNER JOIN (
+                      SELECT EmployeeID,
+                            MAX(DateTimeUploaded) AS MaxDateTimeUploaded
+                      FROM payroll_employee_rates
+                      GROUP BY EmployeeID
+                  ) r2
+                      ON r1.EmployeeID = r2.EmployeeID
+                    AND r1.DateTimeUploaded = r2.MaxDateTimeUploaded
+              ) rate
+          "), function ($join) {
+              $join->on('rate.EmployeeID', '=', 'paytrnemp.EmployeeID');
+          })
+          ->leftjoin('payroll_branch as brn', 'brn.ID', '=', 'paytrnemp.BranchID')
+          ->leftjoin('payroll_branch_site as brnchsite', 'brnchsite.ID', '=', 'usr.company_branch_site_id')
+          ->leftjoin('payroll_department as dept', 'dept.ID', '=', 'usr.department_id')
+          ->leftjoin('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
+          ->leftjoin('payroll_section as sec', 'sec.id', '=', 'usr.section_id')  
+          ->leftjoin('payroll_job_type as job', 'job.ID', '=', 'usr.job_title_id')
+          ->selectraw("
+     
+              COALESCE(paytrnemp.ID,0) as ID,
+
+              COALESCE(paytrnemp.PayrollTransactionID,0) as PayrollTransactionID,
+              COALESCE(paytrn.TransNo,'') as TransNo,
+              FORMAT(paytrn.TransDateTime, 'MM/dd/yyyy hh:mm:dd t') as TransDateTime,
+              COALESCE(paytrn.Status,'') as Status,
+     
+              COALESCE(paytrn.PayrollPeriodID,0) as PayrollPeriodID,
+
+              COALESCE(paytrnemp.EmployeeID,0) as EmployeeID,
+              COALESCE(usr.shortid,'') as EmployeeNo,
+              COALESCE(usr.first_name,'') as FirstName,
+              COALESCE(usr.middle_name,'') as MiddleName,
+              COALESCE(usr.last_name,'') as LastName,
+              CONCAT(COALESCE(usr.last_name,''), ', ', COALESCE(usr.first_name,''), ' ' , COALESCE(usr.middle_name,'')) as FullName,
+              iif(COALESCE(usr.status,1) = 1, 'Active', 'Inactive') as EmployeeStatus,
+              COALESCE(usr.contact_number,'') as ContactNumber,
+              COALESCE(usr.email,'') as EmailAddress,
+
+              COALESCE(paytrnemp.BranchID,0) as BranchID,
+              COALESCE(brn.BranchName,'') as BranchName,
+
+              COALESCE(usr.company_branch_site_id,0) as SiteID,
+              COALESCE(brnchsite.SiteName,'') as SiteName,
+
+              COALESCE(dept.DivisionID,0) as DivisionID,
+              COALESCE(div.Division,'') as Division,
+
+              COALESCE(usr.department_id,0) as DepartmentID,
+              COALESCE(dept.Department,'') as Department,
+
+              COALESCE(sec.ID,0) as SectionID,
+              COALESCE(sec.Section,'') as Section,
+
+              COALESCE(usr.job_title_id,0) as JobTitleID,
+              COALESCE(job.JobTitle,'') as JobTitle,
+     
+              COALESCE(usr.salary_type,0) as SalaryType,
+              COALESCE(paytrnemp.MonthlyRate,0) as MonthlyRate,
+              COALESCE(rate.ID,0) as RateID,
+              COALESCE(rate.DailyRate,0) as DailyRate,
+              COALESCE(CONVERT(varchar, rate.DateTimeUploaded, 120),'') as RateUploaded,
+              COALESCE(paytrnemp.HourlyRate,0) as HourlyRate,
+              COALESCE(paytrnemp.BasicSalary,0) as BasicSalary,
+              COALESCE(paytrnemp.TotalOtherTaxableIncome,0) as TotalOtherTaxableIncome,
+              COALESCE(paytrnemp.TotalNonTaxableIncome,0) as TotalNonTaxableIncome,
+              COALESCE(paytrnemp.TotalEEInsurancePremiums,0) as TotalEEInsurancePremiums,
+              COALESCE(paytrnemp.TotalOtherDeductions,0) as TotalOtherDeductions,
+              COALESCE(paytrnemp.NetPay,0) as NetPay,
+              COALESCE(paytrnemp.MinTakeHomePay,0) as MinTakeHomePay
+          ");
+
+         $approved->where('paytrn.PayrollPeriodID',$PayrollPeriodID);
+
+           if($FilterType!='' && $FilterType=='Location'){
+             $approved->where('paytrnemp.BranchID',$BranchID);
+           }else if($FilterType!='' && $FilterType=='Site' && $BranchSiteID>0){
+             $pending->where('usr.company_branch_site_id',$BranchSiteID);
+           }else if($FilterType!='' && $FilterType=='Division'){
+             $approved->where('dept.DivisionID',$DivisionID);
+           }else if($FilterType!='' && $FilterType=='Department'){
+             $approved->where('usr.department_id',$DepartmentID);
+           }else if($FilterType!='' && $FilterType=='Section' && count($SectionID)>0){
+              $approved->whereIn('sec.ID',$SectionID);
+           }else if($FilterType!='' && $FilterType=='Job Type'){
+             $approved->where('usr.job_title_id',$JobTypeID);
+           }else if($FilterType!='' && $FilterType=='Employee'){
+             $approved->where('paytrnemp.EmployeeID',$EmployeeID);
+           }
+            
+
+    if($SearchText != ''){
+        $arSearchText = explode(" ",$SearchText);
+        if(count($arSearchText) > 0){
+            for($x=0; $x< count($arSearchText); $x++) {
+                $approved->whereraw(
+                    "CONCAT_WS(' ',
+                      COALESCE(usr.shortid,''),
+                      COALESCE(usr.last_name,''),
+                      COALESCE(usr.first_name,''),
+                      COALESCE(usr.middle_name,'')
+                    ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
+            }
+        }
+    }
+
+    $final = $approved->union($pending);
+
+    $query = $final->toSql();
+    $query_final = DB::table(DB::raw("($query) as a"))->mergeBindings($final);
+
+    // if($Limit > 0){
+    //   $query_final->limit($Limit);
+    //   $query_final->offset(($PageNo-1) * $Limit);
+    // }
+   
+    $query_final->orderBy("FullName","ASC");
+    
+    $list = $query_final->get();
+
+    return $list;
+
+  }
+
+
   // EMPLOYEE LOAN DEDUCTION WITH APPROVED/POSTED STATUS GET DATA
   public function getPayrollTransactionApprovedLoanDeduction($param){
 

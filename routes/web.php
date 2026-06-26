@@ -887,7 +887,7 @@ Route::post('get-admin-employee-payslip-list',[
 ]);
 
 Route::get('admin-employee-payslip-print-report',[
-    'uses'=>'ReportController@showAdminEmployeePayslipPrintReport',
+    'uses'=>'ReportController@showAdminEmployeePayslipPrintAllReport',
     'as'=> 'admin-employee-payslip-print-report'
 ]);
 

@@ -1851,8 +1851,125 @@ public function showAdminEmployeePayslipPrintReport(Request $request){
   $data["PayrollTransactionEmployeeList"]=$PayrollTransactionEmployeeList;
   $data["PayrollTransactionInfo"]=$PayrollTransaction->getPayrollTransactionInfo($data['PayrollTransactionID']);
 
-  // dd($data);
+  return View::make('admin/admin-employee-payslip-print-report')->with($data);
 
+}
+
+public function showAdminEmployeePayslipPrintAllReport(Request $request){
+
+  if(!$this->IsAdminLoggedIn()){
+    return Redirect::route('admin-logout');
+  }
+
+  $data['Page'] = 'Employee Payslip Print Report';
+  $data = $this->SetAdminInitialData($data);
+
+  $data["PayrollPeriodID"] = request("PayrollPeriodID");  
+  $data["SearchText"] = request("SearchText");  
+  $data["PageNo"] = request("PageNo");
+
+
+  $data["FilterType"] =  request("FilterType");
+  $data["BranchID"] =  request("BranchID");
+  $data["BranchSiteID"] =  request("BranchSiteID");
+  $data["DivisionID"] =  request("DivisionID");
+  $data["DepartmentID"] =  request("DepartmentID");
+  $data["SectionID"] =  request("SectionID");
+
+  if($data["SectionID"] != 0){
+    $data["SectionID"] = explode(",", $data["SectionID"]);
+  }
+
+  $data["JobTypeID"] =  request("JobTypeID");
+  $data["EmployeeID"] =  request("EmployeeID");
+  $data["Status"] =  request("Status");
+
+    if($data["FilterType"] == "Location"){
+      $data["BranchSiteID"] =  0;
+      $data["DivisionID"] =  0;
+      $data["DepartmentID"] = 0;
+      $data["SectionID"] = 0;
+      $data["JobTypeID"] = 0;
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Site"){
+      $data["BranchID"] =  0;
+      $data["DepartmentID"] = 0;
+      $data["SectionID"] = 0;
+      $data["JobTypeID"] = 0;
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Division"){
+      $data["BranchID"] =  0;
+      $data["BranchSiteID"] =  0;
+      $data["DepartmentID"] = 0;
+      $data["SectionID"] = 0;
+      $data["JobTypeID"] = 0;
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Department"){
+      $data["BranchID"] =  0;
+      $data["BranchSiteID"] =  0;
+      $data["DivisionID"] =  0;
+      $data["SectionID"] = 0;
+      $data["JobTypeID"] = 0;
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Section"){
+      $data["BranchID"] =  0;
+      $data["BranchSiteID"] =  0;
+      $data["DivisionID"] =  0;
+      $data["DepartmentID"] = 0;
+      $data["JobTypeID"] = 0;
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Job Type"){
+      $data["BranchID"] =  0;
+      $data["BranchSiteID"] =  0;
+      $data["DivisionID"] =  0;
+      $data["DepartmentID"] = 0;
+      $data["SectionID"] = 0;
+      $data["EmployeeID"] =  0;
+    }else if($data["FilterType"] == "Employee"){
+      $data["BranchID"] =  0;
+      $data["BranchSiteID"] =  0;
+      $data["DivisionID"] =  0;
+      $data["DepartmentID"] = 0;
+      $data["SectionID"] = 0;
+    }else{
+      $data["BranchID"] =  0;
+      $data["BranchSiteID"] =  0;
+      $data["DivisionID"] =  0;
+      $data["DepartmentID"] = 0;
+      $data["SectionID"] = 0;
+      $data["JobTypeID"] = 0;
+      $data["EmployeeID"] =  0;
+    }
+
+  $data['PrintingBatchNo']=request("PrintingBatchNo");  
+
+  $PayrollSetting = new PayrollSetting();
+  $data['CompanyInfo']=$PayrollSetting->getPayrollSettingInfo(config('app.DEFAULT_SYSTEM_SETTING'));
+
+  $Reports = new Reports();
+  $data['Reports']=$Reports; 
+
+  $PayrollTransaction = new PayrollTransaction();
+  $data['PayrollTransaction']=$PayrollTransaction; 
+
+  $EmployeeDTR = new EmployeeDTR();
+  $data['EmployeeDTR']=$EmployeeDTR; 
+
+  $data['SearchText']='';  
+  $data['Limit']=100;  
+  $data['PageNo']=$data['PrintingBatchNo'];
+
+  $PayrollTransactionEmployeeList = $Reports->getPayrollTransactionEmployeeListByFilterAll($data);
+
+  if(count($PayrollTransactionEmployeeList)>0){
+    foreach ($PayrollTransactionEmployeeList as $item) {
+      $data['PayrollTransactionID']= $item->PayrollTransactionID;
+    }
+  }
+  
+  $data["PayrollTransactionEmployeeList"]=$PayrollTransactionEmployeeList;
+  $data["PayrollTransactionInfo"]=$PayrollTransaction->getPayrollTransactionInfo($data['PayrollTransactionID']);
+  
   return View::make('admin/admin-employee-payslip-print-report')->with($data);
 
 }

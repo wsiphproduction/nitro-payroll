@@ -321,6 +321,8 @@
                         $("#total-record").text(total_rec);
                         $("#paging_button_id"+vPageNo).css("background", "#0069d9");
                         $("#paging_button_id"+vPageNo).css("color", "#fff");
+
+                        $("#PageBatchNo").val(vPageNo)
                      }   
                         LoadRecordList(data.EmployeePaySlipReport);
                     }else{

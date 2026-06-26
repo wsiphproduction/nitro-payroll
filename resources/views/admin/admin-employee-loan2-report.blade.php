@@ -160,6 +160,10 @@ table.alt-background tr.selected td {
                                                           <option disabled="disabled">[ By Payment ]</option>
                                                           <option value="Paid">Payment: Paid</option>
                                                           <option value="Balance">Payment: With Balance</option>
+                                                          <option disabled="disabled">[ By Loan Type ]</option>
+                                                          @foreach($LoanTypeList as $type)
+                                                          <option value="Type|{{ $type->ID }}">Type : {{ $type->Name }}</option>
+                                                          @endforeach
                                                         </select>
                                                   
                                                         <input type="text" class="form-control searchtext" placeholder="Search Here.." style="width: 39%;margin-left: 6px;">

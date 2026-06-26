@@ -2902,6 +2902,9 @@ public function showAdminEmployeeLoanReport(Request $request){
   $BranchSite = new BranchSite();
   $data["BranchSite"] = $BranchSite->getBranchSiteList($param);
 
+  $loanType = DB::table('payroll_loan_type')->where('Status','Active')->get();
+  $data["LoanTypeList"] = $loanType;
+
   return View::make('admin/admin-employee-loan2-report')->with($data);
 
 }

@@ -102,6 +102,8 @@ class EmployeeLoan extends Model
              $query->where("emp.company_branch_id",$arStatus[1]);  
             }else if($arStatus[0] == "Site"){
              $query->where("emp.company_branch_site_id",$arStatus[1]);  
+            }else if($arStatus[0] == "Type"){
+             $query->where("plt.ID",$arStatus[1]);  
             }
         }
     }

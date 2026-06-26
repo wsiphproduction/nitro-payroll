@@ -687,6 +687,8 @@
     $("#divEmployee").hide();
     $("#spnTypeSearch").hide();
 
+    $("#PageBatchNo").val(1)
+
     if($("#GenerateFilter").val() == "Location"){
         $("#divFilters").show();
         $("#GeneratePayrollFilterLabel").text("Location");

@@ -232,6 +232,50 @@ class SyncEmployeesJob implements ShouldQueue
 
             sqlsrv_query($conn_payroll, "SET IDENTITY_INSERT payroll_department OFF");
 
+
+            // Clear payroll positions first
+            sqlsrv_query($conn_payroll, "TRUNCATE TABLE positions");
+
+            sqlsrv_query($conn_payroll, "SET IDENTITY_INSERT positions ON");
+
+            $departments = sqlsrv_query($conn_hris, "
+                SELECT
+                    id,
+                    name,
+                    createdAt,
+                    updatedAt
+                FROM positions
+            ");
+
+            while ($pos = sqlsrv_fetch_array($departments, SQLSRV_FETCH_ASSOC)) {
+
+                $insertQry = "
+                    INSERT INTO positions
+                    (
+                        id,
+                        name,
+                        createdAt,
+                        updatedAt
+                    )
+                    VALUES
+                    (
+                        '".$pos['id']."',
+                        '".$pos['name']."',
+                        '".$pos['createdAt']."',
+                        '".$pos['updatedAt']."'
+                    )
+                ";
+
+                $exec = sqlsrv_query($conn_payroll, $insertQry);
+
+                if ($exec === false) {
+                    logger()->error('positions Insert Failed: '.print_r(sqlsrv_errors(), true));
+                }
+            }
+
+            sqlsrv_query($conn_payroll, "SET IDENTITY_INSERT positions OFF");
+
+
         } catch (\Throwable $e) {
             \Log::error('SyncEmployeesJob failed: ' . $e->getMessage());
             throw $e; // let queue mark as failed

@@ -1705,7 +1705,7 @@ nav > div a.nav-item.nav-link:focus
                     success: function(data){
 
                         if(data.Response =='Success'){
-                            if(vProcessNo < 17){
+                            if(vProcessNo < 21){
                                 doGeneratePayroll(vProcessNo + 1);
                             }else{
                                 $("#divLoader").hide();

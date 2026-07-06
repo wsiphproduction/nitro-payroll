@@ -254,15 +254,13 @@ class SyncEmployeesJob implements ShouldQueue
                     (
                         id,
                         name,
-                        createdAt,
-                        updatedAt
+                        createdAt
                     )
                     VALUES
                     (
                         '".$pos['id']."',
                         '".$pos['name']."',
-                        '".$pos['createdAt']."',
-                        '".$pos['updatedAt']."'
+                        '".$pos['createdAt']."'
                     )
                 ";
 

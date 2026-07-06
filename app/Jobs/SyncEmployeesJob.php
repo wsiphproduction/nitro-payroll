@@ -260,7 +260,7 @@ class SyncEmployeesJob implements ShouldQueue
                     (
                         '".$pos['id']."',
                         '".$pos['name']."',
-                        '".$pos['createdAt']."'
+                        '".$pos['createdAt']->format('Y-m-d H:i:s')."'
                     )
                 ";
 

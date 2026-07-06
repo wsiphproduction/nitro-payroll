@@ -238,7 +238,7 @@ class SyncEmployeesJob implements ShouldQueue
 
             sqlsrv_query($conn_payroll, "SET IDENTITY_INSERT positions ON");
 
-            $departments = sqlsrv_query($conn_hris, "
+            $positions = sqlsrv_query($conn_hris, "
                 SELECT
                     id,
                     name,
@@ -247,7 +247,7 @@ class SyncEmployeesJob implements ShouldQueue
                 FROM positions
             ");
 
-            while ($pos = sqlsrv_fetch_array($departments, SQLSRV_FETCH_ASSOC)) {
+            while ($pos = sqlsrv_fetch_array($positions, SQLSRV_FETCH_ASSOC)) {
 
                 $insertQry = "
                     INSERT INTO positions

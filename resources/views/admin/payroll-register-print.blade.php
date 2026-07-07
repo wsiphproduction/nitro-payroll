@@ -300,7 +300,7 @@ foreach($grand as $field => $total){
         @endphp
 
         <tr class="team-header">
-            <td colspan="{{ count($visibleColumns) + 3 }}">
+            <td colspan="{{ count($visibleColumns) + 5 }}">
                 TEAM LEADER : {{ $currentTeamLeader }}
             </td>
         </tr>
@@ -309,6 +309,8 @@ foreach($grand as $field => $total){
             <th>EMP NO</th>
             <th>EMPLOYEE NAME</th>
             <th>TEAM LEADER</th>
+            <th>POSITION</th>
+            <th>RATE</th>
             <th>DAYS</th>
             <th>BASIC PAY</th>
             @if(in_array('ECOLA',$visibleColumns))
@@ -420,6 +422,8 @@ foreach($grand as $field => $total){
         <td>{{ $row->EmployeeNo }}</td>
         <td>{{ $row->EmployeeName }}</td>
         <td>{{ $row->TeamLeader }}</td>
+        <td>{{ $row->Position }}</td>
+        <td>{{ $row->RateType == 1 ? $row->DailyRate : $row->MonthlyRate }}</td>
         <td class="num">{{ number_format($row->Days,2) }}</td>
         <td class="num">{{ number_format($row->BasicPay,2) }}</td>
 
@@ -661,7 +665,7 @@ foreach($grand as $field => $total){
 </tr>
 
 <tr class="grandtotal">
-    <td colspan="3">GRAND TOTAL</td>
+    <td colspan="5">GRAND TOTAL</td>
 
     <td class="num">{{ number_format($grand['Days'],2) }}</td>
     <td class="num">{{ number_format($grand['BasicPay'],2) }}</td>

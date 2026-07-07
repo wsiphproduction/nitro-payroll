@@ -3019,6 +3019,7 @@ public function getPayrollRegisterApprovedReport($param){
       ->join('payroll_branch as brn', 'brn.ID', '=', 'paytrnemp.BranchID')
       ->join('payroll_branch_site as brnchsite', 'brnchsite.ID', '=', 'emp.company_branch_site_id')
       ->join('payroll_department as dept', 'dept.ID', '=', 'emp.department_id')
+      ->join('positions as pos', 'pos.id', '=', 'emp.job_title_id')
       ->join('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
       ->leftjoin('payroll_section as sec', 'sec.id', '=', 'emp.section_id')  
       ->leftjoin('payroll_job_type as job', 'job.ID', '=', 'emp.job_title_id')
@@ -3060,6 +3061,18 @@ public function getPayrollRegisterApprovedReport($param){
               CONCAT(COALESCE(emp.last_name,''), ', ', COALESCE(emp.first_name,''), ' ' , COALESCE(emp.middle_name,'')) as EmployeeName,
 
               sec.Section as TeamLeader,
+
+              pos.name as Position,
+            
+              COALESCE(paytrnemp.MonthlyRate,0) as MonthlyRate,
+
+              ISNULL((SELECT TOP 1 DailyRate
+                  FROM payroll_employee_rates 
+              WHERE EmployeeID = paytrnemp.EmployeeID
+                  ORDER BY [EffectivityDate] DESC),0) as DailyRate,
+
+              COALESCE(emp.salary_type,0) as RateType,
+
               COALESCE(dtr.RegularHours,0) as RegularHours,
               CASE
                   WHEN ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
@@ -3392,6 +3405,7 @@ public function getPayrollRegisterPendingReport($param){
       ->join('users as emp', 'paytrnemp.EmployeeID', '=', 'emp.id')         
       ->join('payroll_branch as brn', 'brn.ID', '=', 'paytrnemp.BranchID')
       ->join('payroll_branch_site as brnchsite', 'brnchsite.ID', '=', 'emp.company_branch_site_id')
+      ->join('positions as pos', 'pos.id', '=', 'emp.job_title_id')
       ->join('payroll_department as dept', 'dept.ID', '=', 'emp.department_id')
       ->join('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
       ->leftjoin('payroll_section as sec', 'sec.id', '=', 'emp.section_id')  
@@ -3432,6 +3446,18 @@ public function getPayrollRegisterPendingReport($param){
               emp.shortid as EmployeeNo,
               CONCAT(COALESCE(emp.last_name,''), ', ', COALESCE(emp.first_name,''), ' ' , COALESCE(emp.middle_name,'')) as EmployeeName,
               sec.Section as TeamLeader,
+
+              pos.name as Position,
+            
+              COALESCE(paytrnemp.MonthlyRate,0) as MonthlyRate,
+
+              ISNULL((SELECT TOP 1 DailyRate
+                  FROM payroll_employee_rates 
+              WHERE EmployeeID = paytrnemp.EmployeeID
+                  ORDER BY [EffectivityDate] DESC),0) as DailyRate,
+
+              COALESCE(emp.salary_type,0) as RateType,
+
               COALESCE(dtr.RegularHours,0) as RegularHours,
               CASE
                   WHEN ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)

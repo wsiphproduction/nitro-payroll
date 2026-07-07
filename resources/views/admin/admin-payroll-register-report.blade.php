@@ -312,7 +312,9 @@ nav > div a.nav-item.nav-link:focus
                                                      <th></th>                                 
                                                         <th style="min-width: 110px;" class="fixed-column">EMPLOYEE ID</th>                                              
                                                         <th style="min-width: 120px;" class="fixed-column">EMPLOYEE NAME</th>                                              
-                                                        <th style="min-width: 120px;" class="fixed-column">TEAM LEADER</th>    
+                                                        <th style="min-width: 120px;" class="fixed-column">TEAM LEADER</th>                                              
+                                                        <th style="min-width: 120px;" class="fixed-column">POSITION</th>                                                
+                                                        <th style="min-width: 120px;" class="fixed-column">RATE</th>   
                                                         <th style="min-width: 60px;" class="fixed-column">NO OF DAYS</th>                                        
                                                         <th style="min-width: 110px;" class="fixed-column">BASIC PAY</th>
                                                         <th style="min-width: 110px;">E-COLA</th>
@@ -351,7 +353,7 @@ nav > div a.nav-item.nav-link:focus
                                                 <tfoot>
                                                         <tr>
                                                             <th></th>
-                                                            <th colspan="3" class="fixed-column">TOTAL</th>
+                                                            <th colspan="5" class="fixed-column">TOTAL</th>
                                                             <th id="ftDays" title="Days" class="fixed-column"></th>
                                                             <th id="ftBasicPay" title="Basic Pay" class="fixed-column"></th>
                                                             <th id="ftECOLA" title="E-Cola"></th>
@@ -892,6 +894,10 @@ nav > div a.nav-item.nav-link:focus
 
             tdTeamLeader = "<span class='font-normal'>" + (vData.TeamLeader ?? 'NO TEAM LEADER') + "</span>";
 
+            tdPosition = "<span class='font-normal'>" + (vData.Position ?? 'NO POSITION') + "</span>";
+
+            tdRate = "<span class='font-normal'>" + FormatDecimal(vData.RateType == 1 ? vData.DailyRate : vData.MonthlyRate,2) + "</span>";
+
             tdDays = "<span class='font-normal'>" + FormatDecimal(vData.Days,2) + "</span>";
 
             tdBasicPay = "<span class='font-normal'>" + FormatDecimal(vData.BasicPay,2) + "</span>";
@@ -960,38 +966,40 @@ nav > div a.nav-item.nav-link:focus
                     curData[1] = tdEmployeeNo;
                     curData[2] = tdEmployeeName;
                     curData[3] = tdTeamLeader;
-                    curData[4] = tdDays;
-                    curData[5] = tdBasicPay;
-                    curData[6] = tdECOLA;
-                    curData[7] = tdLate;                      
-                    curData[8] = tdUnderTime;                      
-                    curData[9] = tdAbsent;                      
-                    curData[10] = tdSL;
-                    curData[11] = tdVL;
-                    curData[12] = tdOL;
-                    curData[13] = tdNightDiff;
-                    curData[14] = tdOvertimePay; 
-                    curData[15] = tdLH;  
-                    curData[16] = tdSH;  
-                    curData[17] = tdRDDPay;   
-                    curData[18] = tdOvertimeND;    
-                    curData[19] = tdOtherTaxableEarnings;
-                    curData[20] = tdOtherNonTaxableEarnings;
-                    curData[21] = tdGrossPay;
-                    curData[22] = tdSSS;
-                    curData[23] = tdPHIC;
-                    curData[24] = tdHDMF;   
-                    curData[25] = tdHDMFMP2;
-                    curData[26] = tdTaxableIncome;                    
-                    curData[27] = tdWTax;
-                    curData[28] = tdSSSSalaryLoan;
-                    curData[29] = tdSSSCalamityLoan;
-                    curData[30] = tdHDMFLoan;
-                    curData[31] = tdHDMFCalamityLoan;
-                    curData[32] = tOtherDeduction;
-                    curData[33] = tdTotalDeduction;
-                    curData[34] = tdNetPay;
-                    curData[35] = tdStatus;
+                    curData[4] = tdPosition;
+                    curData[5] = tdRate;
+                    curData[6] = tdDays;
+                    curData[7] = tdBasicPay;
+                    curData[8] = tdECOLA;
+                    curData[9] = tdLate;                      
+                    curData[10] = tdUnderTime;                      
+                    curData[11] = tdAbsent;                      
+                    curData[12] = tdSL;
+                    curData[13] = tdVL;
+                    curData[14] = tdOL;
+                    curData[15] = tdNightDiff;
+                    curData[16] = tdOvertimePay; 
+                    curData[17] = tdLH;  
+                    curData[18] = tdSH;  
+                    curData[19] = tdRDDPay;   
+                    curData[20] = tdOvertimeND;    
+                    curData[21] = tdOtherTaxableEarnings;
+                    curData[22] = tdOtherNonTaxableEarnings;
+                    curData[23] = tdGrossPay;
+                    curData[24] = tdSSS;
+                    curData[25] = tdPHIC;
+                    curData[26] = tdHDMF;   
+                    curData[27] = tdHDMFMP2;
+                    curData[28] = tdTaxableIncome;                    
+                    curData[29] = tdWTax;
+                    curData[30] = tdSSSSalaryLoan;
+                    curData[31] = tdSSSCalamityLoan;
+                    curData[32] = tdHDMFLoan;
+                    curData[33] = tdHDMFCalamityLoan;
+                    curData[34] = tOtherDeduction;
+                    curData[35] = tdTotalDeduction;
+                    curData[36] = tdNetPay;
+                    curData[37] = tdStatus;
                     
                     this.data(curData).invalidate().draw();
                 }
@@ -1004,6 +1012,8 @@ nav > div a.nav-item.nav-link:focus
                 tdEmployeeNo,
                 tdEmployeeName,
                 tdTeamLeader,
+                tdPosition,
+                tdRate,
                 tdDays,
                 tdBasicPay,
                 tdECOLA,
@@ -1160,6 +1170,8 @@ nav > div a.nav-item.nav-link:focus
             "EMPLOYEE NO.",
             "EMPLOYEE NAME",
             "TEAM LEADER",
+            "POSITION",
+            "RATE",
             "NO. OF DAYS",
             "BASIC PAY",
             "ECOLA",
@@ -1209,6 +1221,8 @@ nav > div a.nav-item.nav-link:focus
             { title: "EMPLOYEE NO.", field: "EmployeeNo", fixed: true },
             { title: "EMPLOYEE NAME", field: "EmployeeName", fixed: true },
             { title: "TEAM LEADER", field: "TeamLeader", fixed: true },
+            { title: "POSITION", field: "Position", fixed: true },
+            { title: "RATE", field: "Rate", fixed: true },
             { title: "NO. OF DAYS", field: "Days", fixed: true },
             { title: "BASIC PAY", field: "BasicPay", fixed: true },
             { title: "ECOLA", field: "ECOLA", fixed: false },
@@ -1413,6 +1427,8 @@ nav > div a.nav-item.nav-link:focus
                 EmployeeNo: v.EmployeeNo,
                 EmployeeName: v.EmployeeName,
                 TeamLeader: v.TeamLeader,
+                Position: v.Position,
+                Rate: v.RateType == 1 ? v.DailyRate : v.MonthlyRate,
                 Days: v.Days,
                 BasicPay: v.BasicPay,
                 ECOLA: v.ECOLA,
@@ -1610,6 +1626,8 @@ nav > div a.nav-item.nav-link:focus
             EmployeeNo: label,
             EmployeeName: "",
             TeamLeader: "",
+            Position: "",
+            Rate: "",
             Days: totals.Days,
             BasicPay: totals.BasicPay,
             ECOLA: totals.ECOLA,

@@ -3090,7 +3090,7 @@ public function getPayrollRegisterApprovedReport($param){
               COALESCE(emp.salary_type,0) as RateType,
 
               COALESCE(dtr.RegularHours,0) as RegularHours,
-              FLOOR(COALESCE(dtr.RegularHours, 0) / 8) AS Days,
+              ROUND(COALESCE(dtr.RegularHours, 0) / 8) AS Days,
 
               COALESCE(paytrnemp.BasicSalary,0) as BasicPay,
 
@@ -3488,7 +3488,7 @@ public function getPayrollRegisterPendingReport($param){
               COALESCE(emp.salary_type,0) as RateType,
 
               COALESCE(dtr.RegularHours,0) as RegularHours,
-              FLOOR(COALESCE(dtr.RegularHours, 0) / 8) AS Days,
+              ROUND(COALESCE(dtr.RegularHours, 0) / 8) AS Days,
 
              COALESCE(paytrnemp.BasicSalary,0) as BasicPay,
 

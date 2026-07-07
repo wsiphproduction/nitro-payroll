@@ -1277,7 +1277,7 @@ public function generatePayrollRegisterApprovedListExcel($param){
               COALESCE(emp.salary_type,0) as RateType,
 
               COALESCE(dtr.RegularHours,0) as RegularHours,
-FLOOR(COALESCE(dtr.RegularHours, 0) / 8) AS Days,
+ROUND(COALESCE(dtr.RegularHours, 0) / 8) AS Days,
 
              paytrnemp.BasicSalary as BasicPay,
 
@@ -1493,7 +1493,7 @@ public function generatePayrollRegisterPendingListExcel($param){
               COALESCE(emp.salary_type,0) as RateType,
               
               COALESCE(dtr.RegularHours,0) as RegularHours,
-FLOOR(COALESCE(dtr.RegularHours, 0) / 8) AS Days,
+ROUND(COALESCE(dtr.RegularHours, 0) / 8) AS Days,
 
              paytrnemp.BasicSalary as BasicPay,
 

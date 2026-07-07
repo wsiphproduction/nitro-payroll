@@ -3090,12 +3090,44 @@ public function getPayrollRegisterApprovedReport($param){
               COALESCE(emp.salary_type,0) as RateType,
 
               COALESCE(dtr.RegularHours,0) as RegularHours,
-              CASE
-                  WHEN ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
-                      - FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)) = 0.01
-                  THEN FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2))
-                  ELSE ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
-              END AS Days,
+CASE
+    WHEN ROUND(
+            (
+                COALESCE(dtr.RegularHours, 0)
+                - COALESCE(dtr.LateHours, 0)
+                - COALESCE(dtr.UndertimeHours, 0)
+            ) / 8,
+            2
+         )
+         - FLOOR(
+             ROUND(
+                (
+                    COALESCE(dtr.RegularHours, 0)
+                    - COALESCE(dtr.LateHours, 0)
+                    - COALESCE(dtr.UndertimeHours, 0)
+                ) / 8,
+                2
+             )
+         ) = 0.01
+    THEN FLOOR(
+            ROUND(
+                (
+                    COALESCE(dtr.RegularHours, 0)
+                    - COALESCE(dtr.LateHours, 0)
+                    - COALESCE(dtr.UndertimeHours, 0)
+                ) / 8,
+                2
+            )
+         )
+    ELSE ROUND(
+            (
+                COALESCE(dtr.RegularHours, 0)
+                - COALESCE(dtr.LateHours, 0)
+                - COALESCE(dtr.UndertimeHours, 0)
+            ) / 8,
+            2
+         )
+END AS Days,
 
               COALESCE(paytrnemp.BasicSalary,0) as BasicPay,
 
@@ -3493,12 +3525,44 @@ public function getPayrollRegisterPendingReport($param){
               COALESCE(emp.salary_type,0) as RateType,
 
               COALESCE(dtr.RegularHours,0) as RegularHours,
-              CASE
-                  WHEN ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
-                      - FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)) = 0.01
-                  THEN FLOOR(ROUND(COALESCE(dtr.RegularHours,0) / 8, 2))
-                  ELSE ROUND(COALESCE(dtr.RegularHours,0) / 8, 2)
-              END AS Days,
+CASE
+    WHEN ROUND(
+            (
+                COALESCE(dtr.RegularHours, 0)
+                - COALESCE(dtr.LateHours, 0)
+                - COALESCE(dtr.UndertimeHours, 0)
+            ) / 8,
+            2
+         )
+         - FLOOR(
+             ROUND(
+                (
+                    COALESCE(dtr.RegularHours, 0)
+                    - COALESCE(dtr.LateHours, 0)
+                    - COALESCE(dtr.UndertimeHours, 0)
+                ) / 8,
+                2
+             )
+         ) = 0.01
+    THEN FLOOR(
+            ROUND(
+                (
+                    COALESCE(dtr.RegularHours, 0)
+                    - COALESCE(dtr.LateHours, 0)
+                    - COALESCE(dtr.UndertimeHours, 0)
+                ) / 8,
+                2
+            )
+         )
+    ELSE ROUND(
+            (
+                COALESCE(dtr.RegularHours, 0)
+                - COALESCE(dtr.LateHours, 0)
+                - COALESCE(dtr.UndertimeHours, 0)
+            ) / 8,
+            2
+         )
+END AS Days,
 
              COALESCE(paytrnemp.BasicSalary,0) as BasicPay,
 

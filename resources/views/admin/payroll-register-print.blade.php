@@ -175,7 +175,7 @@ foreach($grand as $field => $total){
         @if($currentTeamLeader !== null)
 
         <tr class="subtotal">
-            <td colspan="3">SUBTOTAL</td>
+            <td colspan="5">SUBTOTAL</td>
 
             <td class="num">{{ number_format($subtotal['Days'],2) }}</td>
             <td class="num">{{ number_format($subtotal['BasicPay'],2) }}</td>
@@ -546,7 +546,7 @@ foreach($grand as $field => $total){
 @if($currentTeamLeader !== null)
 
 <tr class="subtotal">
-    <td colspan="3">SUBTOTAL</td>
+    <td colspan="5">SUBTOTAL</td>
 
     <td class="num">{{ number_format($subtotal['Days'],2) }}</td>
     <td class="num">{{ number_format($subtotal['BasicPay'],2) }}</td>
@@ -661,7 +661,7 @@ foreach($grand as $field => $total){
 @endif
 
 <tr>
-    <td colspan="{{ count($visibleColumns) + 3 }}" style="border:none;height:25px;"></td>
+    <td colspan="{{ count($visibleColumns) + 5 }}" style="border:none;height:25px;"></td>
 </tr>
 
 <tr class="grandtotal">

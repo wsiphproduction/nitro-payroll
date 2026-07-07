@@ -3023,7 +3023,23 @@ public function getPayrollRegisterApprovedReport($param){
       ->join('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
       ->leftjoin('payroll_section as sec', 'sec.id', '=', 'emp.section_id')  
       ->leftjoin('payroll_job_type as job', 'job.ID', '=', 'emp.job_title_id')
-
+      ->leftJoin(
+          DB::raw("(
+              SELECT
+                  p.PayrollTransactionID,
+                  p.EmployeeID,
+                  SUM(p.Total) AS OtherDeduction
+              FROM payroll_transaction_details p
+              WHERE p.ReferenceType = 'Deduction'
+              GROUP BY
+                  p.PayrollTransactionID,
+                  p.EmployeeID
+          ) AS DeductionSummary"),
+          function ($join) {
+              $join->on('DeductionSummary.PayrollTransactionID', '=', 'paytrn.ID')
+                  ->on('DeductionSummary.EmployeeID', '=', 'paytrnemp.EmployeeID');
+          }
+      )
       ->leftJoin(
           DB::raw("(
               SELECT
@@ -3123,8 +3139,8 @@ public function getPayrollRegisterApprovedReport($param){
             COALESCE(LoanSummary.HDMFCalamityLoan,0) as HDMFCalamityLoan,
             COALESCE(LoanSummary.OtherLoanDeductions,0) as OtherLoanDeductions,
 
-            COALESCE(paytrnemp.TotalDeductions,0) as OtherDeduction,
-
+            COALESCE(DeductionSummary.OtherDeduction,0) as OtherDeduction,
+            
             COALESCE(paytrnemp.TotalEEInsurancePremiums,0) + COALESCE(paytrnemp.TotalOtherDeductions,0) + COALESCE(paytrnemp.TotalLoanDeductions,0) + COALESCE(paytrnemp.TotalDeductions,0) as TotalDeduction,
 
             COALESCE(paytrnemp.NetPay,0) as NetPay
@@ -3247,6 +3263,8 @@ public function getPayrollRegisterApprovedReport($param){
             SUM(COALESCE(LoanSummary.HDMFLoan,0)) as HDMFLoan,
             SUM(COALESCE(LoanSummary.HDMFCalamityLoan,0)) as HDMFCalamityLoan,
             SUM(COALESCE(LoanSummary.OtherLoanDeductions,0)) as OtherLoanDeductions,
+
+            SUM(COALESCE(DeductionSummary.OtherDeduction,0)) as OtherDeduction,
 
             SUM(
                 COALESCE(paytrnemp.TotalEEInsurancePremiums,0)
@@ -3410,7 +3428,23 @@ public function getPayrollRegisterPendingReport($param){
       ->join('payroll_division as div', 'div.ID', '=', 'dept.DivisionID')
       ->leftjoin('payroll_section as sec', 'sec.id', '=', 'emp.section_id')  
       ->leftjoin('payroll_job_type as job', 'job.ID', '=', 'emp.job_title_id') 
-
+      ->leftJoin(
+          DB::raw("(
+              SELECT
+                  p.PayrollTransactionID,
+                  p.EmployeeID,
+                  SUM(p.Total) AS OtherDeduction
+              FROM payroll_transaction_details_temp p
+              WHERE p.ReferenceType = 'Deduction'
+              GROUP BY
+                  p.PayrollTransactionID,
+                  p.EmployeeID
+          ) AS DeductionSummary"),
+          function ($join) {
+              $join->on('DeductionSummary.PayrollTransactionID', '=', 'paytrn.ID')
+                  ->on('DeductionSummary.EmployeeID', '=', 'paytrnemp.EmployeeID');
+          }
+      )
       ->leftJoin(
                 DB::raw("(
                     SELECT
@@ -3509,7 +3543,7 @@ public function getPayrollRegisterPendingReport($param){
             COALESCE(LoanSummary.HDMFCalamityLoan,0) as HDMFCalamityLoan,
             COALESCE(LoanSummary.OtherLoanDeductions,0) as OtherLoanDeductions,
 
-            COALESCE(paytrnemp.TotalDeductions,0) as OtherDeduction,
+            COALESCE(DeductionSummary.OtherDeduction,0) as OtherDeduction,
 
             COALESCE(paytrnemp.TotalEEInsurancePremiums,0) + COALESCE(paytrnemp.TotalOtherDeductions,0) + COALESCE(paytrnemp.TotalLoanDeductions,0) + COALESCE(paytrnemp.TotalDeductions,0) as TotalDeduction,
 
@@ -3630,6 +3664,7 @@ public function getPayrollRegisterPendingReport($param){
             SUM(COALESCE(LoanSummary.HDMFLoan,0)) as HDMFLoan,
             SUM(COALESCE(LoanSummary.HDMFCalamityLoan,0)) as HDMFCalamityLoan,
             SUM(COALESCE(LoanSummary.OtherLoanDeductions,0)) as OtherLoanDeductions,
+            SUM(COALESCE(DeductionSummary.OtherDeduction,0)) as OtherDeduction,
 
             SUM(
                 COALESCE(paytrnemp.TotalEEInsurancePremiums,0)

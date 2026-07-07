@@ -94,20 +94,21 @@ $grand = [
     'SH'=>0,
     'RDDPay'=>0,
     'OTND'=>0,
-    'OtherTaxableEarnings'=>0,
+    // 'OtherTaxableEarnings'=>0,
     'OtherNonTaxableEarnings'=>0,
     'GrossPay'=>0,
     'SSS'=>0,
     'PHIC'=>0,
     'HDMF'=>0,
     'HDMFMP2'=>0,
-    'TaxableIncome'=>0,
+    // 'TaxableIncome'=>0,
     'WTax'=>0,
     'SSSSalaryLoan'=>0,
     'SSSCalamityLoan'=>0,
     'HDMFLoan'=>0,
     'HDMFCalamityLoan'=>0,
     'OtherLoanDeductions'=>0,
+    'OtherDeduction'=>0,
     'TotalDeduction'=>0,
     'NetPay'=>0
 ];
@@ -137,7 +138,7 @@ $fixedColumns = [
     'NightDiff',
     'OTPay',
     'GrossPay',
-    'TaxableIncome',
+    // 'TaxableIncome',
     'WTax',
     'NetPay'
 ];
@@ -213,9 +214,9 @@ foreach($grand as $field => $total){
                 <td class="num">{{ number_format($grand['OTND'],2) }}</td>
             @endif
 
-            @if(in_array('OtherTaxableEarnings',$visibleColumns))
+            {{-- @if(in_array('OtherTaxableEarnings',$visibleColumns))
                 <td class="num">{{ number_format($grand['OtherTaxableEarnings'],2) }}</td>
-            @endif
+            @endif --}}
 
             @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
                 <td class="num">{{ number_format($grand['OtherNonTaxableEarnings'],2) }}</td>
@@ -258,7 +259,7 @@ foreach($grand as $field => $total){
                 <td class="num">{{ number_format($grand['HDMFMP2'],2) }}</td>
             @endif
             
-            <td class="num">{{ number_format($subtotal['TaxableIncome'],2) }}</td>
+            {{-- <td class="num">{{ number_format($subtotal['TaxableIncome'],2) }}</td> --}}
             <td class="num">{{ number_format($subtotal['WTax'],2) }}</td>
 
             @if(in_array('SSSSalaryLoan',$visibleColumns))
@@ -279,6 +280,10 @@ foreach($grand as $field => $total){
 
             @if(in_array('OtherLoanDeductions',$visibleColumns))
                 <td class="num">{{ number_format($grand['OtherLoanDeductions'],2) }}</td>
+            @endif
+            
+            @if(in_array('OtherDeduction',$visibleColumns))
+                <td class="num">{{ number_format($grand['OtherDeduction'],2) }}</td>
             @endif
             
             @if(in_array('TotalDeduction',$visibleColumns))
@@ -345,9 +350,9 @@ foreach($grand as $field => $total){
                 <th>OTND</th>
             @endif
 
-            @if(in_array('OtherTaxableEarnings',$visibleColumns))
+            {{-- @if(in_array('OtherTaxableEarnings',$visibleColumns))
                 <th>OTH TAX</th>
-            @endif
+            @endif --}}
 
             @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
                 <th>OTH NON TAX</th>
@@ -386,7 +391,7 @@ foreach($grand as $field => $total){
                 <th>MP2</th>
             @endif
             
-            <th>TAXABLE</th>
+            {{-- <th>TAXABLE</th> --}}
             <th>WTAX</th>
 
             @if(in_array('SSSSalaryLoan',$visibleColumns))
@@ -407,6 +412,10 @@ foreach($grand as $field => $total){
 
             @if(in_array('OtherLoanDeductions',$visibleColumns))
                 <th>OTH LOAN</th>
+            @endif
+
+            @if(in_array('OtherDeduction',$visibleColumns))
+                <th>OTH DED</th>
             @endif
 
             @if(in_array('TotalDeduction',$visibleColumns))
@@ -460,9 +469,9 @@ foreach($grand as $field => $total){
             <td class="num">{{ number_format($row->OTND,2) }}</td>
         @endif
 
-        @if(in_array('OtherTaxableEarnings',$visibleColumns))
+        {{-- @if(in_array('OtherTaxableEarnings',$visibleColumns))
             <td class="num">{{ number_format($row->OtherTaxableEarnings,2) }}</td>
-        @endif
+        @endif --}}
 
         @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
             <td class="num">{{ number_format($row->OtherNonTaxableEarnings,2) }}</td>
@@ -503,7 +512,7 @@ foreach($grand as $field => $total){
             <td class="num">{{ number_format($row->HDMFMP2,2) }}</td>
         @endif
 
-        <td class="num">{{ number_format($row->TaxableIncome,2) }}</td>
+        {{-- <td class="num">{{ number_format($row->TaxableIncome,2) }}</td> --}}
         <td class="num">{{ number_format($row->WTax,2) }}</td>
 
         @if(in_array('SSSSalaryLoan',$visibleColumns))
@@ -524,6 +533,10 @@ foreach($grand as $field => $total){
 
         @if(in_array('OtherLoanDeductions',$visibleColumns))
             <td class="num">{{ number_format($row->OtherLoanDeductions,2) }}</td>
+        @endif
+
+        @if(in_array('OtherDeduction',$visibleColumns))
+            <td class="num">{{ number_format($row->OtherDeduction,2) }}</td>
         @endif
 
         @if(in_array('TotalDeduction',$visibleColumns))
@@ -584,9 +597,9 @@ foreach($grand as $field => $total){
         <td class="num">{{ number_format($subtotal['OTND'],2) }}</td>
     @endif
 
-    @if(in_array('OtherTaxableEarnings',$visibleColumns))
+    {{-- @if(in_array('OtherTaxableEarnings',$visibleColumns))
         <td class="num">{{ number_format($subtotal['OtherTaxableEarnings'],2) }}</td>
-    @endif
+    @endif --}}
 
     @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
         <td class="num">{{ number_format($subtotal['OtherNonTaxableEarnings'],2) }}</td>
@@ -628,7 +641,7 @@ foreach($grand as $field => $total){
         <td class="num">{{ number_format($subtotal['HDMFMP2'],2) }}</td>
     @endif
 
-    <td class="num">{{ number_format($subtotal['TaxableIncome'],2) }}</td>
+    {{-- <td class="num">{{ number_format($subtotal['TaxableIncome'],2) }}</td> --}}
     <td class="num">{{ number_format($subtotal['WTax'],2) }}</td>
 
     @if(in_array('SSSSalaryLoan',$visibleColumns))
@@ -649,6 +662,10 @@ foreach($grand as $field => $total){
 
     @if(in_array('OtherLoanDeductions',$visibleColumns))
         <td class="num">{{ number_format($subtotal['OtherLoanDeductions'],2) }}</td>
+    @endif
+
+    @if(in_array('OtherDeduction',$visibleColumns))
+        <td class="num">{{ number_format($subtotal['OtherDeduction'],2) }}</td>
     @endif
 
     @if(in_array('TotalDeduction',$visibleColumns))
@@ -704,9 +721,9 @@ foreach($grand as $field => $total){
         <td class="num">{{ number_format($grand['OTND'],2) }}</td>
     @endif
 
-    @if(in_array('OtherTaxableEarnings',$visibleColumns))
+    {{-- @if(in_array('OtherTaxableEarnings',$visibleColumns))
         <td class="num">{{ number_format($grand['OtherTaxableEarnings'],2) }}</td>
-    @endif
+    @endif --}}
 
     @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
         <td class="num">{{ number_format($grand['OtherNonTaxableEarnings'],2) }}</td>
@@ -748,7 +765,7 @@ foreach($grand as $field => $total){
         <td class="num">{{ number_format($grand['HDMFMP2'],2) }}</td>
     @endif
 
-    <td class="num">{{ number_format($grand['TaxableIncome'],2) }}</td>
+    {{-- <td class="num">{{ number_format($grand['TaxableIncome'],2) }}</td> --}}
     <td class="num">{{ number_format($grand['WTax'],2) }}</td>
 
     @if(in_array('SSSSalaryLoan',$visibleColumns))
@@ -769,6 +786,10 @@ foreach($grand as $field => $total){
 
     @if(in_array('OtherLoanDeductions',$visibleColumns))
         <td class="num">{{ number_format($grand['OtherLoanDeductions'],2) }}</td>
+    @endif
+
+    @if(in_array('OtherDeduction',$visibleColumns))
+        <td class="num">{{ number_format($grand['OtherDeduction'],2) }}</td>
     @endif
 
     @if(in_array('TotalDeduction',$visibleColumns))

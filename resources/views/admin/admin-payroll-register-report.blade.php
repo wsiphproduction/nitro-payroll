@@ -1474,7 +1474,7 @@ nav > div a.nav-item.nav-link:focus
                 HDMFLoan: v.HDMFLoan,
                 HDMFCalamityLoan: v.HDMFCalamityLoan,
                 OtherLoanDeductions: v.OtherLoanDeductions,
-                OtherDeductions: v.OtherDeduction,
+                OtherDeduction: v.OtherDeduction,
                 TotalDeduction: v.TotalDeduction,
                 NetPay: v.NetPay,
                 Status: v.Status
@@ -1677,7 +1677,7 @@ nav > div a.nav-item.nav-link:focus
             HDMFLoan: totals.HDMFLoan,
             HDMFCalamityLoan: totals.HDMFCalamityLoan,
             OtherLoanDeductions: totals.OtherLoan,
-            OtherDeductions: totals.OtherDed,
+            OtherDeduction: totals.OtherDed,
             TotalDeduction: totals.TotalDed,
             NetPay: totals.NetPay,
             Status: ""

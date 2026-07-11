@@ -725,6 +725,11 @@ Route::post('get-employee-income-deduction-transaction-list',[
     'as'=> 'get-employee-income-deduction-transaction-list'
 ]);
 
+Route::post('do-delete-income-deduction-transaction',[
+    'uses'=>'EmployeeIncomeDeductionController@doDeleteEmployeeIncomeDeductionTransaction',
+    'as'=> 'do-delete-income-deduction-transaction'
+]);
+
 Route::post('get-employee-income-deduction-transaction-info',[
     'uses'=>'EmployeeIncomeDeductionController@getEmployeeIncomeDeductionTransactionInfo',
     'as'=> 'get-employee-income-deduction-transaction-info'

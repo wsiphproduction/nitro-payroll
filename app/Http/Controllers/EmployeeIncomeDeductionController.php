@@ -132,6 +132,16 @@ public function showAdminIncomeDeductionTransaction(Request $request){
 
   }
 
+  public function doDeleteEmployeeIncomeDeductionTransaction(Request $request){
+
+    DB::table('payroll_employee_income_deduction_transaction')->where('ID', $request->IncomeDeductionID)->delete();
+
+    return response()->json([
+        'Response' => 'Success',
+        'ResponseMessage' => 'Employee Income Deduction has been deleted successfully.'
+    ]);
+  }
+
   public function doSetEmployeeIncomeDeductionTransactionStatus(Request $request){
 
     $EmployeeIncomeDeduction = new EmployeeIncomeDeduction();

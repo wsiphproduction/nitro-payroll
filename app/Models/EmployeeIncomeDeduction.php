@@ -75,7 +75,18 @@ class EmployeeIncomeDeduction extends Model
                 COALESCE(peit.CancelledByID,0) as CancelledByID,
                 COALESCE(peit.DateTimeCancelled,'') as DateTimeCancelled,
                 COALESCE(peit.ApprovedByID,0) as ApprovedByID,
-                COALESCE(peit.DateTimeApproved,'') as DateTimeApproved
+                COALESCE(peit.DateTimeApproved,'') as DateTimeApproved,
+
+                CASE 
+                    WHEN EXISTS (
+                        SELECT 1 
+                            FROM payroll_transaction_details ptd 
+                            WHERE ptd.ReferenceID = peit.ID 
+                                AND ptd.ReferenceType IN ('Deduction','Earning')
+                    ) THEN 0
+                    ELSE 1
+                END as AllowedToDelete
+
             ");
 
      if($Status!=''){

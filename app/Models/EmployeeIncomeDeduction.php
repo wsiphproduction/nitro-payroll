@@ -18,9 +18,13 @@ use Image;
 use DB;
 
 use App\Models\Misc;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmployeeIncomeDeduction extends Model
 {
+    use SoftDeletes;
+
+    protected $table = 'payroll_employee_income_deduction_transaction';
 
   public function getEmployeeIncomeDeductionTransactionList($param){
 
@@ -136,6 +140,8 @@ class EmployeeIncomeDeduction extends Model
         }
     }
 
+    $query->whereNull('peit.deleted_at');
+
     if($Limit > 0){
       $query->limit($Limit);
       $query->offset(($PageNo-1) * $Limit);
@@ -203,6 +209,8 @@ public function getEmployeeIncomeDeductionTransactionInfo($SearchOption,$SearchV
                 COALESCE(peit.DateTimeApproved,'') as DateTimeApproved
             ");
 
+            $info->whereNull('peit.deleted_at');
+
              if($SearchOption=='ByID'){
                 $info->where("peit.ID",$SearchValue);                
             }
@@ -259,6 +267,8 @@ public function getEmployeeIncomeDeductionPaymentLedgerList($param){
            if($IncomeDeductionTransID>0){
               $query->where("paylgr.IncomeDeductionTransID",$IncomeDeductionTransID);           
           }
+
+          $query->whereNull('dedtrn.deleted_at');
 
          if($SearchText != ''){
 
@@ -625,6 +635,8 @@ $NewStatus = $data['NewStatus'];
                 COALESCE(peidt.IsUploadError,0) as IsUploadError
             ");
 
+    $query->whereNull('peidt.deleted_at');
+
     if($Status!=''){
         $query->where("peidt.Status",$Status);
     }       
@@ -923,6 +935,7 @@ public function getEmployeeIncomeDeductionTempTransactionInfo($EmployeeIncomeDed
             ")
 
     ->where("peidt.ID",$EmployeeIncomeDeductionTransaction_ID)
+    ->whereNull('peidt.deleted_at')
     ->first();
 
     return $info;

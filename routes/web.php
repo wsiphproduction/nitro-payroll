@@ -1480,6 +1480,6 @@ Route::get('/hris-holiday_special', function () {
 Route::get('/hris-incomplete-number-of-hours', function () {
     $_GET = request()->query();
     ob_start();
-    include storage_path('app/legacy/incomplete_timelogs_fixer.php');
+    include storage_path('app/legacy/incomplete-number-of-hours.php');
     return response(ob_get_clean());
 });

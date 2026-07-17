@@ -22,8 +22,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmployeeIncomeDeduction extends Model
 {
-    use SoftDeletes;
-
     protected $table = 'payroll_employee_income_deduction_transaction';
 
   public function getEmployeeIncomeDeductionTransactionList($param){

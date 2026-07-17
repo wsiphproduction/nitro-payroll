@@ -104,6 +104,25 @@ public function showAdminLoanTransaction(Request $request){
 
 }
 
+public function doDeleteEmployeeLoanTransaction(Request $request)
+{
+    $deleted = DB::table('payroll_employee_loan_transaction')
+        ->where('ID', $request->LoanID)
+        ->delete();
+
+    if (!$deleted) {
+        return response()->json([
+            'Response' => 'Failed',
+            'ResponseMessage' => 'Employee Loan not found.'
+        ]);
+    }
+
+    return response()->json([
+        'Response' => 'Success',
+        'ResponseMessage' => 'Employee Loan has been deleted successfully.'
+    ]);
+}
+
  public function getEmployeeLoanTransactionList(Request $request){
 
     $EmployeeLoan = new EmployeeLoan();

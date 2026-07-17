@@ -565,6 +565,11 @@ Route::get('admin-employee-loan-transaction',[
     'as'=> 'admin-employee-loan-transaction'
 ]);
 
+Route::post('do-delete-employee-loan-transaction',[
+    'uses'=>'EmployeeLoanController@doDeleteEmployeeLoanTransaction',
+    'as'=> 'do-delete-employee-loan-transaction'
+]);
+
 Route::post('get-employee-loan-transaction-list',[
     'uses'=>'EmployeeLoanController@getEmployeeLoanTransactionList',
     'as'=> 'get-employee-loan-transaction-list'

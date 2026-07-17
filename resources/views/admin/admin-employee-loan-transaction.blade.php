@@ -824,6 +824,36 @@ table.alt-background tr.selected td {
   </div>    
     <!-- END MODAL -->
 
+
+
+    <!-- DELETE CONFIRMATION MODAL -->
+    <div id="delete-modal" class="modal fade text-left w-100" role="dialog" aria-labelledby="myModalLabel16" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title white-color">Delete Employee Loan </h5>  
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="bx bx-x"></i>
+                    </button>                
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                         <h5 style="padding-top:10px;padding-bottom: 10px;">Are you sure you want to delete this employee's loan records?</h5>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <button id="btnDeleteRecord" type="button" class="btn btn-danger ml-1">
+                        <i class="bx bx-trash d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Delete</span>
+                    </button>
+                 
+                </div>
+            </div>
+        </div>
+    </div>
+
   <!--EXCEL REVIEW MODAL --> 
   <div id="excel-modal" class="modal fade text-left w-100" role="dialog" aria-labelledby="myModalLabel7" aria-hidden="true" style="left:10px;">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
@@ -1440,7 +1470,16 @@ table.alt-background tr.selected td {
                             "</a>";
                
                          }
-                 
+
+                        if(vData.TotalPayment == 0 ){
+
+                             tdAction = tdAction +
+                               "<a title='delete loan' class='dropdown-item text-danger' href='javascript:void(0);' onclick='openDeleteModal(" + vData.ID + ")' style='border-bottom: 1px solid lightgray;color: black;'>"+
+                                "<i class='bx bx-trash mr-1 text-danger'></i> " +
+                                "Delete" +
+                            "</a>";
+
+                        }
 
                          tdAction = tdAction +  "</div>"+
                       
@@ -3130,6 +3169,52 @@ $(document ).ready(function() {
     });
 
 });
+
+ $("#btnDeleteRecord").on('click', function() { 
+    vRecordID= $(".LoanIDStatus").val();
+    if(vRecordID>0){
+        $.ajax({
+            type: "post",
+            data: {
+                _token: '{{ csrf_token() }}',
+                Platform: "{{ config('app.PLATFORM_ADMIN') }}",
+                LoanID: vRecordID
+            },
+            url: "{{ route('do-delete-employee-loan-transaction') }}",
+            dataType: "json",
+            success: function(data){
+              if(data.Response =='Success'){
+                 showHasSuccessMessage(data.ResponseMessage);
+                 getRecordList(1);
+                 $("#delete-modal").modal('hide');
+                }else{
+                  showHasErrorMessage('', data.ResponseMessage);
+                }
+            },
+            error: function(data){
+                console.log(data.responseText);
+            },
+            beforeSend:function(vData){
+            }
+        });
+      }
+  });
+
+  function openDeleteModal(vRecordID){
+    $(".LoanIDStatus").val(vRecordID);
+    $("#delete-modal").modal();
+  }
+
+  function PrintIncomeDeduction(vTransID){
+    
+    window.open('{{config('app.url')}}admin-employee-income-deduction-print-report?IncomeDeductionTransactionID=' +vTransID, '_blank');
+  
+ }
+
+  function openDeleteModal(vRecordID){
+    $(".LoanIDStatus").val(vRecordID);
+    $("#delete-modal").modal();
+  }
 
  function clearMessageNotification(){
 

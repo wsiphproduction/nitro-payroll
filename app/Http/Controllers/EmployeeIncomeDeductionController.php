@@ -134,16 +134,16 @@ public function showAdminIncomeDeductionTransaction(Request $request){
 
   public function doDeleteEmployeeIncomeDeductionTransaction(Request $request){
 
-    $EmployeeIncomeDeduction = EmployeeIncomeDeduction::where('ID', $request->IncomeDeductionID)->first();
+    $deleted = DB::table('payroll_employee_income_deduction_transaction')
+        ->where('ID', $request->IncomeDeductionID)
+        ->delete();
 
-    if (!$EmployeeIncomeDeduction) {
+    if (!$deleted) {
         return response()->json([
             'Response' => 'Failed',
             'ResponseMessage' => 'Employee Income Deduction not found.'
         ]);
     }
-
-    $EmployeeIncomeDeduction->delete();
 
     return response()->json([
         'Response' => 'Success',

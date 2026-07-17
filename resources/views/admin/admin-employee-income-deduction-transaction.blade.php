@@ -1209,7 +1209,7 @@ table.alt-background tr.selected td {
                         if(vData.AllowedToDelete == 1 ){
 
                              tdAction = tdAction +
-                               "<a class='dropdown-item text-danger' href='javascript:void(0);' onclick='openDeleteModal(" + vData.ID + ")' style='border-bottom: 1px solid lightgray;color: black;'>"+
+                               "<a title='delete income/deduction' class='dropdown-item text-danger' href='javascript:void(0);' onclick='openDeleteModal(" + vData.ID + ")' style='border-bottom: 1px solid lightgray;color: black;'>"+
                                 "<i class='bx bx-trash mr-1 text-danger'></i> " +
                                 "Delete" +
                             "</a>";

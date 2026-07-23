@@ -331,7 +331,7 @@ nav > div a.nav-item.nav-link:focus
                                                         <th style="min-width: 110px;">RDD PAY</th>
                                                         <th style="min-width: 110px;">ND OT</th>
                                                         {{-- <th style="min-width: 130px;">OTHER TAXABLE EARNING </th>  --}}
-                                                        {{-- <th id="otherEarningsMarker" style="min-width: 130px;">OTHER NON TAXABLE EARNING </th>  --}}
+                                                        <th id="otherEarningsMarker" style="min-width: 130px;">OTHER NON TAXABLE EARNING </th> 
                                                         <th style="min-width: 110px;" class="fixed-column">GROSS PAY</th>
                                                         <th style="min-width: 60px;">SSS</th>
                                                         <th style="min-width: 80px;">PHIL HEALTH</th>
@@ -371,7 +371,7 @@ nav > div a.nav-item.nav-link:focus
                                                             <th id="ftRDDPay" title="RDD Pay"></th>
                                                             <th id="ftOTND" title="ND OT"></th>
                                                             {{-- <th id="ftOtherTaxable" title="Other Taxable"></th> --}}
-                                                            {{-- <th id="ftOtherNonTaxable" title="Other Non Taxable"></th> --}}
+                                                            <th id="ftOtherNonTaxable" title="Other Non Taxable"></th>
                                                             <th id="ftGrossPay" title="Gross Pay" class="fixed-column"></th>
                                                             <th id="ftSSS" title="SSS"></th>
                                                             <th id="ftPHIC" title="Philhealth"></th>
@@ -587,7 +587,7 @@ nav > div a.nav-item.nav-link:focus
         $(headerHtml).insertAfter("#otherEarningsMarker");
 
         // FOOTER
-        // $(footerHtml).insertAfter("#ftOtherNonTaxable");
+        $(footerHtml).insertAfter("#ftOtherNonTaxable");
     }
 
 
@@ -726,9 +726,9 @@ nav > div a.nav-item.nav-link:focus
                         //     FormatDecimal(data.Totals.OtherTaxableEarnings,2)
                         // );
 
-                        // $("#ftOtherNonTaxable").html(
-                        //     FormatDecimal(data.Totals.OtherNonTaxableEarnings,2)
-                        // );
+                        $("#ftOtherNonTaxable").html(
+                            FormatDecimal(data.Totals.OtherNonTaxableEarnings,2)
+                        );
 
                         $.each(OtherEarningsTypes,function(i,row){
 
@@ -929,7 +929,7 @@ nav > div a.nav-item.nav-link:focus
             tdOvertimeND = "<span class='font-normal'>" + FormatDecimal(vData.OTND,2) + "</span>"; 
 
             // tdOtherTaxableEarnings = "<span class='font-normal'>" + FormatDecimal(vData.OtherTaxableEarnings,2) + "</span>"; 
-            // tdOtherNonTaxableEarnings = "<span class='font-normal'>" + FormatDecimal(vData.OtherNonTaxableEarnings,2) + "</span>";  
+            tdOtherNonTaxableEarnings = "<span class='font-normal'>" + FormatDecimal(vData.OtherNonTaxableEarnings,2) + "</span>";  
             // tdTaxableIncome = "<span class='font-normal'>" + FormatDecimal(vData.TaxableIncome,2) + "</span>";  
 
             tdGrossPay = "<span class='font-normal'>" + FormatDecimal(vData.GrossPay,2) + "</span>";
@@ -992,7 +992,7 @@ nav > div a.nav-item.nav-link:focus
                     curData[19] = tdRDDPay;   
                     curData[20] = tdOvertimeND;    
                     // curData[21] = tdOtherTaxableEarnings;
-                    // curData[22] = tdOtherNonTaxableEarnings;
+                    curData[22] = tdOtherNonTaxableEarnings;
                     curData[23] = tdGrossPay;
                     curData[24] = tdSSS;
                     curData[25] = tdPHIC;
@@ -1039,7 +1039,7 @@ nav > div a.nav-item.nav-link:focus
                 tdRDDPay,
                 tdOvertimeND,
                 // tdOtherTaxableEarnings,
-                // tdOtherNonTaxableEarnings,
+                tdOtherNonTaxableEarnings,
                 ...dynamicOEColumns,
                 tdGrossPay,
                 tdSSS,
@@ -1198,7 +1198,7 @@ nav > div a.nav-item.nav-link:focus
             "RDD PAY",
             "ND OT",
             // "OTHER TAXABLE EARNINGS",
-            // "OTHER NON TAXABLE EARNINGS"
+            "OTHER NON TAXABLE EARNINGS"
         ];
 
         $.each(OtherEarningsTypes,function(i,row){
@@ -1250,7 +1250,7 @@ nav > div a.nav-item.nav-link:focus
             { title: "RDD PAY", field: "RDDPay", fixed: false },
             { title: "ND OT", field: "OTND", fixed: false },
             // { title: "OTHER TAXABLE EARNINGS", field: "OtherTaxableEarnings", fixed: false },
-            // { title: "OTHER NON TAXABLE EARNINGS", field: "OtherNonTaxableEarnings", fixed: false }
+            { title: "OTHER NON TAXABLE EARNINGS", field: "OtherNonTaxableEarnings", fixed: false }
         ];
 
         $.each(OtherEarningsTypes,function(i,row){

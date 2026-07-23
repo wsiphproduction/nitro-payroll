@@ -3658,7 +3658,6 @@ public function getPayrollRegisterPendingReport($param){
             SUM(
                 COALESCE(paytrnemp.TotalEEInsurancePremiums,0)
                 + COALESCE(paytrnemp.TotalOtherDeductions,0)
-                + COALESCE(paytrnemp.TotalLoanDeductions,0)
                 + COALESCE(paytrnemp.TotalDeductions,0)
             ) as TotalDeduction,
 

@@ -218,9 +218,9 @@ foreach($grand as $field => $total){
                 <td class="num">{{ number_format($grand['OtherTaxableEarnings'],2) }}</td>
             @endif --}}
 
-            @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
+            {{-- @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
                 <td class="num">{{ number_format($grand['OtherNonTaxableEarnings'],2) }}</td>
-            @endif
+            @endif --}}
 
 
             @foreach($OtherEarningsTypes as $oe)
@@ -354,9 +354,9 @@ foreach($grand as $field => $total){
                 <th>OTH TAX</th>
             @endif --}}
 
-            @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
+            {{-- @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
                 <th>OTH NON TAX</th>
-            @endif
+            @endif --}}
 
             @foreach($OtherEarningsTypes as $oe)
 
@@ -473,9 +473,9 @@ foreach($grand as $field => $total){
             <td class="num">{{ number_format($row->OtherTaxableEarnings,2) }}</td>
         @endif --}}
 
-        @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
+        {{-- @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
             <td class="num">{{ number_format($row->OtherNonTaxableEarnings,2) }}</td>
-        @endif
+        @endif --}}
 
         @foreach($OtherEarningsTypes as $oe)
 
@@ -601,9 +601,9 @@ foreach($grand as $field => $total){
         <td class="num">{{ number_format($subtotal['OtherTaxableEarnings'],2) }}</td>
     @endif --}}
 
-    @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
+    {{-- @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
         <td class="num">{{ number_format($subtotal['OtherNonTaxableEarnings'],2) }}</td>
-    @endif
+    @endif --}}
 
     @foreach($OtherEarningsTypes as $oe)
 
@@ -725,9 +725,9 @@ foreach($grand as $field => $total){
         <td class="num">{{ number_format($grand['OtherTaxableEarnings'],2) }}</td>
     @endif --}}
 
-    @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
+    {{-- @if(in_array('OtherNonTaxableEarnings',$visibleColumns))
         <td class="num">{{ number_format($grand['OtherNonTaxableEarnings'],2) }}</td>
-    @endif
+    @endif --}}
 
     @foreach($OtherEarningsTypes as $oe)
 

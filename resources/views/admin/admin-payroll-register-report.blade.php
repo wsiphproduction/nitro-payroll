@@ -331,7 +331,7 @@ nav > div a.nav-item.nav-link:focus
                                                         <th style="min-width: 110px;">RDD PAY</th>
                                                         <th style="min-width: 110px;">ND OT</th>
                                                         {{-- <th style="min-width: 130px;">OTHER TAXABLE EARNING </th>  --}}
-                                                        <th id="otherEarningsMarker" style="min-width: 130px;">OTHER NON TAXABLE EARNING </th> 
+                                                        {{-- <th id="otherEarningsMarker" style="min-width: 130px;">OTHER NON TAXABLE EARNING </th>  --}}
                                                         <th style="min-width: 110px;" class="fixed-column">GROSS PAY</th>
                                                         <th style="min-width: 60px;">SSS</th>
                                                         <th style="min-width: 80px;">PHIL HEALTH</th>
@@ -1198,7 +1198,7 @@ nav > div a.nav-item.nav-link:focus
             "RDD PAY",
             "ND OT",
             // "OTHER TAXABLE EARNINGS",
-            "OTHER NON TAXABLE EARNINGS"
+            // "OTHER NON TAXABLE EARNINGS"
         ];
 
         $.each(OtherEarningsTypes,function(i,row){
@@ -1250,7 +1250,7 @@ nav > div a.nav-item.nav-link:focus
             { title: "RDD PAY", field: "RDDPay", fixed: false },
             { title: "ND OT", field: "OTND", fixed: false },
             // { title: "OTHER TAXABLE EARNINGS", field: "OtherTaxableEarnings", fixed: false },
-            { title: "OTHER NON TAXABLE EARNINGS", field: "OtherNonTaxableEarnings", fixed: false }
+            // { title: "OTHER NON TAXABLE EARNINGS", field: "OtherNonTaxableEarnings", fixed: false }
         ];
 
         $.each(OtherEarningsTypes,function(i,row){

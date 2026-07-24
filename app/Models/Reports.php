@@ -3535,7 +3535,9 @@ public function getPayrollRegisterPendingReport($param){
             COALESCE(DeductionSummary.OtherDeduction,0) as OtherDeduction,
             COALESCE(paytrnemp.TotalEEInsurancePremiums,0) + COALESCE(paytrnemp.TotalOtherDeductions,0) + COALESCE(paytrnemp.TotalLoanDeductions,0) + COALESCE(paytrnemp.TotalDeductions,0) as TotalDeduction,
 
-            COALESCE(paytrnemp.NetPay,0) as NetPay,
+            COALESCE(paytrnemp.NetPay,0) as NetPay
+
+            " . (!empty($dynamicColumns) ? "," . $dynamicColumns : "") . ",
 
             paytrn.status as Status
             ");

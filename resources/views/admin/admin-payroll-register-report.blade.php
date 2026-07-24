@@ -2,88 +2,88 @@
 @section('content')
 
 <style>
-#style-2::-webkit-scrollbar-track
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    background-color: #F5F5F5;
-}
+    #style-2::-webkit-scrollbar-track
+    {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: #F5F5F5;
+    }
 
-#style-2::-webkit-scrollbar
-{
-    width: 10px;
-    background-color: #F5F5F5;
-}
+    #style-2::-webkit-scrollbar
+    {
+        width: 10px;
+        background-color: #F5F5F5;
+    }
 
-#style-2::-webkit-scrollbar-thumb
-{
-    background-color: #f68c1f;
-}
+    #style-2::-webkit-scrollbar-thumb
+    {
+        background-color: #f68c1f;
+    }
 
-.select2-container{
-    z-index: 99999999999;
-}
-.Error-Level {
-    background: #ffcccc;
-}
-.Dupli-Level {
-    background: #ccffcc;
-}
+    .select2-container{
+        z-index: 99999999999;
+    }
+    .Error-Level {
+        background: #ffcccc;
+    }
+    .Dupli-Level {
+        background: #ccffcc;
+    }
 
-.Normal-Level {
-   background: #fff;
-}
+    .Normal-Level {
+    background: #fff;
+    }
 
-nav > .nav.nav-tabs{
+    nav > .nav.nav-tabs{
 
-  border: none;
-    color:#fff;    
-    border-radius:0;
-    margin-bottom: initial ;
+    border: none;
+        color:#fff;    
+        border-radius:0;
+        margin-bottom: initial ;
 
-}
-nav > div a.nav-item.nav-link,
-nav > div a.nav-item.nav-link.active
-{
-  border: none;
-    color:#fff;
-    background:#475F7B;
-    border-radius:0;
-}
-.nav.nav-tabs .nav-item, .nav.nav-pills .nav-item{
-  margin-right: initial;
-  padding-bottom:0px;
-  margin-bottom: 0px;
-}
-nav > div a.nav-item.nav-link.active:after
- {
-  content: "";
-  position: relative;
-  bottom: -38px;
-  left: -10%;
-  border-top-color: #f68c1f ;
-}
-.tab-content{
-line-height: 25px;
-border: 0px solid #ddd;
-border-top:5px solid #f68c1f;
-border-bottom:1px solid #eee;
-border-left:1px solid #eee;
-border-right:1px solid #eee;
-}
+    }
+    nav > div a.nav-item.nav-link,
+    nav > div a.nav-item.nav-link.active
+    {
+    border: none;
+        color:#fff;
+        background:#475F7B;
+        border-radius:0;
+    }
+    .nav.nav-tabs .nav-item, .nav.nav-pills .nav-item{
+    margin-right: initial;
+    padding-bottom:0px;
+    margin-bottom: 0px;
+    }
+    nav > div a.nav-item.nav-link.active:after
+    {
+    content: "";
+    position: relative;
+    bottom: -38px;
+    left: -10%;
+    border-top-color: #f68c1f ;
+    }
+    .tab-content{
+    line-height: 25px;
+    border: 0px solid #ddd;
+    border-top:5px solid #f68c1f;
+    border-bottom:1px solid #eee;
+    border-left:1px solid #eee;
+    border-right:1px solid #eee;
+    }
 
-nav > div a.nav-item.nav-link:hover,
-nav > div a.nav-item.nav-link:focus
-{
-  border: none;
-    background: #f68c1f;
-    color:#fff;
-    border-radius:0;
-    transition:background 0.20s linear;
-}
+    nav > div a.nav-item.nav-link:hover,
+    nav > div a.nav-item.nav-link:focus
+    {
+    border: none;
+        background: #f68c1f;
+        color:#fff;
+        border-radius:0;
+        transition:background 0.20s linear;
+    }
 
-.highlighted {
-    background: #ffffcc !important;
-}
+    .highlighted {
+        background: #ffffcc !important;
+    }
 
 </style>
 
@@ -329,9 +329,9 @@ nav > div a.nav-item.nav-link:focus
                                                         <th style="min-width: 110px;">LEGAL HOLIDAY</th>
                                                         <th style="min-width: 110px;">SPECIAL HOLIDAY</th>
                                                         <th style="min-width: 110px;">RDD PAY</th>
-                                                        <th style="min-width: 110px;">ND OT</th>
+                                                        <th id="thNDOT" style="min-width: 110px;">ND OT</th>
                                                         {{-- <th style="min-width: 130px;">OTHER TAXABLE EARNING </th>  --}}
-                                                        <th id="otherEarningsMarker" style="min-width: 130px;">OTHER NON TAXABLE EARNING </th> 
+                                                        {{-- <th id="otherEarningsMarker" style="min-width: 130px;">OTHER NON TAXABLE EARNING </th>  --}}
                                                         <th style="min-width: 110px;" class="fixed-column">GROSS PAY</th>
                                                         <th style="min-width: 60px;">SSS</th>
                                                         <th style="min-width: 80px;">PHIL HEALTH</th>
@@ -371,7 +371,7 @@ nav > div a.nav-item.nav-link:focus
                                                             <th id="ftRDDPay" title="RDD Pay"></th>
                                                             <th id="ftOTND" title="ND OT"></th>
                                                             {{-- <th id="ftOtherTaxable" title="Other Taxable"></th> --}}
-                                                            <th id="ftOtherNonTaxable" title="Other Non Taxable"></th>
+                                                            {{-- <th id="ftOtherNonTaxable" title="Other Non Taxable"></th> --}}
                                                             <th id="ftGrossPay" title="Gross Pay" class="fixed-column"></th>
                                                             <th id="ftSSS" title="SSS"></th>
                                                             <th id="ftPHIC" title="Philhealth"></th>
@@ -583,11 +583,14 @@ nav > div a.nav-item.nav-link:focus
 
         });
 
+        $(headerHtml).insertAfter("#thNDOT");   // was #otherEarningsMarker
+        $(footerHtml).insertAfter("#ftOTND");   // was #ftOtherNonTaxable
+
         // HEADER
-        $(headerHtml).insertAfter("#otherEarningsMarker");
+        // $(headerHtml).insertAfter("#otherEarningsMarker");
 
         // FOOTER
-        $(footerHtml).insertAfter("#ftOtherNonTaxable");
+        // $(footerHtml).insertAfter("#ftOtherNonTaxable");
     }
 
 
@@ -726,9 +729,9 @@ nav > div a.nav-item.nav-link:focus
                         //     FormatDecimal(data.Totals.OtherTaxableEarnings,2)
                         // );
 
-                        $("#ftOtherNonTaxable").html(
-                            FormatDecimal(data.Totals.OtherNonTaxableEarnings,2)
-                        );
+                        // $("#ftOtherNonTaxable").html(
+                        //     FormatDecimal(data.Totals.OtherNonTaxableEarnings,2)
+                        // );
 
                         $.each(OtherEarningsTypes,function(i,row){
 
@@ -929,7 +932,7 @@ nav > div a.nav-item.nav-link:focus
             tdOvertimeND = "<span class='font-normal'>" + FormatDecimal(vData.OTND,2) + "</span>"; 
 
             // tdOtherTaxableEarnings = "<span class='font-normal'>" + FormatDecimal(vData.OtherTaxableEarnings,2) + "</span>"; 
-            tdOtherNonTaxableEarnings = "<span class='font-normal'>" + FormatDecimal(vData.OtherNonTaxableEarnings,2) + "</span>";  
+            // tdOtherNonTaxableEarnings = "<span class='font-normal'>" + FormatDecimal(vData.OtherNonTaxableEarnings,2) + "</span>";  
             // tdTaxableIncome = "<span class='font-normal'>" + FormatDecimal(vData.TaxableIncome,2) + "</span>";  
 
             tdGrossPay = "<span class='font-normal'>" + FormatDecimal(vData.GrossPay,2) + "</span>";
@@ -992,7 +995,7 @@ nav > div a.nav-item.nav-link:focus
                     curData[19] = tdRDDPay;   
                     curData[20] = tdOvertimeND;    
                     // curData[21] = tdOtherTaxableEarnings;
-                    curData[22] = tdOtherNonTaxableEarnings;
+                    // curData[22] = tdOtherNonTaxableEarnings;
                     curData[23] = tdGrossPay;
                     curData[24] = tdSSS;
                     curData[25] = tdPHIC;
@@ -1039,7 +1042,7 @@ nav > div a.nav-item.nav-link:focus
                 tdRDDPay,
                 tdOvertimeND,
                 // tdOtherTaxableEarnings,
-                tdOtherNonTaxableEarnings,
+                // tdOtherNonTaxableEarnings,
                 ...dynamicOEColumns,
                 tdGrossPay,
                 tdSSS,
@@ -1198,7 +1201,7 @@ nav > div a.nav-item.nav-link:focus
             "RDD PAY",
             "ND OT",
             // "OTHER TAXABLE EARNINGS",
-            "OTHER NON TAXABLE EARNINGS"
+            // "OTHER NON TAXABLE EARNINGS"
         ];
 
         $.each(OtherEarningsTypes,function(i,row){
@@ -1250,7 +1253,7 @@ nav > div a.nav-item.nav-link:focus
             { title: "RDD PAY", field: "RDDPay", fixed: false },
             { title: "ND OT", field: "OTND", fixed: false },
             // { title: "OTHER TAXABLE EARNINGS", field: "OtherTaxableEarnings", fixed: false },
-            { title: "OTHER NON TAXABLE EARNINGS", field: "OtherNonTaxableEarnings", fixed: false }
+            // { title: "OTHER NON TAXABLE EARNINGS", field: "OtherNonTaxableEarnings", fixed: false }
         ];
 
         $.each(OtherEarningsTypes,function(i,row){
@@ -1399,7 +1402,7 @@ nav > div a.nav-item.nav-link:focus
                             SL: tSL, VL: tVL, OL: tOL,
                             NightDiff: tNightDiff, OTPay: tOTPay, LH: tLH, SH: tSH, RDDPay: tRDDPay, OTND: tOTND,
                             // OtherTaxable: tOtherTaxable,
-                            OtherNonTaxable: tOtherNonTaxable,
+                            // OtherNonTaxable: tOtherNonTaxable,
                             GrossPay: tGrossPay,
                             SSS: tSSS, PHIC: tPHIC, HDMF: tHDMF, HDMFMP2: tHDMFMP2,
                             // Taxable: tTaxable, 
@@ -1415,7 +1418,8 @@ nav > div a.nav-item.nav-link:focus
                 tDays = tBasicPay = tECOLA = tLate = tUndertime = tAbsent =
                 tSL = tVL = tOL = tNightDiff = tOTPay = tLH = tSH = tRDDPay = tOTND =
                 // tOtherTaxable = 
-                tOtherNonTaxable = tGrossPay =
+                // tOtherNonTaxable = 
+                tGrossPay =
                 tSSS = tPHIC = tHDMF = tHDMFMP2 =
                 // tTaxable = 
                 tWTax = tSSSSalaryLoan = tSSSCalamityLoan = tHDMFLoan = tHDMFCalamityLoan = tOtherDed = tOtherLoan =
@@ -1461,7 +1465,7 @@ nav > div a.nav-item.nav-link:focus
                 RDDPay: v.RDDPay,
                 OTND: v.OTND,
                 // OtherTaxableEarnings: v.OtherTaxableEarnings,
-                OtherNonTaxableEarnings: v.OtherNonTaxableEarnings,
+                // OtherNonTaxableEarnings: v.OtherNonTaxableEarnings,
                 GrossPay: v.GrossPay,
                 SSS: v.SSS,
                 PHIC: v.PHIC,
@@ -1523,7 +1527,7 @@ nav > div a.nav-item.nav-link:focus
             tOTPay += parseFloat(v.OTPay, 2);             gOTPay += parseFloat(v.OTPay, 2);
             tOTND += parseFloat(v.OTND, 2);               gOTND += parseFloat(v.OTND, 2);
             // tOtherTaxable += parseFloat(v.OtherTaxableEarnings, 2); gOtherTaxable += parseFloat(v.OtherTaxableEarnings, 2);
-            tOtherNonTaxable += parseFloat(v.OtherNonTaxableEarnings, 2); gOtherNonTaxable += parseFloat(v.OtherNonTaxableEarnings, 2);
+            // tOtherNonTaxable += parseFloat(v.OtherNonTaxableEarnings, 2); gOtherNonTaxable += parseFloat(v.OtherNonTaxableEarnings, 2);
             tGrossPay += parseFloat(v.GrossPay, 2);       gGrossPay += parseFloat(v.GrossPay, 2);
             tSSS += parseFloat(v.SSS, 2);                 gSSS += parseFloat(v.SSS, 2);
             tPHIC += parseFloat(v.PHIC, 2);               gPHIC += parseFloat(v.PHIC, 2);
@@ -1566,7 +1570,7 @@ nav > div a.nav-item.nav-link:focus
                 SL: tSL, VL: tVL, OL: tOL,
                 NightDiff: tNightDiff, OTPay: tOTPay, LH: tLH, SH: tSH, RDDPay: tRDDPay, OTND: tOTND,
                 // OtherTaxable: tOtherTaxable,
-                OtherNonTaxable: tOtherNonTaxable,
+                // OtherNonTaxable: tOtherNonTaxable,
                 GrossPay: tGrossPay,
                 SSS: tSSS, PHIC: tPHIC, HDMF: tHDMF, HDMFMP2: tHDMFMP2,
                 // Taxable: tTaxable, 
@@ -1589,7 +1593,7 @@ nav > div a.nav-item.nav-link:focus
                 SL: gSL, VL: gVL, OL: gOL,
                 NightDiff: gNightDiff, OTPay: gOTPay, LH: gLH, SH: gSH, RDDPay: gRDDPay, OTND: gOTND,
                 // OtherTaxable: gOtherTaxable,
-                OtherNonTaxable: gOtherNonTaxable,
+                // OtherNonTaxable: gOtherNonTaxable,
                 GrossPay: gGrossPay,
                 SSS: gSSS, PHIC: gPHIC, HDMF: gHDMF, HDMFMP2: gHDMFMP2,
                 // Taxable: gTaxable, 
@@ -1664,7 +1668,7 @@ nav > div a.nav-item.nav-link:focus
             RDDPay: totals.RDDPay,
             OTND: totals.OTND,
             // OtherTaxableEarnings: totals.OtherTaxable,
-            OtherNonTaxableEarnings: totals.OtherNonTaxable,
+            // OtherNonTaxableEarnings: totals.OtherNonTaxable,
             GrossPay: totals.GrossPay,
             SSS: totals.SSS,
             PHIC: totals.PHIC,

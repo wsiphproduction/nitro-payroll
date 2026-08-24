@@ -1488,3 +1488,10 @@ Route::get('/hris-incomplete-number-of-hours', function () {
     include storage_path('app/legacy/incomplete-number-of-hours.php');
     return response(ob_get_clean());
 });
+
+Route::get('/hris-no-timelogs-but-undertime-late', function () {
+    $_GET = request()->query();
+    ob_start();
+    include storage_path('app/legacy/no-timelogs-but-undertime-late.php');
+    return response(ob_get_clean());
+});

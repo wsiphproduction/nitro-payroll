@@ -146,8 +146,6 @@ class SyncEmployeesJob implements ShouldQueue
                 throw new \RuntimeException('Employee details fetch failed: ' . print_r(sqlsrv_errors(), true));
             }
 
-            logger()->info('Employee details update started (birthdate excluded).');
-
             $processedEmployees = 0;
             $unmatchedEmployees = 0;
 

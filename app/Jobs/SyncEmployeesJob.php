@@ -166,7 +166,7 @@ class SyncEmployeesJob implements ShouldQueue
                         bank = ?,
                         job_title_id = ?,
                         company_branch_id = 3,
-                        section_id = ?,
+                        section_id = COALESCE(?, section_id),
                         company_branch_site_id = 2,
                         hdmf_ee = 200,
                         hdmf_er = 200,

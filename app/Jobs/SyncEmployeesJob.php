@@ -172,7 +172,7 @@ class SyncEmployeesJob implements ShouldQueue
                         hdmf_er = 200,
                         employee_number = ?,
                         salary_type = ?,
-                        shortid = ?
+                        shortid = COALESCE(?, shortid),
                     WHERE hris_ref_id = ?
                 ";
 

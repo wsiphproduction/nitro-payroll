@@ -122,7 +122,7 @@ class SyncEmployeesJob implements ShouldQueue
 
             //update employment details of all employees
             $q = sqlsrv_query($conn_hris, "select u.id as uid, u.employee_number, u.status, u.bank,
-            u.firs
+            u.first_name, u.last_name, u.middle_name, u.gender, u.birthdate, u.marital_status, u.email,
             di.id as division_id,di.name as division_name,
             de.id as department_idd, de.department_name as department_name,
             loc.id as location_id,loc.location as location_name,
@@ -143,7 +143,7 @@ class SyncEmployeesJob implements ShouldQueue
             ");
 
             while ($r = sqlsrv_fetch_array($q)) {
-                $upd = sqlsrv_query($conn_payroll, "update users set first_name='" . $r['first_name'] . "', last_name='" . $r['last_name'] . "', middle_name='" . $r['middle_name'] . "', gender='" . $r['gender'] . "', marital_status='" . $r['marital_status'] . "', email='" . $r['email'] . "', division_id='" . $r['division_id'] . "', department_id='" . $r['department_idd'] . "', status='" . $r['status'] . "', bank='" . $r['bank'] . "',
+                $upd = sqlsrv_query($conn_payroll, "update users set first_name='" . $r['first_name'] . "', last_name='" . $r['last_name'] . "', middle_name='" . $r['middle_name'] . "', gender='" . $r['gender'] . "',  marital_status='" . $r['marital_status'] . "', email='" . $r['email'] . "', division_id='" . $r['division_id'] . "', department_id='" . $r['department_idd'] . "', status='" . $r['status'] . "', bank='" . $r['bank'] . "',
                 job_title_id='" . $r['position_idd'] . "',company_branch_id=3,section_id='" . $r['section_idd'] . "',
                 company_branch_site_id=2,hdmf_ee=200,hdmf_er=200,employee_number='" . $r['employee_number'] . "',salary_type='" . $r['saltype'] . "',shortid='" . $r['employee_number'] . "' where hris_ref_id='" . $r['uid'] . "'");
             }

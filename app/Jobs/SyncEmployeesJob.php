@@ -143,9 +143,62 @@ class SyncEmployeesJob implements ShouldQueue
             ");
 
             while ($r = sqlsrv_fetch_array($q)) {
-                $upd = sqlsrv_query($conn_payroll, "update users set first_name='" . $r['first_name'] . "', last_name='" . $r['last_name'] . "', middle_name='" . $r['middle_name'] . "', gender='" . $r['gender'] . "', birthdate='" . $r['birthdate'] . "', marital_status='" . $r['marital_status'] . "', email='" . $r['email'] . "', division_id='" . $r['division_id'] . "', department_id='" . $r['department_idd'] . "', status='" . $r['status'] . "', bank='" . $r['bank'] . "',
-                job_title_id='" . $r['position_idd'] . "',company_branch_id=3,section_id='" . $r['section_idd'] . "',
-                company_branch_site_id=2,hdmf_ee=200,hdmf_er=200,employee_number='" . $r['employee_number'] . "',salary_type='" . $r['saltype'] . "',shortid='" . $r['employee_number'] . "' where hris_ref_id='" . $r['uid'] . "'");
+                $birthdate = $r['birthdate'];
+
+                if ($birthdate instanceof \DateTimeInterface) {
+                    $birthdate = $birthdate->format('Y-m-d');
+                }
+
+                $updateQuery = "
+                    UPDATE users SET
+                        first_name = ?,
+                        last_name = ?,
+                        middle_name = ?,
+                        gender = ?,
+                        birthdate = ?,
+                        marital_status = ?,
+                        email = ?,
+                        division_id = ?,
+                        department_id = ?,
+                        status = ?,
+                        bank = ?,
+                        job_title_id = ?,
+                        company_branch_id = 3,
+                        section_id = ?,
+                        company_branch_site_id = 2,
+                        hdmf_ee = 200,
+                        hdmf_er = 200,
+                        employee_number = ?,
+                        salary_type = ?,
+                        shortid = ?
+                    WHERE hris_ref_id = ?
+                ";
+
+                $updateParams = [
+                    $r['first_name'],
+                    $r['last_name'],
+                    $r['middle_name'],
+                    $r['gender'],
+                    $birthdate,
+                    $r['marital_status'],
+                    $r['email'],
+                    $r['division_id'],
+                    $r['department_idd'],
+                    $r['status'],
+                    $r['bank'],
+                    $r['position_idd'],
+                    $r['section_idd'],
+                    $r['employee_number'],
+                    $r['saltype'],
+                    $r['employee_number'],
+                    $r['uid'],
+                ];
+
+                $upd = sqlsrv_query($conn_payroll, $updateQuery, $updateParams);
+
+                if ($upd === false) {
+                    throw new \RuntimeException('Employee details update failed: ' . print_r(sqlsrv_errors(), true));
+                }
             }
 
             // Sync Sections from HRIS to Payroll

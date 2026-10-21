@@ -142,11 +142,88 @@ class SyncEmployeesJob implements ShouldQueue
             order by u.id desc
             ");
 
-            while ($r = sqlsrv_fetch_array($q)) {
-                $upd = sqlsrv_query($conn_payroll, "update users set first_name='" . $r['first_name'] . "', last_name='" . $r['last_name'] . "', middle_name='" . $r['middle_name'] . "', gender='" . $r['gender'] . "',  marital_status='" . $r['marital_status'] . "', email='" . $r['email'] . "', division_id='" . $r['division_id'] . "', department_id='" . $r['department_idd'] . "', status='" . $r['status'] . "', bank='" . $r['bank'] . "',
-                job_title_id='" . $r['position_idd'] . "',company_branch_id=3,section_id='" . $r['section_idd'] . "',
-                company_branch_site_id=2,hdmf_ee=200,hdmf_er=200,employee_number='" . $r['employee_number'] . "',salary_type='" . $r['saltype'] . "',shortid='" . $r['employee_number'] . "' where hris_ref_id='" . $r['uid'] . "'");
+            if ($q === false) {
+                throw new \RuntimeException('Employee details fetch failed: ' . print_r(sqlsrv_errors(), true));
             }
+
+            logger()->info('Employee details update started (birthdate excluded).');
+
+            $processedEmployees = 0;
+            $unmatchedEmployees = 0;
+
+            while ($r = sqlsrv_fetch_array($q)) {
+                $updateQuery = "
+                    UPDATE users SET
+                        first_name = ?,
+                        last_name = ?,
+                        middle_name = ?,
+                        gender = ?,
+                        marital_status = ?,
+                        email = ?,
+                        division_id = ?,
+                        department_id = ?,
+                        status = ?,
+                        bank = ?,
+                        job_title_id = ?,
+                        company_branch_id = 3,
+                        section_id = ?,
+                        company_branch_site_id = 2,
+                        hdmf_ee = 200,
+                        hdmf_er = 200,
+                        employee_number = ?,
+                        salary_type = ?,
+                        shortid = ?
+                    WHERE hris_ref_id = ?
+                ";
+
+                $updateParams = [
+                    $r['first_name'],
+                    $r['last_name'],
+                    $r['middle_name'],
+                    $r['gender'],
+                    $r['marital_status'],
+                    $r['email'],
+                    $r['division_id'],
+                    $r['department_idd'],
+                    $r['status'],
+                    $r['bank'],
+                    $r['position_idd'],
+                    $r['section_idd'],
+                    $r['employee_number'],
+                    $r['saltype'],
+                    $r['employee_number'],
+                    $r['uid'],
+                ];
+
+                $upd = sqlsrv_query($conn_payroll, $updateQuery, $updateParams);
+
+                if ($upd === false) {
+                    throw new \RuntimeException(
+                        'Employee details update failed for HRIS user ' . $r['uid'] . ': ' . print_r(sqlsrv_errors(), true)
+                    );
+                }
+
+                $processedEmployees++;
+
+                if (sqlsrv_rows_affected($upd) === 0) {
+                    $unmatchedEmployees++;
+
+                    logger()->warning('Employee details update matched no payroll user.', [
+                        'hris_ref_id' => $r['uid'],
+                    ]);
+                }
+
+                sqlsrv_free_stmt($upd);
+            }
+
+            if ($r === false) {
+                throw new \RuntimeException('Employee details row fetch failed: ' . print_r(sqlsrv_errors(), true));
+            }
+
+            logger()->info('Employee details update completed.', [
+                'processed_employees' => $processedEmployees,
+                'unmatched_employees' => $unmatchedEmployees,
+            ]);
 
             // Sync Sections from HRIS to Payroll
 

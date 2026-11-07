@@ -70,7 +70,15 @@ class SyncEmployeesJob implements ShouldQueue
                     while ($c = sqlsrv_fetch_array($cc)) {
 
                         $col =  $c['COLUMN_NAME'];
-                        $not_included = ['id', 'hdmf_ee', 'hdmf_er', 'company_branch_site_id', 'section_id', 'hris_ref_id'];
+                        $not_included = [
+                            'id',
+                            'hdmf_ee',
+                            'hdmf_er',
+                            'company_branch_site_id',
+                            'division_id',
+                            'section_id',
+                            'hris_ref_id',
+                        ];
 
                         if (!in_array($col, $not_included)) {
                             $if .= $c['COLUMN_NAME'] . ",";

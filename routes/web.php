@@ -1455,6 +1455,15 @@ Route::get('/hris-unprocessed_ot', function () {
 });
 
 Route::get('/hris-with_leave_reghrs', function () {
+    $validator = validator(request()->query(), [
+        'st' => ['required', 'date_format:Y-m-d'],
+        'en' => ['required', 'date_format:Y-m-d', 'after_or_equal:st'],
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+
     $_GET = request()->query();
     ob_start();
     include storage_path('app/legacy/with_leave_reghrs.php');
@@ -1483,6 +1492,15 @@ Route::get('/hris-holiday_special', function () {
 });
 
 Route::get('/hris-incomplete-number-of-hours', function () {
+    $validator = validator(request()->query(), [
+        'st' => ['required', 'date_format:Y-m-d'],
+        'en' => ['required', 'date_format:Y-m-d', 'after_or_equal:st'],
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+
     $_GET = request()->query();
     ob_start();
     include storage_path('app/legacy/incomplete-number-of-hours.php');
